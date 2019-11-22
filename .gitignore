@@ -3,3 +3,9 @@
 
 # Ignore Gradle build output directory
 build
+
+# Ignore .xml files and shelf directory in .idea/
+**/.idea/workspace.xml
+**/.idea/usage.statistic.xml
+**/.idea/tasks.xml
+**/.idea/shelf/
