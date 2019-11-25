@@ -1,9 +1,6 @@
 package webserver;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -56,5 +53,12 @@ public class AppTest {
         System.setIn(input);
 
         assertEquals("Hello!", classUnderTest.getSystemInput());
+    }
+
+    @Test
+    public void testServerSocketGetsCreated() throws IOException {
+        final int testPort = 9001;
+
+        assertNotNull(classUnderTest.createServerSocket(testPort));
     }
 }
