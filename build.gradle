@@ -31,6 +31,9 @@ application {
     mainClassName = 'webserver.App'
 }
 
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
+
 tasks.withType(Test) {
     testLogging {
         events TestLogEvent.FAILED,
