@@ -31,6 +31,12 @@ application {
     mainClassName = 'webserver.App'
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'webserver.App'
+    }
+}
+
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
