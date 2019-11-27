@@ -4,15 +4,11 @@ import java.io.IOException;
 import java.lang.Thread;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
+    private static int port = 5000;
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
         int port;
 
         if (args.length >= 1 && isValidPort(args[0])) {
@@ -24,27 +20,16 @@ public class App {
         }
 
         try {
-            ServerSocket serverSocket = new ServerSocket(port);
-            System.out.println("Server started on port " + port);
+            final ServerSocket serverSocket = SocketCreator.createServerSocket(port);
+            System.out.println("Listening for connection on port " + port + "...");
             while (true) {
-                Socket clientSocket = serverSocket.accept();
+                Socket clientSocket = SocketCreator.createClientSocket(serverSocket);
                 Thread thread = new Thread(new HelloWorldPage(clientSocket));
                 thread.start();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void printSystemOutput(String message) {
-        System.out.println(message);
-    }
-
-    public String getSystemInput() {
-        Scanner scan = new Scanner(System.in);
-        String s = scan.next();
-        scan.close();
-        return s;
     }
 
     public static boolean isValidPort(String port) {
