@@ -28,7 +28,7 @@ public class HelloWorldPageTest {
 
         helloWorldPage.run();
 
-        assertEquals("HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello World!\n",
+        assertEquals("HTTP/1.1 200 OK\nContent-Type: text/html\n\n<h1>Hello World!</h1>\n",
                 outContent.toString());
     }
 }

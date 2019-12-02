@@ -12,7 +12,7 @@ public class HelloWorldPage implements Runnable {
     }
 
     public void run() {
-        String httpResponse = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello World!";
+        String httpResponse = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n<h1>Hello World!</h1>";
         try {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             out.println(httpResponse);
