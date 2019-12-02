@@ -13,10 +13,11 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
+        String port = System.getenv("PORT");
 
         try {
-            ServerSocket serverSocket = new ServerSocket(5000);
-            System.out.println("Server started on port 5000");
+            ServerSocket serverSocket = new ServerSocket(Integer.parseInt(port));
+            System.out.println("Server started on port " + port);
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 Thread thread = new Thread(new HelloWorldPage(clientSocket));
