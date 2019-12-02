@@ -54,11 +54,4 @@ public class AppTest {
 
         assertEquals("Hello!", classUnderTest.getSystemInput());
     }
-
-    @Test
-    public void testServerSocketGetsCreated() throws IOException {
-        final int testPort = 9001;
-
-        assertNotNull(classUnderTest.createServerSocket(testPort));
-    }
 }
