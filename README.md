@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/seoulection/webserver.svg?branch=walking-skeleton)](https://travis-ci.org/seoulection/webserver)
 
 A todo list written in Java using web servers.
+[Click here to view current deployment on Heroku](https://java-todo-list.herokuapp.com/)
 ## How to Run
 Clone the repository to your local machine, then go inside the directory by running:
 ```
