@@ -54,4 +54,18 @@ public class AppTest {
 
         assertEquals("Hello!", classUnderTest.getSystemInput());
     }
+
+    @Test
+    public void verifyPortIsANumber() {
+        String portFromCLI = "6000";
+
+        assertTrue(App.isValidPort(portFromCLI));
+    }
+
+    @Test
+    public void verifyPortIsNotANumber() {
+        String portFromCLI = "78UK";
+
+        assertFalse(App.isValidPort(portFromCLI));
+    }
 }

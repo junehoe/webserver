@@ -13,10 +13,18 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
-        String port = System.getenv("PORT");
+        int port;
+
+        if (args.length >= 1 && isValidPort(args[0])) {
+            port = Integer.parseInt(args[0]);
+        } else if (System.getenv("PORT") != null) {
+            port = Integer.parseInt(System.getenv("PORT"));
+        } else {
+            port = 5000;
+        }
 
         try {
-            ServerSocket serverSocket = new ServerSocket(Integer.parseInt(port));
+            ServerSocket serverSocket = new ServerSocket(port);
             System.out.println("Server started on port " + port);
             while (true) {
                 Socket clientSocket = serverSocket.accept();
@@ -37,5 +45,14 @@ public class App {
         String s = scan.next();
         scan.close();
         return s;
+    }
+
+    public static boolean isValidPort(String port) {
+        try {
+            Integer.parseInt(port);
+        } catch (NullPointerException | NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 }

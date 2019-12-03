@@ -40,6 +40,12 @@ jar {
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
+run {
+    if (project.hasProperty('port')) {
+        args findProperty('port')
+    }
+}
+
 tasks.withType(Test) {
     testLogging {
         events TestLogEvent.FAILED,
