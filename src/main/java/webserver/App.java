@@ -6,8 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class App {
-    private static int port = 5000;
-
     public static void main(String[] args) {
         int port;
 
