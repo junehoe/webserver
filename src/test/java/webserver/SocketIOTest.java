@@ -41,9 +41,9 @@ public class SocketIOTest {
     }
 
     @Test
-    public void testReadClientStream() {
+    public void testReadClientStream() throws IOException {
         String inputString = "Hello\n";
-        Scanner input = new Scanner(new InputStreamReader(new ByteArrayInputStream(inputString.getBytes())));
+        BufferedReader input = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(inputString.getBytes())));
 
         assertEquals("Hello", SocketIO.readFromInputStream(input));
     }
