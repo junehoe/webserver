@@ -45,7 +45,7 @@ public class HttpHandlerTest {
 
         httpHandler.run();
 
-        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<h1>Hello World!</h1>\n",
+        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<h1>Hello World!</h1>\n",
                 outContent.toString());
     }
 
@@ -57,7 +57,7 @@ public class HttpHandlerTest {
 
         httpHandler.run();
 
-        assertEquals("HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n<h1>Page not found</h1>\n",
+        assertEquals("HTTP/1.1 404 Not Found\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<h1>Page not found</h1>\n",
                 outContent.toString());
     }
 }

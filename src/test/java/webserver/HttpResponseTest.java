@@ -13,7 +13,7 @@ public class HttpResponseTest {
         String content = "<html><body><h1>Hey there!</h1></body></html>";
 
         String expected = String.format(
-                "HTTP/1.1 %s OK%sContent-Type: %s%s%s%s",
+                "HTTP/1.1 %s OK%sContent-Type: %s; charset=utf-8%s%s%s",
                 statusCode, CRLF, contentType, CRLF, CRLF, content
         );
 
@@ -27,7 +27,7 @@ public class HttpResponseTest {
         String content = "<h1>Not found</h1>";
 
         String expected = String.format(
-                "HTTP/1.1 %s Not Found%sContent-Type: %s%s%s%s",
+                "HTTP/1.1 %s Not Found%sContent-Type: %s; charset=utf-8%s%s%s",
                 statusCode, CRLF, contentType, CRLF, CRLF, content
         );
 
