@@ -18,9 +18,9 @@ public class HttpHandler implements Runnable {
         String contentType = "text/html";
         String content;
         try {
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            BufferedReader br = SocketIO.createSocketReader(clientSocket);
-            HttpRequest httpRequest = new HttpRequest(SocketIO.readFromInputStream(br));
+            PrintWriter output = new PrintWriter(clientSocket.getOutputStream(), true);
+            BufferedReader input = SocketIO.createSocketReader(clientSocket);
+            HttpRequest httpRequest = new HttpRequest(SocketIO.readFromInputStream(input));
             String path = httpRequest.getPath();
             if (path.equals("/")) {
                 content = "<h1>Hello World!</h1>";
@@ -28,9 +28,9 @@ public class HttpHandler implements Runnable {
                 statusCode = 404;
                 content = "<h1>Page not found</h1>";
             }
-            out.println(HttpResponse.response(statusCode, contentType, content));
-            br.close();
-            out.close();
+            output.println(HttpResponse.response(statusCode, contentType, content));
+            input.close();
+            output.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
