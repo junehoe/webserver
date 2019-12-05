@@ -38,26 +38,38 @@ public class HttpHandlerTest {
     }
 
     @Test
-    public void testServerOutputsHelloWorldMessage() throws IOException {
+    public void testServerOutputsIndexPage() throws IOException {
         String inputString = "GET / HTTP/1.1\r\n";
+        String htmlPath = "index.html";
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
         HttpHandler httpHandler = new HttpHandler(clientSocket);
+        String htmlContent = HtmlParser.parseHtml(htmlPath);
+        String expected = new HttpResponseBuilder()
+                .withStatusCode(200)
+                .withContentType("text/html")
+                .withContent(htmlContent)
+                .build() + "\n";
 
         httpHandler.run();
 
-        assertEquals("HTTP/1.1 200 OK\r\nContent-Length: 21\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<h1>Hello World!</h1>\n",
-                outContent.toString());
+        assertEquals(expected, outContent.toString());
     }
 
     @Test
-    public void testServerOutputsPageNotFoundMessage() throws IOException {
+    public void testServerOutputs404Page() throws IOException {
         String inputString = "GET /asdf HTTP/1.1\r\n";
+        String htmlPath = "error.html";
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
         HttpHandler httpHandler = new HttpHandler(clientSocket);
+        String htmlContent = HtmlParser.parseHtml(htmlPath);
+        String expected = new HttpResponseBuilder()
+                .withStatusCode(404)
+                .withContentType("text/html")
+                .withContent(htmlContent)
+                .build() + "\n";
 
         httpHandler.run();
 
-        assertEquals("HTTP/1.1 404 Not Found\r\nContent-Length: 23\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<h1>Page not found</h1>\n",
-                outContent.toString());
+        assertEquals(expected, outContent.toString());
     }
 }
