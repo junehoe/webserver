@@ -12,8 +12,8 @@ public class HttpResponseBuilderTest {
         String contentType = "text/html";
         String content = "This is fake content";
         String expected = String.format(
-                "HTTP/1.1 %s OK%sContent-Type: %s; charset=utf-8%s%s%s",
-                statusCode, CRLF, contentType, CRLF, CRLF, content
+                "HTTP/1.1 %s OK%sContent-Length: %s%sContent-Type: %s; charset=utf-8%s%s%s",
+                statusCode, CRLF, content.length(), CRLF, contentType, CRLF, CRLF, content
         );
 
         httpResponseBuilder.withStatusCode(statusCode);

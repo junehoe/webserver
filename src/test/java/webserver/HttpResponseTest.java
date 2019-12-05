@@ -13,8 +13,8 @@ public class HttpResponseTest {
         String content = "<html><body><h1>Hey there!</h1></body></html>";
 
         String expected = String.format(
-                "HTTP/1.1 %s OK%sContent-Type: %s; charset=utf-8%s%s%s",
-                statusCode, CRLF, contentType, CRLF, CRLF, content
+                "HTTP/1.1 %s OK%sContent-Length: %s%sContent-Type: %s; charset=utf-8%s%s%s",
+                statusCode, CRLF, content.length(), CRLF, contentType, CRLF, CRLF, content
         );
 
         assertEquals(HttpResponse.response(statusCode, contentType, content), expected);
@@ -27,8 +27,8 @@ public class HttpResponseTest {
         String content = "<h1>Not found</h1>";
 
         String expected = String.format(
-                "HTTP/1.1 %s Not Found%sContent-Type: %s; charset=utf-8%s%s%s",
-                statusCode, CRLF, contentType, CRLF, CRLF, content
+                "HTTP/1.1 %s Not Found%sContent-Length: %s%sContent-Type: %s; charset=utf-8%s%s%s",
+                statusCode, CRLF, content.length(), CRLF, contentType, CRLF, CRLF, content
         );
 
         assertEquals(HttpResponse.response(statusCode, contentType, content), expected);

@@ -30,6 +30,8 @@ public class HttpResponseBuilder {
         String response = "";
         response += "HTTP/1.1 " + this.statusCode + " " + this.statusString;
         response += CRLF;
+        response += "Content-Length: " + this.content.length();
+        response += CRLF;
         response += "Content-Type: " + this.contentType + "; ";
         response += "charset=utf-8" + CRLF + CRLF;
         response += this.content;
