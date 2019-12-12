@@ -15,23 +15,32 @@ public class HttpResponse {
     private HttpResponse() {}
 
     public void send(PrintWriter output) {
-        SocketIO.writeToOutputStream(output, responseString());
+        String response = HttpResponseFormatter.format(this);
+        SocketIO.writeToOutputStream(output, response);
     }
 
-    private String responseString() {
-        final String CRLF = "\r\n";
-        String response = "";
-        response += "HTTP/1.1 " + this.statusCode + " " + this.statusString;
-        response += CRLF;
-        response += "Content-Length: " + this.contentLength;
-        response += CRLF;
-        response += "Content-Type: " + this.contentType + "; " + "charset=utf-8";
-        response += CRLF + CRLF;
-        if (this.method.equals("GET")) {
-            response += this.content;
-        }
+    public String getMethod() {
+        return this.method;
+    }
 
-        return response;
+    public int getStatusCode() {
+        return this.statusCode;
+    }
+
+    public String getStatusString() {
+        return this.statusString;
+    }
+
+    public int getContentLength() {
+        return this.contentLength;
+    }
+
+    public String getContentType() {
+        return this.contentType;
+    }
+
+    public String getContent() {
+        return this.content;
     }
 
     public static class Builder {
