@@ -1,5 +1,7 @@
 package webserver;
 
+import webserver.socket.SocketCreator;
+
 import java.io.IOException;
 import java.lang.Thread;
 import java.net.ServerSocket;
@@ -19,14 +21,20 @@ public class App {
 
         try {
             final ServerSocket serverSocket = SocketCreator.createServerSocket(port);
+            Router router = new Router();
+            createServerRoutes(router);
             System.out.println("Listening for connection on port " + port + "...");
             while (true) {
                 Socket clientSocket = SocketCreator.createClientSocket(serverSocket);
-                Thread thread = new Thread(new HttpHandler(clientSocket));
+                Thread thread = new Thread(new HttpHandler(clientSocket, router));
                 thread.start();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void createServerRoutes(Router router) {
+        router.addRoute("/", "index.html");
     }
 }
