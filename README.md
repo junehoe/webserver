@@ -1,5 +1,5 @@
 # Java Todo List
-[![Build Status](https://travis-ci.org/seoulection/webserver.svg?branch=sockets)](https://travis-ci.org/seoulection/webserver)
+[![Build Status](https://travis-ci.org/seoulection/webserver.svg?branch=req-res)](https://travis-ci.org/seoulection/webserver)
 
 A todo list written in Java using web servers.
 [Click here to view current deployment on Heroku](https://java-todo-list.herokuapp.com/)
