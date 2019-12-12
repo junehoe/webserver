@@ -30,6 +30,7 @@ public class HttpHandlerTest {
         when(clientSocket.getOutputStream()).thenReturn(outContent);
         router = new Router();
         router.addRoute("/", "public/index.html");
+        router.addRoute("/health-check", "public/health-check.html");
     }
 
     @Before
@@ -70,6 +71,28 @@ public class HttpHandlerTest {
         String htmlContent = HtmlParser.parseHtml(htmlPath);
         String expected = "";
         expected += "HTTP/1.1 404 Not Found";
+        expected += CRLF;
+        expected += "Content-Length: " + htmlContent.length();
+        expected += CRLF;
+        expected += "Content-Type: text/html; charset=utf-8";
+        expected += CRLF + CRLF;
+        expected += htmlContent + "\n";
+
+        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+
+        httpHandler.run();
+
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    public void testServerOutputsHealthCheckPage() throws IOException {
+        String inputString = "GET /health-check HTTP/1.1\r\n";
+        String htmlPath = "public/health-check.html";
+        String htmlContent = HtmlParser.parseHtml(htmlPath);
+        String expected = "";
+        expected += "HTTP/1.1 200 OK";
         expected += CRLF;
         expected += "Content-Length: " + htmlContent.length();
         expected += CRLF;

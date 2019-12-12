@@ -20,6 +20,13 @@ public class HtmlParserTest {
     }
 
     @Test
+    public void returnsParsedHtmlStringForHealthCheckHtml() throws IOException {
+        String htmlPath = "public/health-check.html";
+
+        assertTrue(HtmlParser.parseHtml(htmlPath).contains("<h1>Everything is good!</h1>"));
+    }
+
+    @Test
     public void throwsErrorIfHtmlDoesNotExist() {
         String htmlPath = "obviouslyFakePath.html";
         try {
