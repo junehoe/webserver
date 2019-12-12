@@ -37,5 +37,11 @@ public class App {
     private static void createServerRoutes(Router router) {
         router.addRoute("/", "public/index.html");
         router.addRoute("/health-check", "public/health-check.html");
+        router.addRoute("/todo", "public/todo-list.html");
+        router.addRoute("/todo/1", "public/todo-item-1.html");
+        router.addRoute("/todo/2", "public/todo-item-2.html");
+        router.addRoute("/todo/3", "public/todo-item-3.html");
+        router.addRoute("/todo/4", "public/todo-item-4.html");
+        router.addRoute("/todo/5", "public/todo-item-5.html");
     }
 }
