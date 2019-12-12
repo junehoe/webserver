@@ -1,6 +1,7 @@
 package webserver;
 
 import webserver.request.HttpRequest;
+import webserver.response.HttpResponse;
 import webserver.socket.SocketIO;
 
 import java.io.BufferedReader;
@@ -23,9 +24,9 @@ public class HttpHandler implements Runnable {
             PrintWriter output = SocketIO.createSocketWriter(clientSocket);
             BufferedReader input = SocketIO.createSocketReader(clientSocket);
             HttpRequest httpRequest = new HttpRequest(input);
-            String httpResponse = router.route(httpRequest);
+            HttpResponse httpResponse = router.route(httpRequest);
 
-            output.println(httpResponse);
+            httpResponse.send(output);
 
             input.close();
             output.close();

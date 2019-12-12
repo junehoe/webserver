@@ -18,7 +18,9 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HttpHandlerTest {
+    private final String CRLF = "\r\n";
     private ByteArrayOutputStream outContent;
+    private Router router;
 
     @Mock
     Socket clientSocket;
@@ -26,6 +28,8 @@ public class HttpHandlerTest {
     public void initialize() throws IOException {
         outContent = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(outContent);
+        router = new Router();
+        router.addRoute("/", "index.html");
     }
 
     @Before
@@ -41,14 +45,18 @@ public class HttpHandlerTest {
     public void testServerOutputsIndexPage() throws IOException {
         String inputString = "GET / HTTP/1.1\r\n";
         String htmlPath = "index.html";
-        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket);
         String htmlContent = HtmlParser.parseHtml(htmlPath);
-        String expected = new HttpResponseBuilder()
-                .withStatusCode(200)
-                .withContentType("text/html")
-                .withContent(htmlContent)
-                .build() + "\n";
+        String expected = "";
+        expected += "HTTP/1.1 200 OK";
+        expected += CRLF;
+        expected += "Content-Length: " + htmlContent.length();
+        expected += CRLF;
+        expected += "Content-Type: text/html; charset=utf-8";
+        expected += CRLF + CRLF;
+        expected += htmlContent + "\n";
+
+        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
 
         httpHandler.run();
 
@@ -59,14 +67,18 @@ public class HttpHandlerTest {
     public void testServerOutputs404Page() throws IOException {
         String inputString = "GET /asdf HTTP/1.1\r\n";
         String htmlPath = "error.html";
-        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket);
         String htmlContent = HtmlParser.parseHtml(htmlPath);
-        String expected = new HttpResponseBuilder()
-                .withStatusCode(404)
-                .withContentType("text/html")
-                .withContent(htmlContent)
-                .build() + "\n";
+        String expected = "";
+        expected += "HTTP/1.1 404 Not Found";
+        expected += CRLF;
+        expected += "Content-Length: " + htmlContent.length();
+        expected += CRLF;
+        expected += "Content-Type: text/html; charset=utf-8";
+        expected += CRLF + CRLF;
+        expected += htmlContent + "\n";
+
+        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
 
         httpHandler.run();
 

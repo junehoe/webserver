@@ -19,20 +19,23 @@ public class Router {
         this.routes.put(path, html);
     }
 
-    public String route(HttpRequest httpRequest) throws IOException {
+    public HttpResponse route(HttpRequest httpRequest) throws IOException {
+        String htmlContent;
         if (routes.containsKey(httpRequest.getPath())) {
-            return HttpResponse.response(
-                    httpRequest.getMethod(),
-                    OK,
-                    "text/html",
-                    HtmlParser.parseHtml(routes.get(httpRequest.getPath()))
-            );
+            htmlContent = HtmlParser.parseHtml(routes.get(httpRequest.getPath()));
+            return new HttpResponse.Builder(httpRequest.getMethod())
+                    .withStatusCode(OK)
+                    .withContentLength(htmlContent.length())
+                    .withContentType("text/html")
+                    .withContent(htmlContent)
+                    .build();
         }
-        return HttpResponse.response(
-                httpRequest.getMethod(),
-                NOT_FOUND,
-                "text/html",
-                HtmlParser.parseHtml("error.html")
-        );
+        htmlContent = HtmlParser.parseHtml("error.html");
+        return new HttpResponse.Builder(httpRequest.getMethod())
+                .withStatusCode(NOT_FOUND)
+                .withContentLength(htmlContent.length())
+                .withContentType("text/html")
+                .withContent(htmlContent)
+                .build();
     }
 }

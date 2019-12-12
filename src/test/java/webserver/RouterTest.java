@@ -1,6 +1,6 @@
 package webserver;
 
-import webserver.response.HttpResponseBuilder;
+import webserver.response.HttpResponse;
 import webserver.request.HttpRequest;
 
 import java.io.IOException;
@@ -28,38 +28,22 @@ public class RouterTest {
     }
 
     @Test
-    public void addsRouteToRouterHashMapAndReturnsCorrectResponse() throws IOException {
+    public void addsRouteAndReturnsResponseObject() throws IOException {
         String path = "/";
         String html = "index.html";
-        String htmlContent = HtmlParser.parseHtml(html);
         when(httpRequest.getMethod()).thenReturn("GET");
         when(httpRequest.getPath()).thenReturn(path);
 
         router.addRoute(path, html);
 
-        assertEquals(router.route(httpRequest), new HttpResponseBuilder()
-                .withStatusCode(200)
-                .withContentLength(htmlContent.length())
-                .withContentType("text/html")
-                .withContent(htmlContent)
-                .build()
-        );
+        assertNotNull(router.route(httpRequest));
     }
 
     @Test
-    public void returnsNotFoundHtmlForResponseNotInRouter() throws IOException {
-        String path = "/fake-path";
-        String html = "error.html";
-        String htmlContent = HtmlParser.parseHtml(html);
+    public void returnsResponseObjectDespiteNotInRoute() throws IOException {
         when(httpRequest.getMethod()).thenReturn("GET");
-        when(httpRequest.getPath()).thenReturn(path);
+        when(httpRequest.getPath()).thenReturn("/fake-path");
 
-        assertEquals(router.route(httpRequest), new HttpResponseBuilder()
-                .withStatusCode(404)
-                .withContentLength(htmlContent.length())
-                .withContentType("text/html")
-                .withContent(htmlContent)
-                .build()
-        );
+        assertNotNull(router.route(httpRequest));
     }
 }
