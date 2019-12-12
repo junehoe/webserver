@@ -35,6 +35,6 @@ public class App {
     }
 
     private static void createServerRoutes(Router router) {
-        router.addRoute("/", "index.html");
+        router.addRoute("/", "public/index.html");
     }
 }

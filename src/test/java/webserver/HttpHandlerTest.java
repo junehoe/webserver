@@ -29,7 +29,7 @@ public class HttpHandlerTest {
         outContent = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(outContent);
         router = new Router();
-        router.addRoute("/", "index.html");
+        router.addRoute("/", "public/index.html");
     }
 
     @Before
@@ -44,7 +44,7 @@ public class HttpHandlerTest {
     @Test
     public void testServerOutputsIndexPage() throws IOException {
         String inputString = "GET / HTTP/1.1\r\n";
-        String htmlPath = "index.html";
+        String htmlPath = "public/index.html";
         String htmlContent = HtmlParser.parseHtml(htmlPath);
         String expected = "";
         expected += "HTTP/1.1 200 OK";
@@ -66,7 +66,7 @@ public class HttpHandlerTest {
     @Test
     public void testServerOutputs404Page() throws IOException {
         String inputString = "GET /asdf HTTP/1.1\r\n";
-        String htmlPath = "error.html";
+        String htmlPath = "public/error.html";
         String htmlContent = HtmlParser.parseHtml(htmlPath);
         String expected = "";
         expected += "HTTP/1.1 404 Not Found";

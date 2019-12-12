@@ -1,6 +1,5 @@
 package webserver;
 
-import webserver.response.HttpResponse;
 import webserver.request.HttpRequest;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class RouterTest {
     @Test
     public void addsRouteAndReturnsResponseObject() throws IOException {
         String path = "/";
-        String html = "index.html";
+        String html = "public/index.html";
         when(httpRequest.getMethod()).thenReturn("GET");
         when(httpRequest.getPath()).thenReturn(path);
 

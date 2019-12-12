@@ -30,7 +30,7 @@ public class Router {
                     .withContent(htmlContent)
                     .build();
         }
-        htmlContent = HtmlParser.parseHtml("error.html");
+        htmlContent = HtmlParser.parseHtml("public/error.html");
         return new HttpResponse.Builder(httpRequest.getMethod())
                 .withStatusCode(NOT_FOUND)
                 .withContentLength(htmlContent.length())
