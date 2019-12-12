@@ -1,5 +1,8 @@
 package webserver;
 
+import webserver.request.HttpRequest;
+import webserver.socket.SocketIO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,27 +11,22 @@ import java.net.Socket;
 
 public class HttpHandler implements Runnable {
     private Socket clientSocket;
+    private Router router;
 
-    public HttpHandler(Socket clientSocket) {
+    public HttpHandler(Socket clientSocket, Router router) {
         this.clientSocket = clientSocket;
+        this.router = router;
     }
 
     public void run() {
-        int statusCode = 200;
-        String contentType = "text/html";
-        String content;
         try {
-            PrintWriter output = new PrintWriter(clientSocket.getOutputStream(), true);
+            PrintWriter output = SocketIO.createSocketWriter(clientSocket);
             BufferedReader input = SocketIO.createSocketReader(clientSocket);
-            HttpRequest httpRequest = new HttpRequest(SocketIO.readFromInputStream(input));
-            String path = httpRequest.getPath();
-            if (path.equals("/")) {
-                content = HtmlParser.parseHtml("index.html");
-            } else {
-                statusCode = 404;
-                content = HtmlParser.parseHtml("error.html");
-            }
-            output.println(HttpResponse.response(statusCode, contentType, content));
+            HttpRequest httpRequest = new HttpRequest(input);
+            String httpResponse = router.route(httpRequest);
+
+            output.println(httpResponse);
+
             input.close();
             output.close();
         } catch (IOException e) {
