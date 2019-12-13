@@ -22,8 +22,7 @@ public class Router {
     public HttpResponse route(HttpRequest httpRequest) throws IOException {
         String htmlContent;
         if (routes.containsKey(httpRequest.getPath())) {
-            htmlContent = HtmlParser.parseHtml(routes.get(httpRequest.getPath()));
-            return createResponse(httpRequest, htmlContent, OK);
+            return createResponse(httpRequest, routes.get(httpRequest.getPath()), OK);
         }
         htmlContent = HtmlParser.parseHtml("public/error.html");
         return createResponse(httpRequest, htmlContent, NOT_FOUND);

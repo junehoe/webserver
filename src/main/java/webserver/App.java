@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.Thread;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class App {
     public static void main(String[] args) {
@@ -34,14 +35,32 @@ public class App {
         }
     }
 
-    private static void createServerRoutes(Router router) {
-        router.addRoute("/", "public/index.html");
-        router.addRoute("/health-check", "public/health-check.html");
-        router.addRoute("/todo", "public/todo-list.html");
-        router.addRoute("/todo/1", "public/todo-item-1.html");
-        router.addRoute("/todo/2", "public/todo-item-2.html");
-        router.addRoute("/todo/3", "public/todo-item-3.html");
-        router.addRoute("/todo/4", "public/todo-item-4.html");
-        router.addRoute("/todo/5", "public/todo-item-5.html");
+    private static void createServerRoutes(Router router) throws IOException {
+        String todoList = "";
+        todoList += "<header><h1>Todo List</h1></header>";
+        todoList += "<section><a rel='item' href='/todo/1'>Do a barrel roll</a></section>";
+        todoList += "<section><a rel='item' href='/todo/2'>Buy groceries for the week</a></section>";
+        todoList += "<section><a rel='item' href='/todo/3'>Pretend to be a tree for a day</a></section>";
+        todoList += "<section><a rel='item' href='/todo/4'>Adopt a kitten</a></section>";
+        todoList += "<section><a rel='item' href='/todo/5'>Create a todo list</a></section>";
+        createRoute(router, "/", "Todo List", "<header><a href='/todo'>Click to view todo list</a></header>");
+        createRoute(router, "/health-check", "Health Check", "<h1>Everything is good!</h1>");
+        createRoute(router, "/todo", "Todo List", todoList);
+        createRoute(router, "/todo/1", "Do a barrel roll",
+                "<header><h1>Do a barrel roll</h1></header><footer><a rel='collection' href='/todo'>Go Back</a></footer>");
+        createRoute(router, "/todo/2", "Buy groceries for the week",
+                "<header><h1>Buy groceries for the week</h1></header><footer><a rel='collection' href='/todo'>Go Back</a></footer>");
+        createRoute(router, "/todo/3", "Pretend to be a tree for a day",
+                "<header><h1>Pretend to be a tree for a day</h1></header><footer><a rel='collection' href='/todo'>Go Back</a></footer>");
+        createRoute(router, "/todo/4", "Adopt a kitten",
+                "<header><h1>Adopt a kitten</h1></header><footer><a rel='collection' href='/todo'>Go Back</a></footer>");
+        createRoute(router, "/todo/5", "Create a todo list",
+                "<header><h1>Create a todo list</h1></header><footer><a rel='collection' href='/todo'>Go Back</a></footer>");
+    }
+
+    private static void createRoute(Router router, String path, String title, String body) throws IOException {
+        HashMap<String, String> descriptors = HtmlPageHandler.createPageHashMap(title, body);
+        String htmlString = HtmlPageHandler.createHtmlString(descriptors);
+        router.addRoute(path, htmlString);
     }
 }
