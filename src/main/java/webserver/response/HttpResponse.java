@@ -1,9 +1,5 @@
 package webserver.response;
 
-import webserver.socket.SocketIO;
-
-import java.io.PrintWriter;
-
 public class HttpResponse {
     private String method;
     private int statusCode;
@@ -13,11 +9,6 @@ public class HttpResponse {
     private String content;
 
     private HttpResponse() {}
-
-    public void send(PrintWriter output) {
-        String response = HttpResponseFormatter.format(this);
-        SocketIO.writeToOutputStream(output, response);
-    }
 
     public String getMethod() {
         return this.method;
