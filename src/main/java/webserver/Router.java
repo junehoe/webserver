@@ -23,19 +23,18 @@ public class Router {
         String htmlContent;
         if (routes.containsKey(httpRequest.getPath())) {
             htmlContent = HtmlParser.parseHtml(routes.get(httpRequest.getPath()));
-            return new HttpResponse.Builder(httpRequest.getMethod())
-                    .withStatusCode(OK)
-                    .withContentLength(htmlContent.length())
-                    .withContentType("text/html")
-                    .withContent(htmlContent)
-                    .build();
+            return createResponse(httpRequest, htmlContent, OK);
         }
         htmlContent = HtmlParser.parseHtml("public/error.html");
+        return createResponse(httpRequest, htmlContent, NOT_FOUND);
+    }
+
+    private HttpResponse createResponse(HttpRequest httpRequest, String content, int statusCode) {
         return new HttpResponse.Builder(httpRequest.getMethod())
-                .withStatusCode(NOT_FOUND)
-                .withContentLength(htmlContent.length())
+                .withStatusCode(statusCode)
+                .withContentLength(content.length())
                 .withContentType("text/html")
-                .withContent(htmlContent)
+                .withContent(content)
                 .build();
     }
 }
