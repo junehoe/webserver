@@ -7,8 +7,8 @@ import java.io.IOException;
 
 public class HttpRequest {
     private String methodHeader;
-    private static final int METHOD = 0;
-    private static final int PATH = 1;
+    private static final int METHOD_INDEX = 0;
+    private static final int PATH_INDEX = 1;
     private static final String SPACE = "\\s+";
 
     public HttpRequest(BufferedReader input) {
@@ -20,10 +20,10 @@ public class HttpRequest {
     }
 
     public String getMethod() {
-        return this.methodHeader.split(SPACE)[METHOD];
+        return this.methodHeader.split(SPACE)[METHOD_INDEX];
     }
 
     public String getPath() {
-        return this.methodHeader.split(SPACE)[PATH];
+        return this.methodHeader.split(SPACE)[PATH_INDEX];
     }
 }
