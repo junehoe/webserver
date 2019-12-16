@@ -8,7 +8,7 @@ import static webserver.Page.BODY;
 import static webserver.Page.TEMPLATE_HTML;
 import static webserver.Page.TITLE;
 
-public class HtmlPageHandler {
+public class HtmlBuilder {
     public static String createHtmlString(HashMap<String, String> pageContents) throws IOException {
         String templateString = HtmlParser.parseHtml(TEMPLATE_HTML);
         for (Map.Entry<String, String> entry : pageContents.entrySet()) {

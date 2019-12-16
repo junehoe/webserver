@@ -11,12 +11,12 @@ import static webserver.Page.TITLE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class HtmlPageHandlerTest {
+public class HtmlBuilderTest {
     HashMap<String, String> hashMap;
 
     @Before
     public void initialize() {
-        hashMap = HtmlPageHandler.createPageHashMap("Hello", "World");
+        hashMap = HtmlBuilder.createPageHashMap("Hello", "World");
     }
 
     @Test
@@ -40,7 +40,7 @@ public class HtmlPageHandlerTest {
 
     @Test
     public void createsHtmlStringBasedOnPageHashMap() throws IOException {
-        String htmlString = HtmlPageHandler.createHtmlString(hashMap);
+        String htmlString = HtmlBuilder.createHtmlString(hashMap);
 
         assertTrue(htmlString.contains("Hello"));
         assertTrue(htmlString.contains("World"));
@@ -48,7 +48,7 @@ public class HtmlPageHandlerTest {
 
     @Test
     public void createsCustomHtmlStringBasedOnPath() throws IOException {
-        String htmlString = HtmlPageHandler.createHtmlString(ERROR_HTML);
+        String htmlString = HtmlBuilder.createHtmlString(ERROR_HTML);
 
         assertTrue(htmlString.contains("404 Page Not Found"));
     }

@@ -67,8 +67,8 @@ public class App {
     }
 
     private static void createRoute(Router router, String path, String title, String body) throws IOException {
-        HashMap<String, String> descriptors = HtmlPageHandler.createPageHashMap(title, body);
-        String htmlString = HtmlPageHandler.createHtmlString(descriptors);
+        HashMap<String, String> descriptors = HtmlBuilder.createPageHashMap(title, body);
+        String htmlString = HtmlBuilder.createHtmlString(descriptors);
         router.addRoute(path, htmlString);
     }
 
@@ -87,7 +87,7 @@ public class App {
                 todoList += "<section><a rel='item' href='/todo/" + (i + 1) + "'>" + fileName + "</a></section>";
                 path = "/todo/" + (i + 1);
                 fullPath = directory + "/" + customFiles[i].getName();
-                router.addRoute(path, HtmlPageHandler.createHtmlString(fullPath));
+                router.addRoute(path, HtmlBuilder.createHtmlString(fullPath));
             }
         }
         createRoute(router, "/todo", "Todo List", todoList);
