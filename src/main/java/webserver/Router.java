@@ -4,6 +4,7 @@ import webserver.response.HttpResponse;
 import webserver.request.HttpRequest;
 
 import static webserver.Page.ERROR_HTML;
+import static webserver.Page.TEXT_HTML;
 import static webserver.response.ResponseCodes.NOT_FOUND;
 import static webserver.response.ResponseCodes.OK;
 
@@ -34,7 +35,7 @@ public class Router {
         return new HttpResponse.Builder(httpRequest.getMethod())
                 .withStatusCode(statusCode)
                 .withContentLength(content.length())
-                .withContentType("text/html")
+                .withContentType(TEXT_HTML)
                 .withContent(content)
                 .build();
     }
