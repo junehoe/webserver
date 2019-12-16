@@ -52,4 +52,21 @@ public class HtmlBuilderTest {
 
         assertTrue(htmlString.contains("404 Page Not Found"));
     }
+
+    @Test
+    public void createsHtmlHeaderString() {
+        String headerTitle = "This is the header title";
+        String expected = "<header><h1>This is the header title</h1></header>";
+
+        assertEquals(HtmlBuilder.createHeader(headerTitle), expected);
+    }
+
+    @Test
+    public void createsHtmlSectionString() {
+        String path = "/test-path";
+        String contents = "This is the content";
+        String expected = "<section><a rel='item' href='" + path + "'>" + contents + "</a></section>";
+
+        assertEquals(HtmlBuilder.createSection(path, contents), expected);
+    }
 }

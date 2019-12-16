@@ -28,6 +28,14 @@ public class HtmlBuilder {
         return hashMap;
     }
 
+    public static String createHeader(String headerTitle) {
+        return "<header><h1>" + headerTitle + "</h1></header>";
+    }
+
+    public static String createSection(String path, String sectionBody) {
+        return "<section><a rel='item' href='" + path + "'>" + sectionBody + "</a></section>";
+    }
+
     private static String replaceSubstring(String string, String placeholder, String value) {
         return string.replaceAll(placeholder, value);
     }
