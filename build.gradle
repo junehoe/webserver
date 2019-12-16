@@ -44,6 +44,9 @@ run {
     if (project.hasProperty('port')) {
         args findProperty('port')
     }
+    if (project.hasProperty('dir')) {
+        args findProperty('dir')
+    }
 }
 
 tasks.withType(Test) {
