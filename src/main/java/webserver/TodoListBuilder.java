@@ -1,6 +1,5 @@
 package webserver;
 
-import java.io.File;
 import static webserver.TodoItems.*;
 
 public class TodoListBuilder {
@@ -14,14 +13,12 @@ public class TodoListBuilder {
         return todoList;
     }
 
-    public static String buildList(File[] customFiles) {
+    public static String buildList(String[] customFiles) {
         String todoList = HtmlBuilder.createHeader("Todo List");
         for (int i = 0; i < customFiles.length; i++) {
-            if (customFiles[i].isFile()) {
-                String path = "/todo/" + (i + 1);
-                String fileName = getFileName(customFiles[i].getName());
-                todoList += HtmlBuilder.createSection(path, fileName);
-            }
+            String path = "/todo/" + (i + 1);
+            String fileName = getFileName(customFiles[i]);
+            todoList += HtmlBuilder.createSection(path, fileName);
         }
         return todoList;
     }

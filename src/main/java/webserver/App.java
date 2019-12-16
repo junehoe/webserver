@@ -66,19 +66,17 @@ public class App {
 
     private static void createTodoListRoutes(Router router, String directory) throws IOException {
         File folder = new File(directory);
-        File[] customFiles = folder.listFiles();
+        String[] customFiles = folder.list();
         String todoList = TodoListBuilder.buildList(customFiles);
         createCustomRoutes(router, directory, customFiles);
         createRoute(router, TODO_PATH, TODO_TITLE, todoList);
     }
 
-    private static void createCustomRoutes(Router router, String directory, File[] customFiles) throws IOException {
+    private static void createCustomRoutes(Router router, String directory, String[] customFiles) throws IOException {
         for (int i = 0; i < customFiles.length; i++) {
-            if (customFiles[i].isFile()) {
-                String path = "/todo/" + (i + 1);
-                String fullPath = directory + "/" + customFiles[i].getName();
-                router.addRoute(path, HtmlBuilder.createHtmlString(fullPath));
-            }
+            String path = "/todo/" + (i + 1);
+            String fullPath = directory + "/" + customFiles[i];
+            router.addRoute(path, HtmlBuilder.createHtmlString(fullPath));
         }
     }
 

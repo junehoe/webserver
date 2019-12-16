@@ -2,8 +2,6 @@ package webserver;
 
 import org.junit.Test;
 
-import java.io.File;
-
 import static org.junit.Assert.assertEquals;
 
 public class TodoListBuilderTest {
@@ -30,13 +28,12 @@ public class TodoListBuilderTest {
 
     @Test
     public void createsCustomTodoList() {
-        File folder = new File("/Users/briansung/Documents/projects/java/webserver/public/todo");
-        File[] customFiles = folder.listFiles();
+        String[] customFiles = new String[]{"fake1.html", "fake2.html", "fake3.html"};
+
         String expected = "<header><h1>Todo List</h1></header>";
-        expected += "<section><a rel='item' href='/todo/1'>feed-cat</a></section>";
-        expected += "<section><a rel='item' href='/todo/2'>feed-dog</a></section>";
-        expected += "<section><a rel='item' href='/todo/3'>feed-me</a></section>";
-        expected += "<section><a rel='item' href='/todo/4'>do-a-cool-thing</a></section>";
+        expected += "<section><a rel='item' href='/todo/1'>fake1</a></section>";
+        expected += "<section><a rel='item' href='/todo/2'>fake2</a></section>";
+        expected += "<section><a rel='item' href='/todo/3'>fake3</a></section>";
 
         assertEquals(TodoListBuilder.buildList(customFiles), expected);
     }
