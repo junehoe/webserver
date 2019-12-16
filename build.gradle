@@ -41,12 +41,8 @@ task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
 run {
-    if (project.hasProperty('port')) {
-        args findProperty('port')
-    }
-    if (project.hasProperty('dir')) {
-        args findProperty('dir')
-    }
+    systemProperty 'port', System.getProperty('port')
+    systemProperty 'dir', System.getProperty('dir')
 }
 
 tasks.withType(Test) {
