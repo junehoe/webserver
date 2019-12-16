@@ -3,13 +3,15 @@ package webserver;
 import webserver.response.HttpResponse;
 import webserver.request.HttpRequest;
 
+import static webserver.Page.ERROR_HTML;
+import static webserver.response.ResponseCodes.NOT_FOUND;
+import static webserver.response.ResponseCodes.OK;
+
 import java.io.IOException;
 import java.util.HashMap;
 
 public class Router {
     private HashMap<String, String> routes;
-    private static final int OK = 200;
-    private static final int NOT_FOUND = 404;
 
     public Router() {
         this.routes = new HashMap<>();
@@ -24,7 +26,7 @@ public class Router {
         if (routes.containsKey(httpRequest.getPath())) {
             return createResponse(httpRequest, routes.get(httpRequest.getPath()), OK);
         }
-        htmlContent = HtmlParser.parseHtml("public/error.html");
+        htmlContent = HtmlParser.parseHtml(ERROR_HTML);
         return createResponse(httpRequest, htmlContent, NOT_FOUND);
     }
 

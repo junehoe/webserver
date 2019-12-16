@@ -1,5 +1,7 @@
 package webserver.response;
 
+import static webserver.response.ResponseCodes.RESPONSE_CODES;
+
 public class HttpResponse {
     private String method;
     private int statusCode;
@@ -48,7 +50,7 @@ public class HttpResponse {
 
         public Builder withStatusCode(int statusCode) {
             this.statusCode = statusCode;
-            this.statusString = ResponseCodes.RESPONSE_CODES.get(statusCode);
+            this.statusString = RESPONSE_CODES.get(statusCode);
 
             return this;
         }
