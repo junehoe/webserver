@@ -2,28 +2,54 @@ package webserver;
 
 import java.io.IOException;
 import java.util.HashMap;
+import org.junit.Before;
 import org.junit.Test;
+
+import static webserver.Page.BODY;
+import static webserver.Page.ERROR_HTML;
+import static webserver.Page.TITLE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class HtmlPageHandlerTest {
-    @Test
-    public void createsAnHtmlPageHashMap() {
-        HashMap<String, String> expected = HtmlPageHandler.createPageHashMap("Hello", "World");
+    HashMap<String, String> hashMap;
 
-        assertEquals(expected.get("\\$title"), "Hello");
-        assertEquals(expected.get("\\$body"), "World");
+    @Before
+    public void initialize() {
+        hashMap = HtmlPageHandler.createPageHashMap("Hello", "World");
     }
 
     @Test
-    public void createsAnHtmlPageBasedOnHashMap() throws IOException {
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("\\$title", "Hello World");
-        hashMap.put("\\$body", "This is the body");
+    public void createsAHashMap() {
+        assertTrue(hashMap instanceof HashMap);
+    }
 
+    @Test
+    public void createsAHashMapWithGivenTitle() {
+        String expectedTitle = "Hello";
+
+        assertEquals(hashMap.get(TITLE), expectedTitle);
+    }
+
+    @Test
+    public void createsAHashMapWithGivenBody() {
+        String expectedBody = "World";
+
+        assertEquals(hashMap.get(BODY), expectedBody);
+    }
+
+    @Test
+    public void createsHtmlStringBasedOnPageHashMap() throws IOException {
         String htmlString = HtmlPageHandler.createHtmlString(hashMap);
 
-        assertTrue(htmlString.contains("Hello World"));
-        assertTrue(htmlString.contains("This is the body"));
+        assertTrue(htmlString.contains("Hello"));
+        assertTrue(htmlString.contains("World"));
+    }
+
+    @Test
+    public void createsCustomHtmlStringBasedOnPath() throws IOException {
+        String htmlString = HtmlPageHandler.createHtmlString(ERROR_HTML);
+
+        assertTrue(htmlString.contains("404 Page Not Found"));
     }
 }
