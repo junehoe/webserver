@@ -16,7 +16,7 @@ public class App {
     private static final String BLANK = "";
 
     public static void main(String[] args) {
-        String portArg = System.getProperty("port");
+        String portArg = System.getProperty("p");
         String dirArg = System.getProperty("dir");
 
         try {
