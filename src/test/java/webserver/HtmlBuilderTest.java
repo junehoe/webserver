@@ -5,9 +5,9 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import static webserver.Page.BODY;
-import static webserver.Page.ERROR_HTML;
-import static webserver.Page.TITLE;
+import static webserver.pages.Page.BODY;
+import static webserver.pages.Page.ERROR_HTML;
+import static webserver.pages.Page.TITLE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
