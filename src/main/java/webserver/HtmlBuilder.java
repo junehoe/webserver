@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static webserver.Page.BODY;
-import static webserver.Page.TEMPLATE_HTML;
-import static webserver.Page.TITLE;
+import webserver.parser.HtmlParser;
+
+import static webserver.pages.Page.BODY;
+import static webserver.pages.Page.TEMPLATE_HTML;
+import static webserver.pages.Page.TITLE;
 
 public class HtmlBuilder {
     public static String createHtmlString(HashMap<String, String> pageContents) throws IOException {
