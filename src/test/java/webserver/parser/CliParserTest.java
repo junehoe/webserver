@@ -33,6 +33,6 @@ public class CliParserTest {
     public void returnsNullForInvalidDirectory() {
         String invalidDirectory = "totally invalid directory";
 
-        assertNull(CliParser.getDirectory(invalidDirectory));;
+        assertEquals(CliParser.getDirectory(invalidDirectory), "");;
     }
 }

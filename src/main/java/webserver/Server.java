@@ -3,6 +3,7 @@ package webserver;
 import webserver.router.RouteInitializer;
 import webserver.router.Router;
 import webserver.socket.SocketCreator;
+import static webserver.parser.CliParser.EMPTY;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -52,7 +53,7 @@ public class Server implements Runnable {
 
     private void createRoutes(Router router) throws IOException {
         RouteInitializer.createServerRoutes(router);
-        if (this.directory.equals(null)) {
+        if (this.directory.equals(EMPTY)) {
             RouteInitializer.createTodoListRoutes(router);
         } else {
             RouteInitializer.createTodoListRoutes(router, this.directory);
