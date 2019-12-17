@@ -84,9 +84,9 @@ public class RouteInitializerTest {
 
         RouteInitializer.createTodoListRoutes(router, directory);
 
-        verify(router, times(1)).addRoute(TODO_3_PATH, htmlString1);
-        verify(router, times(1)).addRoute(TODO_1_PATH, htmlString2);
-        verify(router, times(1)).addRoute(TODO_2_PATH, htmlString3);
+        verify(router, times(1)).addRoute(TODO_1_PATH, htmlString1);
+        verify(router, times(1)).addRoute(TODO_2_PATH, htmlString2);
+        verify(router, times(1)).addRoute(TODO_3_PATH, htmlString3);
     }
 
     @Test
