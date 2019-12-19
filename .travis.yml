@@ -1,9 +1,9 @@
 language: java
 
-install: ./scripts/install.sh
+install: ./install.sh
 
 before_script:
   - ./gradlew run &
   - sleep 5
 
-script: ./scripts/spinach.sh
+script: ./spinach.sh
