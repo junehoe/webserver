@@ -16,7 +16,7 @@ public class HtmlBuilderTest {
 
     @Before
     public void initialize() {
-        hashMap = HtmlBuilder.createPageHashMap("Hello", "World");
+        hashMap = HtmlBuilder.createPageDescriptors("Hello", "World");
     }
 
     @Test

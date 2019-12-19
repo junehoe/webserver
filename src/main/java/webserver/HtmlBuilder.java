@@ -23,7 +23,7 @@ public class HtmlBuilder {
         return HtmlParser.parseHtml(path);
     }
 
-    public static HashMap<String, String> createPageHashMap(String title, String body) {
+    public static HashMap<String, String> createPageDescriptors(String title, String body) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put(TITLE, title);
         hashMap.put(BODY, body);

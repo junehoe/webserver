@@ -20,9 +20,9 @@ public class RouteInitializerTest {
 
     @Test
     public void createsServerRoutes() throws IOException {
-        HashMap<String, String> indexDescriptors = HtmlBuilder.createPageHashMap(INDEX_TITLE, INDEX_BODY);
+        HashMap<String, String> indexDescriptors = HtmlBuilder.createPageDescriptors(INDEX_TITLE, INDEX_BODY);
         String indexHtmlString = HtmlBuilder.createHtmlString(indexDescriptors);
-        HashMap<String, String> healthDescriptors = HtmlBuilder.createPageHashMap(HEALTH_TITLE, HEALTH_BODY);
+        HashMap<String, String> healthDescriptors = HtmlBuilder.createPageDescriptors(HEALTH_TITLE, HEALTH_BODY);
         String healthHtmlString = HtmlBuilder.createHtmlString(healthDescriptors);
 
         RouteInitializer.createServerRoutes(router);
@@ -33,7 +33,7 @@ public class RouteInitializerTest {
 
     @Test
     public void createsTodoListRoute() throws IOException {
-        HashMap<String, String> todoListDesc = HtmlBuilder.createPageHashMap(
+        HashMap<String, String> todoListDesc = HtmlBuilder.createPageDescriptors(
                 TODO_TITLE, TodoListBuilder.buildList()
         );
         String htmlString = HtmlBuilder.createHtmlString(todoListDesc);
@@ -45,19 +45,19 @@ public class RouteInitializerTest {
 
     @Test
     public void createsTodoItemsRoute() throws IOException {
-        HashMap<String, String> todo1Desc = HtmlBuilder.createPageHashMap(
+        HashMap<String, String> todo1Desc = HtmlBuilder.createPageDescriptors(
                 TODO_1_TITLE, TodoListBuilder.buildItem(TODO_1_TITLE)
         );
-        HashMap<String, String> todo2Desc = HtmlBuilder.createPageHashMap(
+        HashMap<String, String> todo2Desc = HtmlBuilder.createPageDescriptors(
                 TODO_2_TITLE, TodoListBuilder.buildItem(TODO_2_TITLE)
         );
-        HashMap<String, String> todo3Desc = HtmlBuilder.createPageHashMap(
+        HashMap<String, String> todo3Desc = HtmlBuilder.createPageDescriptors(
                 TODO_3_TITLE, TodoListBuilder.buildItem(TODO_3_TITLE)
         );
-        HashMap<String, String> todo4Desc = HtmlBuilder.createPageHashMap(
+        HashMap<String, String> todo4Desc = HtmlBuilder.createPageDescriptors(
                 TODO_4_TITLE, TodoListBuilder.buildItem(TODO_4_TITLE)
         );
-        HashMap<String, String> todo5Desc = HtmlBuilder.createPageHashMap(
+        HashMap<String, String> todo5Desc = HtmlBuilder.createPageDescriptors(
                 TODO_5_TITLE, TodoListBuilder.buildItem(TODO_5_TITLE)
         );
         String todo1String = HtmlBuilder.createHtmlString(todo1Desc);

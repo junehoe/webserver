@@ -44,7 +44,7 @@ public class RouteInitializer {
     }
 
     private static void createRoute(Router router, String path, String title, String body) throws IOException {
-        HashMap<String, String> descriptors = HtmlBuilder.createPageHashMap(title, body);
+        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(title, body);
         String htmlString = HtmlBuilder.createHtmlString(descriptors);
         router.addRoute(path, htmlString);
     }
