@@ -1,4 +1,4 @@
-package webserver;
+package webserver.socket;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,7 +12,7 @@ public class SocketIO {
     }
 
     public static PrintWriter createSocketWriter(Socket socket) throws IOException {
-        return new PrintWriter(socket.getOutputStream());
+        return new PrintWriter(socket.getOutputStream(), true);
     }
 
     public static String readFromInputStream(BufferedReader input) throws IOException {

@@ -1,4 +1,4 @@
-package webserver;
+package webserver.socket;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -1,10 +1,8 @@
-package webserver;
+package webserver.socket;
 
 import java.io.*;
 
 import java.net.Socket;
-
-import java.util.Scanner;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
