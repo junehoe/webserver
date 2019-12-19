@@ -3,7 +3,6 @@ package webserver.parser;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class CliParserTest {
     @Test
@@ -34,5 +33,10 @@ public class CliParserTest {
         String invalidDirectory = "totally invalid directory";
 
         assertEquals(CliParser.getDirectory(invalidDirectory), "");;
+    }
+
+    @Test
+    public void returnsBlankDirectoryForNullDirectory() {
+        assertEquals(CliParser.getDirectory(null), "");
     }
 }

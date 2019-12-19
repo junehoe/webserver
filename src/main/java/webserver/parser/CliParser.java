@@ -19,6 +19,9 @@ public class CliParser {
     }
 
     public static String getDirectory(String directory) {
+        if (directory == null) {
+            return EMPTY;
+        }
         File file = new File(directory);
         if (file.isDirectory()) {
             return directory;
