@@ -11,7 +11,6 @@ import java.net.Socket;
 
 public class Server implements Runnable {
     private ServerSocket serverSocket;
-    private Socket clientSocket;
     private int port;
     private String directory;
     private boolean running;
@@ -28,7 +27,7 @@ public class Server implements Runnable {
             Router router = new Router();
             createRoutes(router);
             while (running) {
-                clientSocket = SocketCreator.createClientSocket(serverSocket);
+                Socket clientSocket = SocketCreator.createClientSocket(serverSocket);
                 HttpHandler httpHandler = new HttpHandler(clientSocket, router);
                 new Thread(httpHandler).start();
             }
@@ -43,7 +42,7 @@ public class Server implements Runnable {
         new Thread(this).start();
     }
 
-    public void stop() throws IOException {
+    public void stop() {
         this.running = false;
     }
 
@@ -54,8 +53,10 @@ public class Server implements Runnable {
     private void createRoutes(Router router) throws IOException {
         RouteInitializer.createServerRoutes(router);
         if (this.directory.equals(EMPTY)) {
+            System.out.println("Using default directory");
             RouteInitializer.createTodoListRoutes(router);
         } else {
+            System.out.println("Serving files from " + this.directory);
             RouteInitializer.createTodoListRoutes(router, this.directory);
         }
     }
