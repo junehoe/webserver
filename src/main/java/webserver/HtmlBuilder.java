@@ -19,12 +19,8 @@ public class HtmlBuilder {
         return templateString;
     }
 
-    public static String createHtmlString(String path) throws IOException {
-        return HtmlParser.parseHtml(path, true);
-    }
-
-    public static String createCustomHtmlString(String path) throws IOException {
-        return HtmlParser.parseHtml(path, false);
+    public static String createHtmlString(String path, boolean isResource) throws IOException {
+        return HtmlParser.parseHtml(path, isResource);
     }
 
     public static HashMap<String, String> createPageDescriptors(String title, String body) {
