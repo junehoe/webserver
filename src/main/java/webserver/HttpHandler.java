@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class HttpHandler implements Runnable {
-    Socket clientSocket;
+    private Socket clientSocket;
 
     public HttpHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -23,10 +23,10 @@ public class HttpHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(SocketIO.readFromInputStream(input));
             String path = httpRequest.getPath();
             if (path.equals("/")) {
-                content = "<h1>Hello World!</h1>";
+                content = HtmlParser.parseHtml("index.html");
             } else {
                 statusCode = 404;
-                content = "<h1>Page not found</h1>";
+                content = HtmlParser.parseHtml("error.html");
             }
             output.println(HttpResponse.response(statusCode, contentType, content));
             input.close();
