@@ -12,7 +12,11 @@ Inside of the directory, run the following to start the server:
 ```
 gradle run -Dport=<desired-port-number> -Ddir=<desired-full-directory-to-serve>
 ```
-Alternatively, you can execute the `.jar` file by running:
+Alternatively, you can execute the `.jar`. First, you must run:
+```
+gradle build
+```
+This will generate a `.jar` file inside of `/build/libs`. `cd` into this directory and run:
 ```
 java -Dport=<desired-port-number> -Ddir=<desired-full-directory-to-serve> -jar webserver.jar
 ```
