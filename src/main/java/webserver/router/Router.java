@@ -29,7 +29,7 @@ public class Router {
         if (routes.containsKey(httpRequest.getPath())) {
             return createResponse(httpRequest, routes.get(httpRequest.getPath()), OK);
         }
-        htmlContent = HtmlParser.parseHtml(ERROR_HTML);
+        htmlContent = HtmlParser.parseHtml(ERROR_HTML, true);
         return createResponse(httpRequest, htmlContent, NOT_FOUND);
     }
 

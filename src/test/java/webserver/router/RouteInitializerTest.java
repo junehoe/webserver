@@ -77,7 +77,7 @@ public class RouteInitializerTest {
 
     @Test
     public void createsCustomTodoItemsRoute() throws IOException {
-        String directory = "./public/test";
+        String directory = "public/test";
         String htmlString1 = "This is fake file 1.";
         String htmlString2 = "This is fake file 2.";
         String htmlString3 = "This is fake file 3.";

@@ -39,7 +39,7 @@ public class RouteInitializer {
         for (int i = 0; i < customFiles.length; i++) {
             String path = "/todo/" + (i + 1);
             String fullPath = directory + "/" + customFiles[i];
-            router.addRoute(path, HtmlBuilder.createHtmlString(fullPath));
+            router.addRoute(path, HtmlBuilder.createCustomHtmlString(fullPath));
         }
     }
 

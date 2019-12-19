@@ -69,4 +69,12 @@ public class HtmlBuilderTest {
 
         assertEquals(HtmlBuilder.createSection(path, contents), expected);
     }
+
+    @Test
+    public void createsCustomHtmlStringFromDirectory() throws IOException {
+        String path = "public/test/fake-1.html";
+        String expected = "This is fake file 1.";
+
+        assertEquals(HtmlBuilder.createCustomHtmlString(path), expected);
+    }
 }
