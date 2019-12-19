@@ -3,11 +3,12 @@ package webserver.router;
 import webserver.parser.HtmlParser;
 import webserver.response.HttpResponse;
 import webserver.request.HttpRequest;
+import webserver.response.HttpStatusCode;
 
 import static webserver.pages.Page.ERROR_HTML;
 import static webserver.pages.Page.TEXT_HTML;
-import static webserver.response.ResponseCodes.NOT_FOUND;
-import static webserver.response.ResponseCodes.OK;
+import static webserver.response.HttpStatusCode.NOT_FOUND;
+import static webserver.response.HttpStatusCode.OK;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,9 +33,9 @@ public class Router {
         return createResponse(httpRequest, htmlContent, NOT_FOUND);
     }
 
-    private HttpResponse createResponse(HttpRequest httpRequest, String content, int statusCode) {
+    private HttpResponse createResponse(HttpRequest httpRequest, String content, HttpStatusCode httpStatusCode) {
         return new HttpResponse.Builder(httpRequest.getMethod())
-                .withStatusCode(statusCode)
+                .withStatusCode(httpStatusCode)
                 .withContentLength(content.length())
                 .withContentType(TEXT_HTML)
                 .withContent(content)
