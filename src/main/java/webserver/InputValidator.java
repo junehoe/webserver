@@ -11,10 +11,7 @@ public class InputValidator {
         } catch (NumberFormatException | NullPointerException e) {
             return false;
         }
-        if (isValidPortNumber(port)) {
-            return true;
-        }
-        return false;
+        return isValidPortNumber(port);
     }
 
     private static boolean isValidPortNumber(int port) {
