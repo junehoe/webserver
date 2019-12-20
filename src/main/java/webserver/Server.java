@@ -38,7 +38,7 @@ public class Server implements Runnable {
 
     public void start() {
         this.running = true;
-        System.out.println("Listening for connection on port " + this.port + "...");
+        Logger.printConnectionMessage(this.port);
         new Thread(this).start();
     }
 
@@ -53,10 +53,10 @@ public class Server implements Runnable {
     private void createRoutes(Router router) throws IOException {
         RouteInitializer.createServerRoutes(router);
         if (this.directory.equals(EMPTY_DIRECTORY)) {
-            System.out.println("Using default directory");
+            Logger.printDefaultDirectoryMessage();
             RouteInitializer.createTodoListRoutes(router);
         } else {
-            System.out.println("Serving files from " + this.directory);
+            Logger.printCustomDirectoryMessage(this.directory);
             RouteInitializer.createTodoListRoutes(router, this.directory);
         }
     }
