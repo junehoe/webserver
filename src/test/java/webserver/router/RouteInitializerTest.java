@@ -1,5 +1,6 @@
 package webserver.router;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import org.junit.Test;
@@ -17,6 +18,9 @@ import static webserver.todo.TodoItems.*;
 public class RouteInitializerTest {
     @Mock
     Router router;
+
+    @Mock
+    File file;
 
     @Test
     public void createsServerRoutes() throws IOException {
@@ -84,9 +88,9 @@ public class RouteInitializerTest {
 
         RouteInitializer.createTodoListRoutes(router, directory);
 
-        verify(router, times(1)).addRoute(TODO_1_PATH, htmlString1);
-        verify(router, times(1)).addRoute(TODO_2_PATH, htmlString2);
-        verify(router, times(1)).addRoute(TODO_3_PATH, htmlString3);
+        verify(router, times(1)).addRoute(TODO_1_PATH, htmlString2);
+        verify(router, times(1)).addRoute(TODO_2_PATH, htmlString3);
+        verify(router, times(1)).addRoute(TODO_3_PATH, htmlString1);
     }
 
     @Test
