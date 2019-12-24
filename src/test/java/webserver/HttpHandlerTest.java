@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import webserver.parser.HtmlParser;
+import webserver.router.Route;
 import webserver.router.Router;
 
 import static org.junit.Assert.*;
@@ -31,14 +32,14 @@ public class HttpHandlerTest {
         outContent = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(outContent);
         router = new Router();
-        router.addRoute("/", HtmlParser.parseHtml("/index.html", true));
-        router.addRoute("/health-check", HtmlParser.parseHtml("/health-check.html", true));
-        router.addRoute("/todo", HtmlParser.parseHtml("/todo-list.html", true));
-        router.addRoute("/todo/1", HtmlParser.parseHtml("/todo-item-1.html", true));
-        router.addRoute("/todo/2", HtmlParser.parseHtml("/todo-item-2.html", true));
-        router.addRoute("/todo/3", HtmlParser.parseHtml("/todo-item-3.html", true));
-        router.addRoute("/todo/4", HtmlParser.parseHtml("/todo-item-4.html", true));
-        router.addRoute("/todo/5", HtmlParser.parseHtml("/todo-item-5.html", true));
+        router.addRoute(new Route("GET", "/", HtmlParser.parseHtml("/index.html", true)));
+        router.addRoute(new Route("GET", "/health-check", HtmlParser.parseHtml("/health-check.html", true)));
+        router.addRoute(new Route("GET", "/todo", HtmlParser.parseHtml("/todo-list.html", true)));
+        router.addRoute(new Route("GET", "/todo/1", HtmlParser.parseHtml("/todo-item-1.html", true)));
+        router.addRoute(new Route("GET", "/todo/2", HtmlParser.parseHtml("/todo-item-2.html", true)));
+        router.addRoute(new Route("GET", "/todo/3", HtmlParser.parseHtml("/todo-item-3.html", true)));
+        router.addRoute(new Route("GET", "/todo/4", HtmlParser.parseHtml("/todo-item-4.html", true)));
+        router.addRoute(new Route("GET", "/todo/5", HtmlParser.parseHtml("/todo-item-5.html", true)));
     }
 
     @Before

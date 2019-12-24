@@ -37,13 +37,18 @@ public class RouteInitializer {
         for (int i = 0; i < customFiles.length; i++) {
             String path = "/todo/" + (i + 1);
             String fullPath = directory + "/" + customFiles[i];
-            router.addRoute(path, HtmlBuilder.createHtmlString(fullPath, false));
+            addRoutes(router, path, HtmlBuilder.createHtmlString(fullPath, false));
         }
     }
 
     private static void createRoute(Router router, String path, String title, String body) throws IOException {
         HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(title, body);
         String htmlString = HtmlBuilder.createHtmlString(descriptors);
-        router.addRoute(path, htmlString);
+        addRoutes(router, path, htmlString);
+    }
+
+    private static void addRoutes(Router router, String path, String htmlString) {
+        router.addRoute(new Route("GET", path, htmlString));
+        router.addRoute(new Route("HEAD", path, htmlString));
     }
 }

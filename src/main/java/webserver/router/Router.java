@@ -11,26 +11,30 @@ import static webserver.response.HttpStatusCode.NOT_FOUND;
 import static webserver.response.HttpStatusCode.OK;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Router {
-    private HashMap<String, String> routes;
+    private ArrayList<Route> routes;
 
     public Router() {
-        this.routes = new HashMap<>();
+        this.routes = new ArrayList<>();
     }
 
-    public void addRoute(String path, String html) {
-        this.routes.put(path, html);
+    public void addRoute(Route route) {
+        this.routes.add(route);
     }
 
     public HttpResponse route(HttpRequest httpRequest) throws IOException {
         String htmlContent;
-        if (routes.containsKey(httpRequest.getPath())) {
-            return createResponse(httpRequest, routes.get(httpRequest.getPath()), OK);
+        for (Route route : routes) {
+            if (route.getPath().equals(httpRequest.getPath())) return createResponse(httpRequest, route.getBody(), OK);
         }
         htmlContent = HtmlParser.parseHtml(ERROR_HTML, true);
         return createResponse(httpRequest, htmlContent, NOT_FOUND);
+    }
+
+    public ArrayList<Route> getRoutes() {
+        return routes;
     }
 
     private HttpResponse createResponse(HttpRequest httpRequest, String content, HttpStatusCode httpStatusCode) {

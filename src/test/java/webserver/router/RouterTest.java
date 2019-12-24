@@ -1,5 +1,6 @@
 package webserver.router;
 
+import webserver.parser.HtmlParser;
 import webserver.request.HttpRequest;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import webserver.response.HttpResponse;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -27,22 +29,41 @@ public class RouterTest {
     }
 
     @Test
-    public void addsRouteAndReturnsResponseObject() throws IOException {
+    public void return200ResponseObjectIfRouteExists() throws IOException {
         String path = "/";
-        String html = "public/index.html";
+        String html = "/index.html";
+
         when(httpRequest.getMethod()).thenReturn("GET");
-        when(httpRequest.getPath()).thenReturn(path);
+        when(httpRequest.getPath()).thenReturn("/");
+        router.addRoute(new Route("GET", path, HtmlParser.parseHtml(html, true)));
 
-        router.addRoute(path, html);
+        HttpResponse httpResponse = router.route(httpRequest);
 
-        assertNotNull(router.route(httpRequest));
+        assertEquals(200, httpResponse.getStatusCode());
     }
 
     @Test
-    public void returnsResponseObjectDespiteNotInRoute() throws IOException {
+    public void returns404ResponseObjectIfNotInRoute() throws IOException {
+        String path = "/";
+        String html = "/index.html";
+
         when(httpRequest.getMethod()).thenReturn("GET");
         when(httpRequest.getPath()).thenReturn("/fake-path");
+        router.addRoute(new Route("GET", path, HtmlParser.parseHtml(html, true)));
 
-        assertNotNull(router.route(httpRequest));
+        HttpResponse httpResponse = router.route(httpRequest);
+
+        assertEquals(404, httpResponse.getStatusCode());
+    }
+
+    @Test
+    public void getsTheRoutes() {
+        Route route1 = new Route("GET", "/route1", "Route 1");
+        Route route2 = new Route("HEAD", "/route2", "Route 2");
+
+        router.addRoute(route1);
+        router.addRoute(route2);
+
+        assertEquals(2, router.getRoutes().size());
     }
 }

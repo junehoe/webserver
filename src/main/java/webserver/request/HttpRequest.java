@@ -1,29 +1,25 @@
 package webserver.request;
 
-import webserver.socket.SocketIO;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-
 public class HttpRequest {
-    private String methodHeader;
-    private static final int METHOD_INDEX = 0;
-    private static final int PATH_INDEX = 1;
-    private static final String SPACE = "\\s+";
+    private final String method;
+    private final String path;
+    private final String httpVersion;
 
-    public HttpRequest(BufferedReader input) {
-        try {
-            this.methodHeader = SocketIO.readFromInputStream(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public HttpRequest(String method, String path, String httpVersion) {
+        this.method = method;
+        this.path = path;
+        this.httpVersion = httpVersion;
     }
 
     public String getMethod() {
-        return this.methodHeader.split(SPACE)[METHOD_INDEX];
+        return method;
     }
 
     public String getPath() {
-        return this.methodHeader.split(SPACE)[PATH_INDEX];
+        return path;
+    }
+
+    public String getHttpVersion() {
+        return httpVersion;
     }
 }
