@@ -38,6 +38,26 @@ public class HtmlBuilder {
         return "<section><a rel='item' href='" + path + "'>" + sectionBody + "</a></section>";
     }
 
+    public static String createForm(String path, String method, String body) {
+        return "<form action='" + path + "' method='" + method + "'>" + body + "</form>";
+    }
+
+    public static String createInput(String type) {
+        return "<input type='" + type + "'>";
+    }
+
+    public static String createInput(String type, String name) {
+        return "<input type='" + type + "' name='" + name + "'>";
+    }
+
+    public static String createGoBackFooter() {
+        return "<footer><a rel='collection' href='/todo'>Go Back</a></footer>";
+    }
+
+    public static String createBreak() {
+        return "<br>";
+    }
+
     private static String replaceSubstring(String string, String placeholder, String value) {
         return string.replaceAll(placeholder, value);
     }

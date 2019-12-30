@@ -9,3 +9,6 @@ build
 **/.idea/usage.statistic.xml
 **/.idea/tasks.xml
 **/.idea/shelf/
+
+# Ignore todo directory
+/todo/*

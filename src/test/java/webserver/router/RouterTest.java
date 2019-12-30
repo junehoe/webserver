@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import webserver.response.HttpResponse;
+import webserver.todo.TodoList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class RouterTest {
     private Router router;
+    private TodoList todoList;
 
     @Mock
     private HttpRequest httpRequest;
@@ -26,6 +28,7 @@ public class RouterTest {
     @Before
     public void initialize() {
         router = new Router();
+        todoList = new TodoList();
     }
 
     @Test
@@ -37,7 +40,7 @@ public class RouterTest {
         when(httpRequest.getPath()).thenReturn("/");
         router.addRoute(new Route("GET", path, HtmlParser.parseHtml(html, true)));
 
-        HttpResponse httpResponse = router.route(httpRequest);
+        HttpResponse httpResponse = router.route(httpRequest, todoList);
 
         assertEquals(200, httpResponse.getStatusCode());
     }
@@ -51,7 +54,7 @@ public class RouterTest {
         when(httpRequest.getPath()).thenReturn("/fake-path");
         router.addRoute(new Route("GET", path, HtmlParser.parseHtml(html, true)));
 
-        HttpResponse httpResponse = router.route(httpRequest);
+        HttpResponse httpResponse = router.route(httpRequest, todoList);
 
         assertEquals(404, httpResponse.getStatusCode());
     }
@@ -65,5 +68,18 @@ public class RouterTest {
         router.addRoute(route2);
 
         assertEquals(2, router.getRoutes().size());
+    }
+
+    @Test
+    public void returns303PostResponseObjectForPost() throws IOException {
+        String path = "/todo/new";
+
+        when(httpRequest.getMethod()).thenReturn("POST");
+        when(httpRequest.getBody()).thenReturn("name=Hello");
+        router.addRoute(new Route("POST", path));
+
+        HttpResponse httpResponse = router.route(httpRequest, todoList);
+
+        assertEquals(303, httpResponse.getStatusCode());
     }
 }

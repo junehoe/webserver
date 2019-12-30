@@ -3,7 +3,12 @@ package webserver.router;
 public class Route {
     private final String method;
     private final String path;
-    private final String body;
+    private String body;
+
+    public Route(String method, String path) {
+        this.method = method;
+        this.path = path;
+    }
 
     public Route(String method, String path, String body) {
         this.method = method;
@@ -21,5 +26,9 @@ public class Route {
 
     public String getBody() {
         return body;
+    }
+
+    public void setBody(String newBody) {
+        this.body = newBody;
     }
 }

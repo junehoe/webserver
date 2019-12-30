@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import webserver.parser.HtmlParser;
 import webserver.router.Route;
 import webserver.router.Router;
+import webserver.todo.TodoList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -24,6 +25,7 @@ public class HttpHandlerTest {
     private final String CRLF = "\r\n";
     private ByteArrayOutputStream outContent;
     private Router router;
+    private TodoList todoList;
 
     @Mock
     Socket clientSocket;
@@ -31,6 +33,7 @@ public class HttpHandlerTest {
     public void initialize() throws IOException {
         outContent = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(outContent);
+        todoList = new TodoList();
         router = new Router();
         router.addRoute(new Route("GET", "/", HtmlParser.parseHtml("/index.html", true)));
         router.addRoute(new Route("GET", "/health-check", HtmlParser.parseHtml("/health-check.html", true)));
@@ -59,7 +62,7 @@ public class HttpHandlerTest {
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
@@ -81,7 +84,7 @@ public class HttpHandlerTest {
         expected += htmlContent + "\n";
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
@@ -96,7 +99,7 @@ public class HttpHandlerTest {
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
@@ -111,7 +114,7 @@ public class HttpHandlerTest {
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
@@ -126,7 +129,7 @@ public class HttpHandlerTest {
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
@@ -141,7 +144,7 @@ public class HttpHandlerTest {
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
@@ -156,7 +159,7 @@ public class HttpHandlerTest {
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
@@ -171,7 +174,7 @@ public class HttpHandlerTest {
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
@@ -186,7 +189,7 @@ public class HttpHandlerTest {
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 

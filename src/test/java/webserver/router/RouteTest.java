@@ -27,4 +27,11 @@ public class RouteTest {
     public void returnsTheHtmlBody() {
         assertEquals("This is the body", route.getBody());
     }
+
+    @Test
+    public void theBodyCanBeSet() {
+        route.setBody("This is the set body");
+
+        assertEquals(route.getBody(), "This is the set body");
+    }
 }
