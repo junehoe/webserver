@@ -80,20 +80,6 @@ public class RouteInitializerTest {
     }
 
     @Test
-    public void createsCustomTodoItemsRoute() throws IOException {
-        String directory = "public/test";
-        String htmlString1 = "This is fake file 1.";
-        String htmlString2 = "This is fake file 2.";
-        String htmlString3 = "This is fake file 3.";
-
-        RouteInitializer.createTodoListRoutes(router, directory);
-
-        verify(router, times(1)).addRoute(TODO_1_PATH, htmlString2);
-        verify(router, times(1)).addRoute(TODO_2_PATH, htmlString3);
-        verify(router, times(1)).addRoute(TODO_3_PATH, htmlString1);
-    }
-
-    @Test
     public void throwsNullPointerExceptionIfDirectoryIsInvalid() {
         try {
             String directory = "obviously/fake/path";
