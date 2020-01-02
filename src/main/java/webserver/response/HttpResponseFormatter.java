@@ -7,7 +7,7 @@ public class HttpResponseFormatter {
         response += "HTTP/1.1 " + res.getStatusCode() + " " + res.getStatusString();
         response += CRLF;
         if (res.getMethod().equals("POST")) {
-            response += "Location: " + res.getLocation();
+            response += "Location: " + res.getLocation() + CRLF;
         } else {
             response += "Content-Length: " + res.getContentLength();
             response += CRLF;

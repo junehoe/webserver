@@ -12,16 +12,18 @@ import webserver.todo.TodoListBuilder;
 
 import static webserver.pages.Page.ERROR_HTML;
 import static webserver.pages.Page.TEXT_HTML;
+import static webserver.response.HttpStatusCode.CREATED;
 import static webserver.response.HttpStatusCode.NOT_FOUND;
 import static webserver.response.HttpStatusCode.OK;
 import static webserver.response.HttpStatusCode.SEE_OTHER;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Router {
     private ArrayList<Route> routes;
+    private String path;
 
     public Router() {
         this.routes = new ArrayList<>();
@@ -31,10 +33,13 @@ public class Router {
         this.routes.add(route);
     }
 
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public HttpResponse route(HttpRequest httpRequest, TodoList todoList) throws IOException {
         ArrayList<TodoItem> todoItemList = todoList.getTodoList();
         if (httpRequest.getMethod().equals("POST")) {
-            String path = "/todo/" + (todoItemList.size() + 1);
             String title = getTitle(httpRequest.getBody());
             for (TodoItem item : todoItemList) {
                 if (item.getTitle().equals(title)) {
@@ -49,7 +54,7 @@ public class Router {
             addRoute(new Route("HEAD", indexedPath, HtmlBuilder.createHtmlString(pageDescriptors)));
             todoList.add(new TodoItem(indexedPath, title));
             updateRoute("/todo", TodoListBuilder.buildList(todoItemList));
-            return createPostResponse(httpRequest, SEE_OTHER, path);
+            return createPostResponse(httpRequest, CREATED, indexedPath);
         }
 
         String htmlContent;

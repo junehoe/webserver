@@ -4,6 +4,7 @@ import webserver.parser.HtmlParser;
 import webserver.request.HttpRequest;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -71,15 +72,16 @@ public class RouterTest {
     }
 
     @Test
-    public void returns303PostResponseObjectForPost() throws IOException {
+    public void returns201PostResponseObjectForPost() throws IOException {
         String path = "/todo/new";
 
         when(httpRequest.getMethod()).thenReturn("POST");
         when(httpRequest.getBody()).thenReturn("name=Hello");
         router.addRoute(new Route("POST", path));
+        router.setPath(Paths.get("").toAbsolutePath().toString() + "/public/test/post-test");
 
         HttpResponse httpResponse = router.route(httpRequest, todoList);
 
-        assertEquals(303, httpResponse.getStatusCode());
+        assertEquals(201, httpResponse.getStatusCode());
     }
 }

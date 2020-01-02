@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Server implements Runnable {
     private ServerSocket serverSocket;
@@ -57,12 +59,15 @@ public class Server implements Runnable {
         RouteInitializer.createServerRoutes(router);
         if (this.directory.equals(EMPTY_DIRECTORY)) {
             Logger.printDefaultDirectoryMessage();
-            todoList.initializeHardCodedList();
+            Path todoListPath = Paths.get("").toAbsolutePath();
+            router.setPath(todoListPath.toString() + "/todo");
+            todoList.initializeHardCodedList(todoListPath.toString());
         } else {
             Logger.printCustomDirectoryMessage(this.directory);
             File folder = new File(this.directory);
-            String[] customFiles = folder.list();
+            File[] customFiles = folder.listFiles();
             todoList.initializeCustomList(customFiles);
+            router.setPath(this.directory);
         }
         RouteInitializer.createTodoListRoutes(router, todoList.getTodoList());
     }

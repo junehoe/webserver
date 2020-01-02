@@ -3,9 +3,9 @@ package webserver.response;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+import static webserver.response.HttpStatusCode.CREATED;
 import static webserver.response.HttpStatusCode.NOT_FOUND;
 import static webserver.response.HttpStatusCode.OK;
-import static webserver.response.HttpStatusCode.SEE_OTHER;
 
 public class HttpResponseFormatterTest {
     @Test
@@ -42,10 +42,10 @@ public class HttpResponseFormatterTest {
     @Test
     public void returnsThePostResponseString() {
         HttpResponse httpResponse = new HttpResponse.Builder("POST")
-                .withStatusCode(SEE_OTHER)
+                .withStatusCode(CREATED)
                 .withLocation("/")
                 .build();
-        String expected = "HTTP/1.1 303 See Other\r\nLocation: /";
+        String expected = "HTTP/1.1 201 Created\r\nLocation: /\r\n";
 
         assertEquals(HttpResponseFormatter.format(httpResponse), expected);
     }
