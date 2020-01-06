@@ -48,7 +48,7 @@ public class HtmlBuilderTest {
 
     @Test
     public void createsCustomHtmlStringBasedOnPath() throws IOException {
-        String htmlString = HtmlBuilder.createHtmlString(ERROR_HTML);
+        String htmlString = HtmlBuilder.createHtmlString(ERROR_HTML, true);
 
         assertTrue(htmlString.contains("404 Page Not Found"));
     }
@@ -68,5 +68,13 @@ public class HtmlBuilderTest {
         String expected = "<section><a rel='item' href='" + path + "'>" + contents + "</a></section>";
 
         assertEquals(HtmlBuilder.createSection(path, contents), expected);
+    }
+
+    @Test
+    public void createsCustomHtmlStringFromDirectory() throws IOException {
+        String path = "public/test/fake-1.html";
+        String expected = "This is fake file 1.";
+
+        assertEquals(HtmlBuilder.createHtmlString(path, false), expected);
     }
 }

@@ -12,15 +12,15 @@ import static webserver.pages.Page.TITLE;
 
 public class HtmlBuilder {
     public static String createHtmlString(HashMap<String, String> pageContents) throws IOException {
-        String templateString = HtmlParser.parseHtml(TEMPLATE_HTML);
+        String templateString = HtmlParser.parseHtml(TEMPLATE_HTML, true);
         for (Map.Entry<String, String> entry : pageContents.entrySet()) {
             templateString = replaceSubstring(templateString, entry.getKey(), entry.getValue());
         }
         return templateString;
     }
 
-    public static String createHtmlString(String path) throws IOException {
-        return HtmlParser.parseHtml(path);
+    public static String createHtmlString(String path, boolean isResource) throws IOException {
+        return HtmlParser.parseHtml(path, isResource);
     }
 
     public static HashMap<String, String> createPageDescriptors(String title, String body) {

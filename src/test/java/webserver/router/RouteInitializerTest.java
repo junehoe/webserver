@@ -1,5 +1,6 @@
 package webserver.router;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import org.junit.Test;
@@ -17,6 +18,9 @@ import static webserver.todo.TodoItems.*;
 public class RouteInitializerTest {
     @Mock
     Router router;
+
+    @Mock
+    File file;
 
     @Test
     public void createsServerRoutes() throws IOException {
@@ -73,20 +77,6 @@ public class RouteInitializerTest {
         verify(router, times(1)).addRoute(TODO_3_PATH, todo3String);
         verify(router, times(1)).addRoute(TODO_4_PATH, todo4String);
         verify(router, times(1)).addRoute(TODO_5_PATH, todo5String);
-    }
-
-    @Test
-    public void createsCustomTodoItemsRoute() throws IOException {
-        String directory = "./public/test";
-        String htmlString1 = "This is fake file 1.";
-        String htmlString2 = "This is fake file 2.";
-        String htmlString3 = "This is fake file 3.";
-
-        RouteInitializer.createTodoListRoutes(router, directory);
-
-        verify(router, times(1)).addRoute(TODO_1_PATH, htmlString1);
-        verify(router, times(1)).addRoute(TODO_2_PATH, htmlString2);
-        verify(router, times(1)).addRoute(TODO_3_PATH, htmlString3);
     }
 
     @Test

@@ -5,7 +5,6 @@ import webserver.todo.TodoListBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import static webserver.pages.ServerPages.*;
@@ -35,11 +34,10 @@ public class RouteInitializer {
     }
 
     private static void createCustomRoutes(Router router, String directory, String[] customFiles) throws IOException {
-        Arrays.sort(customFiles);
         for (int i = 0; i < customFiles.length; i++) {
             String path = "/todo/" + (i + 1);
             String fullPath = directory + "/" + customFiles[i];
-            router.addRoute(path, HtmlBuilder.createHtmlString(fullPath));
+            router.addRoute(path, HtmlBuilder.createHtmlString(fullPath, false));
         }
     }
 

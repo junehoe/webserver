@@ -6,7 +6,7 @@ import java.io.File;
 
 public class CliParser {
     private static final int DEFAULT_PORT = 5000;
-    public static final String EMPTY = "";
+    public static final String EMPTY_DIRECTORY = "";
 
     public static int getPort(String port) {
         if (InputValidator.isValidPort(port)) {
@@ -19,11 +19,14 @@ public class CliParser {
     }
 
     public static String getDirectory(String directory) {
+        if (directory == null) {
+            return EMPTY_DIRECTORY;
+        }
         File file = new File(directory);
         if (file.isDirectory()) {
             return directory;
         } else {
-            return EMPTY;
+            return EMPTY_DIRECTORY;
         }
     }
 }

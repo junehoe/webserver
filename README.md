@@ -12,12 +12,24 @@ Inside of the directory, run the following to start the server:
 ```
 gradle run -Dport=<desired-port-number> -Ddir=<desired-full-directory-to-serve>
 ```
-NOTE: If no port and directory are specified, the port number will be defaulted to `5000` and the default directory will be used..
+Alternatively, you can execute the `.jar`. First, you must run:
+```
+gradle build
+```
+This will generate a `.jar` file inside of `/build/libs`. `cd` into this directory and run:
+```
+java -Dport=<desired-port-number> -Ddir=<desired-full-directory-to-serve> -jar webserver.jar
+```
+NOTE: If no port and directory are specified, the port number will be defaulted to `5000` and the default directory will be used.
 To exit the server, press `Ctrl-D`.
 ### Example
 If you would like to create a server on port `8080` and serve the directory `/Users/cloud/Desktop/directory-to-serve`, then you would run:
 ```
 gradle run -Dport=8080 -Ddir=/Users/cloud/Desktop/directory-to-serve
+```
+Using the `.jar` file:
+```
+java -Dport=8080 -Ddir=/Users/cloud/Desktop/directory-to-serve -jar webserver.jar
 ```
 This creates a server socket on port `8080` and serves the files in the specified directory.. Then inside of a browser, go to `localhost:8080` to see the contents.
 
