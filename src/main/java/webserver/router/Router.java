@@ -54,7 +54,7 @@ public class Router {
             addRoute(new Route("HEAD", indexedPath, HtmlBuilder.createHtmlString(pageDescriptors)));
             todoList.add(new TodoItem(indexedPath, title));
             updateRoute("/todo", TodoListBuilder.buildList(todoItemList));
-            return createPostResponse(httpRequest, CREATED, indexedPath);
+            return createPostResponse(httpRequest, SEE_OTHER, indexedPath);
         }
 
         String htmlContent;

@@ -72,7 +72,7 @@ public class RouterTest {
     }
 
     @Test
-    public void returns201PostResponseObjectForPost() throws IOException {
+    public void returns303PostResponseObjectForPost() throws IOException {
         String path = "/todo/new";
 
         when(httpRequest.getMethod()).thenReturn("POST");
@@ -82,6 +82,6 @@ public class RouterTest {
 
         HttpResponse httpResponse = router.route(httpRequest, todoList);
 
-        assertEquals(201, httpResponse.getStatusCode());
+        assertEquals(303, httpResponse.getStatusCode());
     }
 }

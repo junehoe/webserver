@@ -3,7 +3,7 @@ Feature: Create a TODO item
 
   Scenario: Successfully creating a TODO item
     Given I make a valid POST request to the listing page
-    Then my response should have status code 201
+    Then my response should have status code 303
     And my response should have a Location header pointing to a detail page
 
   Scenario: Trying to create a TODO item with an unsupported media type
