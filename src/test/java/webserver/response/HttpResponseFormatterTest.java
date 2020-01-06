@@ -3,12 +3,15 @@ package webserver.response;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+import static webserver.response.HttpStatusCode.NOT_FOUND;
+import static webserver.response.HttpStatusCode.OK;
+
 public class HttpResponseFormatterTest {
     @Test
     public void returnsTheGetResponseString() {
         String content = "CoNtEnT!";
         HttpResponse httpResponse = new HttpResponse.Builder("GET")
-                .withStatusCode(200)
+                .withStatusCode(OK)
                 .withContentLength(content.length())
                 .withContentType("text/html")
                 .withContent(content)
@@ -24,7 +27,7 @@ public class HttpResponseFormatterTest {
     public void returnsTheHeadResponseString() {
         String content = "CoNtEnT!";
         HttpResponse httpResponse = new HttpResponse.Builder("HEAD")
-                .withStatusCode(404)
+                .withStatusCode(NOT_FOUND)
                 .withContentLength(content.length())
                 .withContentType("text/html")
                 .withContent(content)

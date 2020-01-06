@@ -3,10 +3,10 @@ package webserver.response;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class HttpResponseTest {
-    private final int OK_CODE = 200;
-    private final int NOT_FOUND_CODE = 404;
+import static webserver.response.HttpStatusCode.NOT_FOUND;
+import static webserver.response.HttpStatusCode.OK;
 
+public class HttpResponseTest {
     @Test
     public void returnsResponseMethod() {
         HttpResponse httpResponse = new HttpResponse.Builder("HEAD")
@@ -18,7 +18,7 @@ public class HttpResponseTest {
     @Test
     public void returnsStatusCode() {
         HttpResponse httpResponse = new HttpResponse.Builder("GET")
-                .withStatusCode(OK_CODE)
+                .withStatusCode(OK)
                 .build();
 
         assertEquals(httpResponse.getStatusCode(), 200);
@@ -27,7 +27,7 @@ public class HttpResponseTest {
     @Test
     public void returnsStatusString() {
         HttpResponse httpResponse = new HttpResponse.Builder("GET")
-                .withStatusCode(NOT_FOUND_CODE)
+                .withStatusCode(NOT_FOUND)
                 .build();
 
         assertEquals(httpResponse.getStatusString(), "Not Found");
@@ -37,7 +37,7 @@ public class HttpResponseTest {
     public void returnsContentLength() {
         String content = "Hello there";
         HttpResponse httpResponse = new HttpResponse.Builder("GET")
-                .withStatusCode(NOT_FOUND_CODE)
+                .withStatusCode(NOT_FOUND)
                 .withContentLength(content.length())
                 .build();
 
@@ -48,7 +48,7 @@ public class HttpResponseTest {
     public void returnsContentType() {
         String contentType = "text/html";
         HttpResponse httpResponse = new HttpResponse.Builder("GET")
-                .withStatusCode(NOT_FOUND_CODE)
+                .withStatusCode(NOT_FOUND)
                 .withContentType(contentType)
                 .build();
 
@@ -59,7 +59,7 @@ public class HttpResponseTest {
     public void returnsContent() {
         String content = "This is exclusive content";
         HttpResponse httpResponse = new HttpResponse.Builder("GET")
-                .withStatusCode(NOT_FOUND_CODE)
+                .withStatusCode(NOT_FOUND)
                 .withContent(content)
                 .build();
 

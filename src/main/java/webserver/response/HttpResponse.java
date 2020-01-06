@@ -2,8 +2,7 @@ package webserver.response;
 
 public class HttpResponse {
     private String method;
-    private int statusCode;
-    private String statusString;
+    private HttpStatusCode httpStatusCode;
     private int contentLength;
     private String contentType;
     private String content;
@@ -15,11 +14,11 @@ public class HttpResponse {
     }
 
     public int getStatusCode() {
-        return this.statusCode;
+        return this.httpStatusCode.getStatusCode();
     }
 
     public String getStatusString() {
-        return this.statusString;
+        return this.httpStatusCode.getStatusString();
     }
 
     public int getContentLength() {
@@ -36,8 +35,7 @@ public class HttpResponse {
 
     public static class Builder {
         private String method;
-        private int statusCode;
-        private String statusString;
+        private HttpStatusCode httpStatusCode;
         private int contentLength;
         private String contentType;
         private String content = "";
@@ -46,9 +44,8 @@ public class HttpResponse {
             this.method = method;
         }
 
-        public Builder withStatusCode(int statusCode) {
-            this.statusCode = statusCode;
-            this.statusString = ResponseCodes.RESPONSE_CODES.get(statusCode);
+        public Builder withStatusCode(HttpStatusCode httpStatusCode) {
+            this.httpStatusCode = httpStatusCode;
 
             return this;
         }
@@ -74,8 +71,7 @@ public class HttpResponse {
         public HttpResponse build() {
             HttpResponse httpResponse = new HttpResponse();
             httpResponse.method = this.method;
-            httpResponse.statusCode = this.statusCode;
-            httpResponse.statusString = this.statusString;
+            httpResponse.httpStatusCode = this.httpStatusCode;
             httpResponse.contentLength = this.contentLength;
             httpResponse.contentType = this.contentType;
             httpResponse.content = this.content;

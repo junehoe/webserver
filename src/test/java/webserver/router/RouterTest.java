@@ -1,4 +1,4 @@
-package webserver;
+package webserver.router;
 
 import webserver.request.HttpRequest;
 
