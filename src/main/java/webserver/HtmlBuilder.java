@@ -30,6 +30,14 @@ public class HtmlBuilder {
         return hashMap;
     }
 
+    public static String createTodoDetailHtml(String title) {
+        StringBuilder bodyBuilder = new StringBuilder();
+        bodyBuilder.append(HtmlBuilder.createHeader(title));
+        bodyBuilder.append(HtmlBuilder.createBreak());
+        bodyBuilder.append(HtmlBuilder.createGoBackFooter());
+        return bodyBuilder.toString();
+    }
+
     public static String createHeader(String headerTitle) {
         return "<header><h1>" + headerTitle + "</h1></header>";
     }
