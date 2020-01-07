@@ -23,8 +23,9 @@ public class PostController {
     public Function<HttpRequest, HttpResponse> createTodoItem = (request) -> {
         String indexedPath = "/todo/" + (todoList.getTodoList().size() + 1);
         String title = getTitle(request.getBody());
-        todoList.add(new TodoItem(indexedPath, title));
-        TodoPageCreator.createTodoPage(todoList.getDirectory(), title);
+        todoList.add(new TodoItem(indexedPath,
+                title,
+                TodoPageCreator.createTodoPage(todoList.getDirectory(), title)));
         return createResponse(indexedPath, SEE_OTHER);
     };
 

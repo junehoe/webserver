@@ -43,7 +43,7 @@ public class TodoList {
         int index = 1;
         Arrays.sort(files, byCreationTime);
         for (File file : files) {
-            add(new TodoItem("/todo/" + index, getFileName(file.getName())));
+            add(new TodoItem("/todo/" + index, getFileName(file.getName()), file));
             index++;
         }
     }

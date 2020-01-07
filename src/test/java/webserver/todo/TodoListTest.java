@@ -5,11 +5,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import static org.junit.Assert.assertEquals;
 
 public class TodoListTest {
     private TodoList todoList;
+
+    @Mock
+    File file;
 
     @Before
     public void initialize() {
@@ -18,7 +22,7 @@ public class TodoListTest {
 
     @Test
     public void addsTodoItemToTheTodoList() {
-        TodoItem todoItem = new TodoItem("/path", "Title");
+        TodoItem todoItem = new TodoItem("/path", "Title", file);
         ArrayList<TodoItem> list = todoList.getTodoList();
 
         todoList.add(todoItem);
@@ -27,7 +31,7 @@ public class TodoListTest {
     }
 
     @Test
-    public void initializesTheTodoListWithFiveHardCodedTodoItems() throws IOException {
+    public void initializesTheTodoListWithFiveHardCodedTodoItems() {
         todoList.initializeHardCodedList("public/test/hardcoded-test");
 
         ArrayList<TodoItem> list = todoList.getTodoList();
