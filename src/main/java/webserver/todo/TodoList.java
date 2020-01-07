@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class TodoList {
+    private String directory;
     private ArrayList<TodoItem> todoList;
 
     public TodoList() {
@@ -24,7 +25,7 @@ public class TodoList {
         return todoList;
     }
 
-    public void initializeHardCodedList(String pathString) throws IOException {
+    public void initializeHardCodedList(String pathString) {
         Path path = Paths.get(pathString, "/todo");
         if (!Files.exists(path)) {
             createHardCodedPages(path.toString());
@@ -40,27 +41,33 @@ public class TodoList {
 
     private void initializeList(File[] files) {
         int index = 1;
-        Arrays.sort(files, comparator);
+        Arrays.sort(files, byCreationTime);
         for (File file : files) {
             add(new TodoItem("/todo/" + index, getFileName(file.getName())));
             index++;
         }
     }
 
+    public String getDirectory() {
+        return directory;
+    }
+
+    public void setDirectory(String directory) {
+        this.directory = directory;
+    }
+
     private String getFileName(String fullFileName) {
         return fullFileName.replaceFirst("[.][^.]+$", "");
     }
 
-    private void createHardCodedPages(String path) throws IOException {
+    private void createHardCodedPages(String path) {
         new File(path).mkdirs();
-        TodoPageCreator.createTodoPage(path, "Do a barrel roll");
-        TodoPageCreator.createTodoPage(path, "Buy groceries for the week");
-        TodoPageCreator.createTodoPage(path, "Pretend to be a tree for a day");
-        TodoPageCreator.createTodoPage(path, "Adopt a kitten");
-        TodoPageCreator.createTodoPage(path, "Create a todo list");
+        for (HardCodedTodoItem item : HardCodedTodoItem.values()) {
+            TodoPageCreator.createTodoPage(path, item.getTitle());
+        }
     }
 
-    private Comparator<File> comparator = Comparator.comparing(file -> {
+    private Comparator<File> byCreationTime = Comparator.comparing(file -> {
         try {
             return Files.readAttributes(Paths.get(file.toURI()), BasicFileAttributes.class).creationTime();
         } catch (IOException e) {

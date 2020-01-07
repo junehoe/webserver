@@ -19,10 +19,11 @@ public class TodoListTest {
     @Test
     public void addsTodoItemToTheTodoList() {
         TodoItem todoItem = new TodoItem("/path", "Title");
+        ArrayList<TodoItem> list = todoList.getTodoList();
 
         todoList.add(todoItem);
 
-        assertEquals(todoList.getTodoList().size(), 1);
+        assertEquals(list.get(0).getTitle(), "Title");
     }
 
     @Test
@@ -44,5 +45,12 @@ public class TodoListTest {
         ArrayList<TodoItem> list = todoList.getTodoList();
 
         assertEquals(list.size(), 3);
+    }
+
+    @Test
+    public void setsAndGetsTheDirectoryOfTheTodoList() {
+        todoList.setDirectory("/this-is-a-fake-directory");
+
+        assertEquals(todoList.getDirectory(), "/this-is-a-fake-directory");
     }
 }
