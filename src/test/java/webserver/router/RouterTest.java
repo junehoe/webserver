@@ -1,10 +1,13 @@
 package webserver.router;
 
-import webserver.parser.HtmlParser;
+import webserver.controller.AppController;
+import webserver.controller.GetController;
+import webserver.controller.HeadController;
+import webserver.controller.PostController;
 import webserver.request.HttpRequest;
 
-import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +23,12 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RouterTest {
+    private GetController getController;
+    private HeadController headController;
+    private PostController postController;
     private Router router;
     private TodoList todoList;
+    private String path = Paths.get("").toAbsolutePath().toString() + "/public/test/router-test";
 
     @Mock
     private HttpRequest httpRequest;
@@ -30,40 +37,66 @@ public class RouterTest {
     public void initialize() {
         router = new Router();
         todoList = new TodoList();
+        todoList.setDirectory(path);
+        getController = new GetController(todoList);
+        headController = new HeadController(todoList);
+        postController = new PostController(todoList);
     }
 
     @Test
-    public void return200ResponseObjectIfRouteExists() throws IOException {
+    public void addsGetRoute() {
+        ArrayList<Route> routes = router.getRoutes();
+        router.get("/", getController.index);
+
+        assertEquals(routes.get(0).getMethod(), "GET");
+    }
+
+    @Test
+    public void addsHEADRoute() {
+        ArrayList<Route> routes = router.getRoutes();
+        router.head("/", headController.index);
+
+        assertEquals(routes.get(0).getMethod(), "HEAD");
+    }
+
+    @Test
+    public void addsPostRoute() {
+        ArrayList<Route> routes = router.getRoutes();
+        router.post("/", postController.createTodoItem);
+
+        assertEquals(routes.get(0).getMethod(), "POST");
+    }
+
+    @Test
+    public void return200ResponseObjectIfRouteExists() {
         String path = "/";
-        String html = "/index.html";
 
         when(httpRequest.getMethod()).thenReturn("GET");
         when(httpRequest.getPath()).thenReturn("/");
-        router.addRoute(new Route("GET", path, HtmlParser.parseHtml(html, true)));
+        router.get(path, getController.index);
 
-        HttpResponse httpResponse = router.route(httpRequest, todoList);
+        HttpResponse httpResponse = router.route(httpRequest);
 
         assertEquals(200, httpResponse.getStatusCode());
     }
 
     @Test
-    public void returns404ResponseObjectIfNotInRoute() throws IOException {
+    public void returns404ResponseObjectIfNotInRoute() {
         String path = "/";
-        String html = "/index.html";
 
         when(httpRequest.getMethod()).thenReturn("GET");
         when(httpRequest.getPath()).thenReturn("/fake-path");
-        router.addRoute(new Route("GET", path, HtmlParser.parseHtml(html, true)));
+        router.get(path, AppController.error);
 
-        HttpResponse httpResponse = router.route(httpRequest, todoList);
+        HttpResponse httpResponse = router.route(httpRequest);
 
         assertEquals(404, httpResponse.getStatusCode());
     }
 
     @Test
     public void getsTheRoutes() {
-        Route route1 = new Route("GET", "/route1", "Route 1");
-        Route route2 = new Route("HEAD", "/route2", "Route 2");
+        Route route1 = new Route("GET", "/route1", getController.showTodoItem);
+        Route route2 = new Route("HEAD", "/route2", headController.showTodoItem);
 
         router.addRoute(route1);
         router.addRoute(route2);
@@ -72,15 +105,15 @@ public class RouterTest {
     }
 
     @Test
-    public void returns303PostResponseObjectForPost() throws IOException {
+    public void returns303PostResponseObjectForPost() {
         String path = "/todo/new";
 
         when(httpRequest.getMethod()).thenReturn("POST");
-        when(httpRequest.getBody()).thenReturn("name=Hello");
-        router.addRoute(new Route("POST", path));
-        router.setPath(Paths.get("").toAbsolutePath().toString() + "/public/test/post-test");
+        when(httpRequest.getPath()).thenReturn("/todo/new");
+        when(httpRequest.getBody()).thenReturn("todo-name=Hello");
+        router.post(path, postController.createTodoItem);
 
-        HttpResponse httpResponse = router.route(httpRequest, todoList);
+        HttpResponse httpResponse = router.route(httpRequest);
 
         assertEquals(303, httpResponse.getStatusCode());
     }
