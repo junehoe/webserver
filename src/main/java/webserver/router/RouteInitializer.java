@@ -1,38 +1,34 @@
 package webserver.router;
 
-import webserver.HtmlBuilder;
-import webserver.todo.TodoItem;
-import webserver.todo.TodoListBuilder;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import webserver.controller.GetController;
+import webserver.controller.HeadController;
+import webserver.controller.PostController;
+import webserver.todo.TodoList;
 
 import static webserver.pages.ServerPages.*;
 
 public class RouteInitializer {
-    public static void createServerRoutes(Router router) throws IOException {
-        createRoute(router, INDEX_PATH, INDEX_TITLE, INDEX_BODY);
-        createRoute(router, HEALTH_PATH, HEALTH_TITLE, HEALTH_BODY);
-        createRoute(router, CREATE_TODO_ITEM_PATH, CREATE_TODO_ITEM_TITLE, CREATE_TODO_ITEM_BODY);
-        router.addRoute(new Route("POST", CREATE_TODO_ITEM_PATH));
+    private GetController getController;
+    private HeadController headController;
+    private PostController postController;
+
+    public RouteInitializer(TodoList todoList) {
+        this.getController = new GetController(todoList);
+        this.headController = new HeadController(todoList);
+        this.postController = new PostController(todoList);
     }
 
-    public static void createTodoListRoutes(Router router, ArrayList<TodoItem> todoList) throws IOException {
-        createRoute(router, TODO_PATH, TODO_TITLE, TodoListBuilder.buildList(todoList));
-        for (TodoItem item : todoList) {
-            createRoute(router, item.getPath(), item.getTitle(), TodoListBuilder.buildItem(item.getTitle()));
-        }
-    }
-
-    private static void createRoute(Router router, String path, String title, String body) throws IOException {
-        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(title, body);
-        String htmlString = HtmlBuilder.createHtmlString(descriptors);
-        addRoutes(router, path, htmlString);
-    }
-
-    private static void addRoutes(Router router, String path, String htmlString) {
-        router.addRoute(new Route("GET", path, htmlString));
-        router.addRoute(new Route("HEAD", path, htmlString));
+    public void createServerRoutes(Router router) {
+        router.get(INDEX_PATH, getController.index);
+        router.head(INDEX_PATH, headController.index);
+        router.get(HEALTH_PATH, getController.healthCheck);
+        router.head(HEALTH_PATH, headController.healthCheck);
+        router.get(TODO_PATH, getController.showTodoList);
+        router.head(TODO_PATH, headController.showTodoList);
+        router.get(CREATE_TODO_ITEM_PATH, getController.createTodoItem);
+        router.head(CREATE_TODO_ITEM_PATH, headController.createTodoItem);
+        router.post(CREATE_TODO_ITEM_PATH, postController.createTodoItem);
+        router.get(TODO_ITEM_PATH, getController.showTodoItem);
+        router.head(TODO_ITEM_PATH, headController.showTodoItem);
     }
 }

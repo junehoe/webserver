@@ -32,7 +32,7 @@ public class HttpHandler implements Runnable {
             PrintWriter output = SocketIO.createSocketWriter(clientSocket);
             BufferedReader input = SocketIO.createSocketReader(clientSocket);
             HttpRequest httpRequest = httpRequestParser.parse(input);
-            HttpResponse httpResponse = router.route(httpRequest, todoList);
+            HttpResponse httpResponse = router.route(httpRequest);
             HttpResponseSender.send(output, httpResponse);
 
             input.close();
