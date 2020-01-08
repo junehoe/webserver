@@ -8,6 +8,7 @@ import webserver.request.HttpRequest;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -107,8 +108,11 @@ public class RouterTest {
     @Test
     public void returns303PostResponseObjectForPost() {
         String path = "/todo/new";
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
 
         when(httpRequest.getMethod()).thenReturn("POST");
+        when(httpRequest.getHeaders()).thenReturn(headers);
         when(httpRequest.getPath()).thenReturn("/todo/new");
         when(httpRequest.getBody()).thenReturn("todo-name=Hello");
         router.post(path, postController.createTodoItem);

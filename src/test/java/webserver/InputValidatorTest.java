@@ -30,4 +30,32 @@ public class InputValidatorTest {
 
         assertFalse(InputValidator.isValidPort(inputPort));
     }
+
+    @Test
+    public void returnsTrueIfContentTypeIsNotSupported() {
+        String contentType = "fake content type";
+
+        assertTrue(InputValidator.isUnsupportedMediaType(contentType));
+    }
+
+    @Test
+    public void returnsFalseIfContentTypeIsNotSupported() {
+        String contentType = "application/x-www-form-urlencoded";
+
+        assertFalse(InputValidator.isUnsupportedMediaType(contentType));
+    }
+
+    @Test
+    public void returnsTrueIfValueIsInvalid() {
+        String body = "invalid values";
+
+        assertTrue(InputValidator.isInvalidValue(body));
+    }
+
+    @Test
+    public void returnsFalseIfValueIsValid() {
+        String body = "valid+values";
+
+        assertFalse(InputValidator.isInvalidValue(body));
+    }
 }

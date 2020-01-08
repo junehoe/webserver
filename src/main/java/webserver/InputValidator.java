@@ -14,6 +14,14 @@ public class InputValidator {
         return isValidPortNumber(port);
     }
 
+    public static boolean isUnsupportedMediaType(String contentType) {
+        return !contentType.equals("application/x-www-form-urlencoded");
+    }
+
+    public static boolean isInvalidValue(String body) {
+        return body.contains(" ");
+    }
+
     private static boolean isValidPortNumber(int port) {
         return (port >= LOWER_PORT_BOUND && port <= UPPER_PORT_BOUND);
     }
