@@ -25,6 +25,6 @@ public class RouteInitializerTest {
     public void createsServerRoutes() {
         routeInitializer.createServerRoutes(router);
 
-        assertEquals(11, router.getRoutes().size());
+        assertEquals(13, router.getRoutes().size());
     }
 }

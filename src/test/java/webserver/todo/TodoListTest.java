@@ -57,4 +57,23 @@ public class TodoListTest {
 
         assertEquals(todoList.getDirectory(), "/this-is-a-fake-directory");
     }
+
+    @Test
+    public void setsAndGetsTheFilteredTodoList() {
+        TodoItem item1 = new TodoItem("/path1", "Hello", file);
+        TodoItem item2 = new TodoItem("/path2", "Testing", file);
+        TodoItem item3 = new TodoItem("/path3", "The Best Title", file);
+        TodoItem item4 = new TodoItem("/path4", "The Worst Title", file);
+        ArrayList<TodoItem> expectedList = new ArrayList<>();
+        expectedList.add(item3);
+        expectedList.add(item4);
+
+        todoList.add(item1);
+        todoList.add(item2);
+        todoList.add(item3);
+        todoList.add(item4);
+        todoList.setFilteredTodoList("Title");
+
+        assertEquals(todoList.getFilteredTodoList(), expectedList);
+    }
 }

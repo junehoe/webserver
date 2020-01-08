@@ -23,6 +23,8 @@ public class ServerPages {
     public static final String CREATE_TODO_ITEM_TITLE = "Create Todo Item";
     public static final String CREATE_TODO_ITEM_BODY = todoFormBody();
 
+    public static final String FILTERED_TODO_PATH = "/todo(.*?)";
+
     private static String todoFormBody() {
         StringBuilder todoFormBodyBuilder = new StringBuilder();
         todoFormBodyBuilder.append("Todo Item: " + HtmlBuilder.createInput("text", "todo-name"));

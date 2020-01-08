@@ -12,6 +12,7 @@ import java.util.Comparator;
 public class TodoList {
     private String directory;
     private ArrayList<TodoItem> todoList;
+    private ArrayList<TodoItem> filteredTodoList;
 
     public TodoList() {
         this.todoList = new ArrayList<>();
@@ -46,6 +47,20 @@ public class TodoList {
             add(new TodoItem("/todo/" + index, getFileName(file.getName()), file));
             index++;
         }
+    }
+
+    public void setFilteredTodoList(String keyword) {
+        filteredTodoList = new ArrayList<>();
+        ArrayList<TodoItem> unfilteredTodoList = getTodoList();
+        for (TodoItem item : unfilteredTodoList) {
+            if (item.getTitle().contains(keyword)) {
+                filteredTodoList.add(item);
+            }
+        }
+    }
+
+    public ArrayList<TodoItem> getFilteredTodoList() {
+        return filteredTodoList;
     }
 
     public String getDirectory() {

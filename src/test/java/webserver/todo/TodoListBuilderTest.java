@@ -33,7 +33,9 @@ public class TodoListBuilderTest {
         expected.append("<section><a rel='item' href='/todo/3'>Pretend to be a tree for a day</a></section>");
         expected.append("<section><a rel='item' href='/todo/4'>Adopt a kitten</a></section>");
         expected.append("<section><a rel='item' href='/todo/5'>Create a todo list</a></section>");
-        expected.append("<br><br><footer><a href='/todo/new'>Create new todo item</a></footer>");
+        expected.append("<br><br><footer><a href='/todo/new'>Create new todo item</a>");
+        expected.append("<br><br><form action='/todo' method='GET'>");
+        expected.append("Keyword: <input type='text' name='filter'><br><input type='submit'></form></footer>");
 
         assertEquals(TodoListBuilder.buildList(todoList.getTodoList()), expected.toString());
     }
@@ -48,5 +50,23 @@ public class TodoListBuilderTest {
         expected += "<footer><a rel='collection' href='/todo'>Go Back</a></footer>";
 
         assertEquals(TodoListBuilder.buildItem(title), expected);
+    }
+
+    @Test
+    public void createsFilteredTodoList() {
+        TodoList todoList = new TodoList();
+        TodoItem todoItem1 = new TodoItem("/todo/1", "Do a barrel roll", file);
+        TodoItem todoItem2 = new TodoItem("/todo/2", "Buy groceries for the week", file);
+
+        todoList.add(todoItem1);
+        todoList.add(todoItem2);
+
+        StringBuilder expected = new StringBuilder();
+        expected.append("<header><h1>Filtered Todo List</h1></header>");
+        expected.append("<section><a rel='item' href='/todo/1'>Do a barrel roll</a></section>");
+        expected.append("<section><a rel='item' href='/todo/2'>Buy groceries for the week</a></section>");
+        expected.append("<br><br><footer><a href='/todo'>Go Back</a></footer>");
+
+        assertEquals(TodoListBuilder.buildFilteredList(todoList.getTodoList()), expected.toString());
     }
 }
