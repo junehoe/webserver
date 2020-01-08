@@ -19,13 +19,8 @@ public class AppController extends Controller {
             createResponse(ERROR_TITLE, ERROR_BODY, NOT_FOUND);
 
     private static String htmlString(String title, String body) {
-        try {
-            HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(title, body);
-            return HtmlBuilder.createHtmlString(descriptors);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Not Found";
-        }
+        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(title, body);
+        return HtmlBuilder.createHtmlString(descriptors);
     }
 
     private static HttpResponse createResponse(String title, String body, HttpStatusCode httpStatusCode) {

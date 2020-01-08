@@ -50,13 +50,8 @@ public class GetController extends Controller {
     };
 
     private String htmlString(String title, String body) {
-        try {
-            HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(title, body);
-            return HtmlBuilder.createHtmlString(descriptors);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Not Found";
-        }
+        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(title, body);
+        return HtmlBuilder.createHtmlString(descriptors);
     }
 
     private HttpResponse createResponse(String content, HttpStatusCode httpStatusCode) {
