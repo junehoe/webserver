@@ -29,6 +29,6 @@ public class ServerPages {
         todoFormBodyBuilder.append(HtmlBuilder.createBreak());
         todoFormBodyBuilder.append(HtmlBuilder.createInput("submit"));
 
-        return HtmlBuilder.createForm("/todo/new", "POST", todoFormBodyBuilder.toString());
+        return HtmlBuilder.createForm("/todo", "POST", todoFormBodyBuilder.toString());
     }
 }

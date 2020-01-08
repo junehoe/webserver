@@ -25,9 +25,9 @@ public class RouteInitializer {
         router.head(HEALTH_PATH, headController.healthCheck);
         router.get(TODO_PATH, getController.showTodoList);
         router.head(TODO_PATH, headController.showTodoList);
+        router.post(TODO_PATH, postController.createTodoItem);
         router.get(CREATE_TODO_ITEM_PATH, getController.createTodoItem);
         router.head(CREATE_TODO_ITEM_PATH, headController.createTodoItem);
-        router.post(CREATE_TODO_ITEM_PATH, postController.createTodoItem);
         router.get(TODO_ITEM_PATH, getController.showTodoItem);
         router.head(TODO_ITEM_PATH, headController.showTodoItem);
     }
