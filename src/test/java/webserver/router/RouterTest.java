@@ -1,9 +1,7 @@
 package webserver.router;
 
 import webserver.controller.AppController;
-import webserver.controller.GetController;
-import webserver.controller.HeadController;
-import webserver.controller.PostController;
+import webserver.controller.TodoController;
 import webserver.request.HttpRequest;
 
 import java.nio.file.Paths;
@@ -24,9 +22,8 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RouterTest {
-    private GetController getController;
-    private HeadController headController;
-    private PostController postController;
+    private AppController appController;
+    private TodoController todoController;
     private Router router;
     private TodoList todoList;
     private String path = Paths.get("").toAbsolutePath().toString() + "/public/test/router-test";
@@ -38,16 +35,15 @@ public class RouterTest {
     public void initialize() {
         router = new Router();
         todoList = new TodoList();
+        appController = new AppController();
+        todoController = new TodoController(todoList);
         todoList.setDirectory(path);
-        getController = new GetController(todoList);
-        headController = new HeadController(todoList);
-        postController = new PostController(todoList);
     }
 
     @Test
     public void addsGetRoute() {
         ArrayList<Route> routes = router.getRoutes();
-        router.get("/", getController.index);
+        router.get("/", appController.index);
 
         assertEquals(routes.get(0).getMethod(), "GET");
     }
@@ -55,7 +51,7 @@ public class RouterTest {
     @Test
     public void addsHEADRoute() {
         ArrayList<Route> routes = router.getRoutes();
-        router.head("/", headController.index);
+        router.head("/", appController.index);
 
         assertEquals(routes.get(0).getMethod(), "HEAD");
     }
@@ -63,7 +59,7 @@ public class RouterTest {
     @Test
     public void addsPostRoute() {
         ArrayList<Route> routes = router.getRoutes();
-        router.post("/", postController.createTodoItem);
+        router.post("/", todoController.createTodoItem);
 
         assertEquals(routes.get(0).getMethod(), "POST");
     }
@@ -74,7 +70,7 @@ public class RouterTest {
 
         when(httpRequest.getMethod()).thenReturn("GET");
         when(httpRequest.getPath()).thenReturn("/");
-        router.get(path, getController.index);
+        router.get(path, appController.index);
 
         HttpResponse httpResponse = router.route(httpRequest);
 
@@ -87,7 +83,7 @@ public class RouterTest {
 
         when(httpRequest.getMethod()).thenReturn("GET");
         when(httpRequest.getPath()).thenReturn("/fake-path");
-        router.get(path, AppController.error);
+        router.get(path, appController.error);
 
         HttpResponse httpResponse = router.route(httpRequest);
 
@@ -96,8 +92,8 @@ public class RouterTest {
 
     @Test
     public void getsTheRoutes() {
-        Route route1 = new Route("GET", "/route1", getController.showTodoItem);
-        Route route2 = new Route("HEAD", "/route2", headController.showTodoItem);
+        Route route1 = new Route("GET", "/route1", todoController.showTodoItem);
+        Route route2 = new Route("HEAD", "/route2", todoController.showTodoItem);
 
         router.addRoute(route1);
         router.addRoute(route2);
@@ -115,7 +111,7 @@ public class RouterTest {
         when(httpRequest.getHeaders()).thenReturn(headers);
         when(httpRequest.getPath()).thenReturn("/todo/new");
         when(httpRequest.getBody()).thenReturn("todo-name=Hello");
-        router.post(path, postController.createTodoItem);
+        router.post(path, todoController.createTodoItem);
 
         HttpResponse httpResponse = router.route(httpRequest);
 
