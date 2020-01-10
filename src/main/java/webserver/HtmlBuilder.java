@@ -1,6 +1,5 @@
 package webserver;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,11 +29,23 @@ public class HtmlBuilder {
         return hashMap;
     }
 
-    public static String createTodoDetailHtml(String title) {
+    public static String createTodoDetailHtml(String title, int id, boolean isComplete) {
         StringBuilder bodyBuilder = new StringBuilder();
         bodyBuilder.append(HtmlBuilder.createHeader(title));
         bodyBuilder.append(HtmlBuilder.createBreak());
+        bodyBuilder.append(HtmlBuilder.createStatusSection(id, isComplete));
+        bodyBuilder.append(HtmlBuilder.createBreak());
         bodyBuilder.append(HtmlBuilder.createGoBackFooter());
+        return bodyBuilder.toString();
+    }
+
+    private static String createStatusSection(int id, boolean isComplete) {
+        StringBuilder bodyBuilder = new StringBuilder();
+        bodyBuilder.append("<form action='/todo/" + id + "/toggle' method='POST'>");
+        bodyBuilder.append("<label class='" + getClass(isComplete) + "'>");
+        bodyBuilder.append("Complete: " + isComplete + "</label><br>");
+        bodyBuilder.append("<input type='submit' value='Toggle'>");
+        bodyBuilder.append("</form>");
         return bodyBuilder.toString();
     }
 
@@ -42,8 +53,8 @@ public class HtmlBuilder {
         return "<header><h1>" + headerTitle + "</h1></header>";
     }
 
-    public static String createSection(String path, String sectionBody) {
-        return "<section><a rel='item' href='" + path + "'>" + sectionBody + "</a></section>";
+    public static String createSection(int id, String sectionBody) {
+        return "<section><a rel='item' href='/todo/" + id + "'>" + sectionBody + "</a></section>";
     }
 
     public static String createForm(String path, String method, String body) {
@@ -68,5 +79,13 @@ public class HtmlBuilder {
 
     private static String replaceSubstring(String string, String placeholder, String value) {
         return string.replaceAll(placeholder, value);
+    }
+
+    private static String getClass(boolean isComplete) {
+        if (isComplete) {
+            return "complete";
+        } else {
+            return "incomplete";
+        }
     }
 }
