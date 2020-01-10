@@ -1,6 +1,7 @@
 package webserver.router;
 
 import webserver.controller.*;
+import webserver.database.DatabaseHandler;
 import webserver.todo.TodoList;
 
 import static webserver.pages.ServerPages.*;
@@ -9,9 +10,9 @@ public class RouteInitializer {
     private AppController appController;
     private TodoController todoController;
 
-    public RouteInitializer(TodoList todoList) {
+    public RouteInitializer(TodoList todoList, DatabaseHandler databaseHandler) {
         this.appController = new AppController();
-        this.todoController = new TodoController(todoList);
+        this.todoController = new TodoController(todoList, databaseHandler);
     }
 
     public void createServerRoutes(Router router) {
@@ -36,5 +37,6 @@ public class RouteInitializer {
         router.head(TODO_ITEM_PATH, todoController.showTodoItem);
         router.get(FILTERED_TODO_PATH, todoController.showFilteredTodoList);
         router.head(FILTERED_TODO_PATH, todoController.showFilteredTodoList);
+        router.post(TOGGLE_PATH, todoController.toggleTodoItem);
     }
 }

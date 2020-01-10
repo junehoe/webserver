@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import webserver.database.Database;
+import webserver.database.DatabaseHandler;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.todo.TodoList;
@@ -23,10 +25,13 @@ public class TodoControllerTest {
     @Mock
     HttpRequest httpRequest;
 
+    @Mock
+    DatabaseHandler databaseHandler;
+
     @Before
     public void initialize() {
         todoList = new TodoList();
-        todoController = new TodoController(todoList);
+        todoController = new TodoController(todoList, databaseHandler);
     }
 
     @Test
@@ -77,7 +82,6 @@ public class TodoControllerTest {
     public void createsAPostResponse() {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/x-www-form-urlencoded");
-        todoList.setDirectory("./public/test/post-test");
 
         when(httpRequest.getMethod()).thenReturn("POST");
         when(httpRequest.getBody()).thenReturn("title=This+is+cool");

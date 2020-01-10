@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import webserver.controller.AppController;
 import webserver.controller.TodoController;
+import webserver.database.DatabaseHandler;
 import webserver.router.Router;
 import webserver.todo.TodoList;
 import webserver.todo.TodoListBuilder;
@@ -35,13 +36,16 @@ public class HttpHandlerTest {
     @Mock
     Socket clientSocket;
 
+    @Mock
+    DatabaseHandler databaseHandler;
+
     public void initialize() throws IOException {
         outContent = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(outContent);
         todoList = new TodoList();
         router = new Router();
         appController = new AppController();
-        todoController = new TodoController(todoList);
+        todoController = new TodoController(todoList, databaseHandler);
 
         router.get("/", appController.index);
         router.get("/health-check", appController.healthCheck);

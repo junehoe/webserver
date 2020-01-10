@@ -2,9 +2,9 @@ package webserver.router;
 
 import webserver.controller.AppController;
 import webserver.controller.TodoController;
+import webserver.database.DatabaseHandler;
 import webserver.request.HttpRequest;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,18 +26,19 @@ public class RouterTest {
     private TodoController todoController;
     private Router router;
     private TodoList todoList;
-    private String path = Paths.get("").toAbsolutePath().toString() + "/public/test/router-test";
 
     @Mock
     private HttpRequest httpRequest;
+
+    @Mock
+    DatabaseHandler databaseHandler;
 
     @Before
     public void initialize() {
         router = new Router();
         todoList = new TodoList();
         appController = new AppController();
-        todoController = new TodoController(todoList);
-        todoList.setDirectory(path);
+        todoController = new TodoController(todoList, databaseHandler);
     }
 
     @Test

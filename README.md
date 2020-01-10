@@ -3,6 +3,11 @@
 
 A todo list written in Java using web servers.
 [Click here to view current deployment on Heroku](https://java-todo-list.herokuapp.com/)
+## Prerequisites ##
+Ensure that you have PostgreSQL 11.5 installed. Start the PostgreSQL server then execute the script in this repository:
+```
+./postgres.sh
+```
 ## How to Run
 Clone the repository to your local machine, then go inside the directory by running:
 ```
