@@ -1,8 +1,11 @@
 language: java
 
+services: postgresql
+
 install: ./install.sh
 
 before_script:
+  - ./postgres.sh
   - ./gradlew run &
   - sleep 5
 
