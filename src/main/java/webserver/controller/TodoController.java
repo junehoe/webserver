@@ -1,6 +1,7 @@
 package webserver.controller;
 
 import webserver.HtmlBuilder;
+import webserver.HttpRequestValidator;
 import webserver.InputValidator;
 import webserver.parser.HttpRequestParser;
 import webserver.request.HttpRequest;
@@ -84,11 +85,11 @@ public class TodoController {
 
     private HttpResponse postTodoItem(HttpRequest httpRequest) {
         String contentType = HttpRequestParser.getContentTypeFrom(httpRequest.getHeaders());
-        if (InputValidator.isUnsupportedMediaType(contentType)) {
+        if (HttpRequestValidator.isUnsupportedMediaType(contentType)) {
             return createResponse(UNSUPPORTED_MEDIA_TYPE);
         }
 
-        if (InputValidator.isInvalidValue(httpRequest.getBody())) {
+        if (HttpRequestValidator.isInvalidValue(httpRequest.getBody())) {
             return createResponse(BAD_REQUEST);
         }
 
