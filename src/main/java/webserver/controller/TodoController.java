@@ -53,20 +53,6 @@ public class TodoController {
         return HtmlBuilder.createHtmlString(descriptors);
     }
 
-    private HttpResponse createResponse(HttpStatusCode httpStatusCode) {
-        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(
-                httpStatusCode.getStatusString(),
-                httpStatusCode.getStatusCode() + " " + httpStatusCode.getStatusString()
-        );
-        String content = HtmlBuilder.createHtmlString(descriptors);
-        return new HttpResponse.Builder("GET")
-                .withStatusCode(httpStatusCode)
-                .withContentLength(content.length())
-                .withContentType(TEXT_HTML)
-                .withContent(content)
-                .build();
-    }
-
     private HttpResponse createResponse(String location, HttpStatusCode httpStatusCode) {
         return new HttpResponse.Builder("POST")
                 .withStatusCode(httpStatusCode)
@@ -86,11 +72,21 @@ public class TodoController {
     private HttpResponse postTodoItem(HttpRequest httpRequest) {
         String contentType = HttpRequestParser.getContentTypeFrom(httpRequest.getHeaders());
         if (HttpRequestValidator.isUnsupportedMediaType(contentType)) {
-            return createResponse(UNSUPPORTED_MEDIA_TYPE);
+            return new HttpResponse.Builder("GET")
+                    .withStatusCode(UNSUPPORTED_MEDIA_TYPE)
+                    .withContentLength(UNSUPPORTED_MEDIA_TYPE.getStatusString().length())
+                    .withContentType(TEXT_HTML)
+                    .withContent(UNSUPPORTED_MEDIA_TYPE.getStatusString())
+                    .build();
         }
 
         if (HttpRequestValidator.isInvalidValue(httpRequest.getBody())) {
-            return createResponse(BAD_REQUEST);
+            return new HttpResponse.Builder("GET")
+                    .withStatusCode(BAD_REQUEST)
+                    .withContentLength(BAD_REQUEST.getStatusString().length())
+                    .withContentType(TEXT_HTML)
+                    .withContent(BAD_REQUEST.getStatusString())
+                    .build();
         }
 
         String title = HttpRequestParser.getTitle(httpRequest.getBody());
