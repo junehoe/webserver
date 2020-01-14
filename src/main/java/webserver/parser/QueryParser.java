@@ -5,7 +5,7 @@ public class QueryParser {
 
     public static String getFilterKeyword(String requestPath) {
         String[] keyValue = requestPath.split("=");
-        return keyValue[VALUE_INDEX];
+        return keyValue[VALUE_INDEX].replace("+", " ");
     }
 
     public static String getTitle(String body) {

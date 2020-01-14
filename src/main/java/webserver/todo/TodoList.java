@@ -1,5 +1,7 @@
 package webserver.todo;
 
+import webserver.InputValidator;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -53,7 +55,7 @@ public class TodoList {
         filteredTodoList = new ArrayList<>();
         ArrayList<TodoItem> unfilteredTodoList = getTodoList();
         for (TodoItem item : unfilteredTodoList) {
-            if (item.getTitle().contains(keyword)) {
+            if (InputValidator.isCaseInsensitiveStringContained(keyword, item.getTitle())) {
                 filteredTodoList.add(item);
             }
         }

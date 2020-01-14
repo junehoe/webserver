@@ -17,4 +17,8 @@ public class InputValidator {
     private static boolean isValidPortNumber(int port) {
         return (port >= LOWER_PORT_BOUND && port <= UPPER_PORT_BOUND);
     }
+
+    public static boolean isCaseInsensitiveStringContained(String inputKeyword, String title) {
+        return title.toLowerCase().contains(inputKeyword.toLowerCase());
+    }
 }
