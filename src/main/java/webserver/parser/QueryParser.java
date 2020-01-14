@@ -4,8 +4,8 @@ public class QueryParser {
     private static final int VALUE_INDEX = 1;
 
     public static String getFilterKeyword(String requestPath) {
-        String[] words = requestPath.split("=");
-        return words[VALUE_INDEX];
+        String[] keyValue = requestPath.split("=");
+        return keyValue[VALUE_INDEX];
     }
 
     public static String getTitle(String body) {

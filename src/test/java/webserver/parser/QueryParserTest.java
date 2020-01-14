@@ -14,7 +14,7 @@ public class QueryParserTest {
 
     @Test
     public void returnsTheTitleFromRequestBody() {
-        String requestBody = "title=Hello+there+this+is+a+title";
+        String requestBody = "todo-name=Hello+there+this+is+a+title";
 
         assertEquals(QueryParser.getTitle(requestBody), "Hello there this is a title");
     }

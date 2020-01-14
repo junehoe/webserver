@@ -33,4 +33,32 @@ public class HttpRequestValidatorTest {
 
         assertFalse(HttpRequestValidator.isInvalidValue(body));
     }
+
+    @Test
+    public void returnsTrueForValidFilterRequestPath() {
+        String requestPath = "/todo?filter=hello%20world";
+
+        assertTrue(HttpRequestValidator.isValidFilterRequestPath(requestPath));
+    }
+
+    @Test
+    public void returnsFalseForInvalidFilterRequestPath() {
+        String requestPath = "/todo?thisis=incorrect";
+
+        assertFalse(HttpRequestValidator.isValidFilterRequestPath(requestPath));
+    }
+
+    @Test
+    public void returnsTrueForValidRequestBody() {
+        String requestBody = "todo-name=Hello+there+this+is+a+title";
+
+        assertTrue(HttpRequestValidator.isValidRequestBody(requestBody));
+    }
+
+    @Test
+    public void returnsFalseForInvalidRequestBody() {
+        String requestBody = "incorrect-name=Hello+there+this+is+a+title";
+
+        assertFalse(HttpRequestValidator.isValidRequestBody(requestBody));
+    }
 }

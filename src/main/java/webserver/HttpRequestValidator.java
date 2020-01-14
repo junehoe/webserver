@@ -8,4 +8,12 @@ public class HttpRequestValidator {
     public static boolean isInvalidValue(String body) {
         return body.contains(" ");
     }
+
+    public static boolean isValidFilterRequestPath(String path) {
+        return path.contains("/todo?filter=");
+    }
+
+    public static boolean isValidRequestBody(String body) {
+        return body.contains("todo-name=");
+    }
 }
