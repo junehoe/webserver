@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Filtered Todo List</title>
+  </head>
+  <body>
+    <header>
+      <h1>Filtered Todo List</h1>
+    </header>
+    <main>
+      <section>
+        {{#filteredTodos}}
+        <a rel="item" href="/todo/{{id}}">{{title}}</a>
+        {{/filteredTodos}}
+      </section>
+    </main>
+    <footer>
+      <a rel="collection" href="/todo">Go Back</a>
+    </footer>
+  </body>
+</html>

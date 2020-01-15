@@ -26,6 +26,10 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:2+'
 
     compile fileTree(dir: 'lib', include: '*.jar')
+
+    // Mustache html template
+    compile group: 'com.github.spullara.mustache.java', name: 'compiler', version: '0.9.6'
+
 }
 
 application {

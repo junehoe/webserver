@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{pageName}}</title>
+  </head>
+  <body>
+    <header>
+      <h1>{{pageName}}</h1>
+    </header>
+    <main>
+      <section>
+        <form action="{{pagePath}}" method="POST">
+          <label>Todo Item: </label>
+          <input type="text" name="todo-name">
+          <input type="submit">
+        </form>
+      </section>
+    </main>
+    <footer>
+      <a rel="collection" href="/todo">Go Back</a>
+    </footer>
+  </body>
+</html>
