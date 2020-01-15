@@ -2,7 +2,7 @@ package webserver.controller;
 
 import webserver.HtmlBuilder;
 import webserver.HttpRequestValidator;
-import webserver.InputValidator;
+import webserver.database.DatabaseHandler;
 import webserver.parser.HttpRequestParser;
 import webserver.parser.QueryParser;
 import webserver.request.HttpRequest;
@@ -11,7 +11,6 @@ import webserver.response.HttpStatusCode;
 import webserver.todo.TodoItem;
 import webserver.todo.TodoList;
 import webserver.todo.TodoListBuilder;
-import webserver.todo.TodoPageCreator;
 
 import java.util.HashMap;
 import java.util.function.Function;
@@ -22,10 +21,12 @@ import static webserver.response.HttpStatusCode.*;
 import static webserver.response.HttpStatusCode.UNSUPPORTED_MEDIA_TYPE;
 
 public class TodoController {
+    private DatabaseHandler databaseHandler;
     private TodoList todoList;
 
-    public TodoController(TodoList todoList) {
+    public TodoController(TodoList todoList, DatabaseHandler databaseHandler) {
         this.todoList = todoList;
+        this.databaseHandler = databaseHandler;
     }
 
     public Function<HttpRequest, HttpResponse> showTodoList = (request) ->
@@ -39,14 +40,29 @@ public class TodoController {
     };
 
     public Function<HttpRequest, HttpResponse> showTodoItem = (request) -> {
+        int id = Integer.parseInt(request.getPath().replace("/todo/", ""));
         for (TodoItem item : todoList.getTodoList()) {
-            if (item.getPath().equals(request.getPath())) {
-                String title = item.getTitle();
-                String body = HtmlBuilder.createTodoDetailHtml(title);
-                return createResponse(htmlString(title, body), request, OK);
+            if (item.getId() == id) {
+                HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(
+                        item.getTitle(),
+                        HtmlBuilder.createTodoDetailHtml(item.getTitle(), item.getId(), item.isComplete())
+                );
+                return createResponse(HtmlBuilder.createHtmlString(descriptors), request, OK);
             }
         }
         return createResponse(htmlString(ERROR_TITLE, ERROR_BODY), request, NOT_FOUND);
+    };
+
+    public Function<HttpRequest, HttpResponse> toggleTodoItem = (request) -> {
+        String idToggle = request.getPath().replace("/todo/", "");
+        int id = Integer.parseInt(idToggle.replace("/toggle", ""));
+        for (TodoItem item : todoList.getTodoList()) {
+            if (item.getId() == id) {
+                databaseHandler.toggleTodoItemStatus(item);
+                return createResponse("/todo/" + id, SEE_OTHER);
+            }
+        }
+        return createResponse(BAD_REQUEST);
     };
 
     public Function<HttpRequest, HttpResponse> showFilteredTodoList = (request) -> {
@@ -61,6 +77,20 @@ public class TodoController {
     private String htmlString(String title, String body) {
         HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(title, body);
         return HtmlBuilder.createHtmlString(descriptors);
+    }
+
+    private HttpResponse createResponse(HttpStatusCode httpStatusCode) {
+        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(
+                httpStatusCode.getStatusString(),
+                httpStatusCode.getStatusCode() + " " + httpStatusCode.getStatusString()
+        );
+        String content = HtmlBuilder.createHtmlString(descriptors);
+        return new HttpResponse.Builder("GET")
+                .withStatusCode(httpStatusCode)
+                .withContentLength(content.length())
+                .withContentType(TEXT_HTML)
+                .withContent(content)
+                .build();
     }
 
     private HttpResponse createResponse(String location, HttpStatusCode httpStatusCode) {
@@ -100,10 +130,8 @@ public class TodoController {
         }
 
         String title = HttpRequestParser.getTitle(httpRequest.getBody());
-        String indexedPath = "/todo/" + (todoList.getTodoList().size() + 1);
-        todoList.add(new TodoItem(indexedPath,
-                title,
-                TodoPageCreator.createTodoPage(todoList.getDirectory(), title)));
-        return createResponse(indexedPath, SEE_OTHER);
+        int id = databaseHandler.insertTodoItem(title);
+        todoList.add(new TodoItem(id, title));
+        return createResponse("/todo/" + id, SEE_OTHER);
     };
 }

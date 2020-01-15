@@ -8,7 +8,7 @@ public class TodoListBuilder {
         StringBuilder listBuilder = new StringBuilder();
         listBuilder.append(HtmlBuilder.createHeader("Todo List"));
         for (TodoItem item : todoList) {
-            listBuilder.append(HtmlBuilder.createSection(item.getPath(), item.getTitle()));
+            listBuilder.append(HtmlBuilder.createSection(item.getId(), item.getTitle()));
         }
         listBuilder.append("<br><br><footer><a href='/todo/new'>Create new todo item</a>");
         listBuilder.append("<br><br><form action='/todo' method='GET'>Keyword: <input type='text' name='filter'><br><input type='submit'></form></footer>");
@@ -19,7 +19,7 @@ public class TodoListBuilder {
         StringBuilder listBuilder = new StringBuilder();
         listBuilder.append(HtmlBuilder.createHeader("Filtered Todo List"));
         for (TodoItem item : todoList) {
-            listBuilder.append(HtmlBuilder.createSection(item.getPath(), item.getTitle()));
+            listBuilder.append(HtmlBuilder.createSection(item.getId(), item.getTitle()));
         }
         listBuilder.append("<br><br><footer><a href='/todo'>Go Back</a></footer>");
         return listBuilder.toString();

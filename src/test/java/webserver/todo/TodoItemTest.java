@@ -2,41 +2,47 @@ package webserver.todo;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import java.io.File;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-@RunWith(MockitoJUnitRunner.class)
 public class TodoItemTest {
     private TodoItem todoItem;
 
-    @Mock
-    File file;
-
     @Before
     public void initialize() {
-        todoItem = new TodoItem("/todo/3", "Todo Item 3", file);
+        todoItem = new TodoItem(1, "Todo Item 1");
     }
 
     @Test
-    public void getsThePath() {
-        assertEquals(todoItem.getPath(), "/todo/3");
+    public void getsTheId() {
+        assertEquals(todoItem.getId(), 1);
     }
 
     @Test
     public void getsTheTitle() {
-        assertEquals(todoItem.getTitle(), "Todo Item 3");
+        assertEquals(todoItem.getTitle(), "Todo Item 1");
     }
 
     @Test
-    public void getsTheFile() {
-        when(file.getName()).thenReturn("Hello");
+    public void getsTheStatus() {
+        assertFalse(todoItem.isComplete());
+    }
 
-        assertEquals(todoItem.getFile().getName(), "Hello");
+    @Test
+    public void setsTheStatus() {
+        todoItem.setStatus(true);
+
+        assertTrue(todoItem.isComplete());
+    }
+
+    @Test
+    public void todoItemCanBeInitializedAsComplete() {
+        TodoItem anotherTodoItem = new TodoItem(4, "Hello World", true);
+
+        assertEquals(anotherTodoItem.getId(), 4);
+        assertEquals(anotherTodoItem.getTitle(), "Hello World");
+        assertTrue(anotherTodoItem.isComplete());
     }
 }

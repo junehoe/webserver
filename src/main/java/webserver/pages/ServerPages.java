@@ -25,6 +25,8 @@ public class ServerPages {
 
     public static final String FILTERED_TODO_PATH = "/todo(.*?)";
 
+    public static final String TOGGLE_PATH = "/todo/[0-9]+/toggle";
+
     private static String todoFormBody() {
         StringBuilder todoFormBodyBuilder = new StringBuilder();
         todoFormBodyBuilder.append("Todo Item: " + HtmlBuilder.createInput("text", "todo-name"));

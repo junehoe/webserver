@@ -39,7 +39,7 @@ public class HtmlBuilderTest {
     }
 
     @Test
-    public void createsHtmlStringBasedOnPageHashMap() throws IOException {
+    public void createsHtmlStringBasedOnPageHashMap() {
         String htmlString = HtmlBuilder.createHtmlString(hashMap);
 
         assertTrue(htmlString.contains("Hello"));
@@ -47,7 +47,7 @@ public class HtmlBuilderTest {
     }
 
     @Test
-    public void createsCustomHtmlStringBasedOnPath() throws IOException {
+    public void createsCustomHtmlStringBasedOnPath() {
         String htmlString = HtmlBuilder.createHtmlString(ERROR_HTML, true);
 
         assertTrue(htmlString.contains("404 Page Not Found"));
@@ -63,15 +63,15 @@ public class HtmlBuilderTest {
 
     @Test
     public void createsHtmlSectionString() {
-        String path = "/test-path";
+        int id = 1;
         String contents = "This is the content";
-        String expected = "<section><a rel='item' href='" + path + "'>" + contents + "</a></section>";
+        String expected = "<section><a rel='item' href='/todo/" + id + "'>" + contents + "</a></section>";
 
-        assertEquals(HtmlBuilder.createSection(path, contents), expected);
+        assertEquals(HtmlBuilder.createSection(id, contents), expected);
     }
 
     @Test
-    public void createsCustomHtmlStringFromDirectory() throws IOException {
+    public void createsCustomHtmlStringFromDirectory() {
         String path = "public/test/fake-files/fake-1.html";
         String expected = "This is fake file 1.";
 

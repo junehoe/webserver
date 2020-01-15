@@ -1,27 +1,33 @@
 package webserver.todo;
 
-import java.io.File;
-
 public class TodoItem {
-    private final String path;
-    private final String title;
-    private final File file;
+    private int id;
+    private String title;
+    private boolean isComplete;
 
-    public TodoItem(String path, String title, File file) {
-        this.path = path;
-        this.title = title;
-        this.file = file;
+    public TodoItem(int id, String title) {
+        this(id, title, false);
     }
 
-    public String getPath() {
-        return path;
+    public TodoItem(int id, String title, boolean isComplete) {
+        this.id = id;
+        this.title = title;
+        this.isComplete = isComplete;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public File getFile() {
-        return file;
+    public int getId() {
+        return id;
+    }
+
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public void setStatus(boolean status) {
+        this.isComplete = status;
     }
 }
