@@ -1,29 +1,80 @@
 package webserver.request;
 
-import webserver.socket.SocketIO;
-
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.util.HashMap;
 
 public class HttpRequest {
-    private String methodHeader;
-    private static final int METHOD_INDEX = 0;
-    private static final int PATH_INDEX = 1;
-    private static final String SPACE = "\\s+";
+    private String method;
+    private String path;
+    private String httpVersion;
+    private HashMap<String, String> headers;
+    private String body;
 
-    public HttpRequest(BufferedReader input) {
-        try {
-            this.methodHeader = SocketIO.readFromInputStream(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private HttpRequest() {}
 
     public String getMethod() {
-        return this.methodHeader.split(SPACE)[METHOD_INDEX];
+        return method;
     }
 
     public String getPath() {
-        return this.methodHeader.split(SPACE)[PATH_INDEX];
+        return path;
+    }
+
+    public String getHttpVersion() {
+        return httpVersion;
+    }
+
+    public HashMap<String, String> getHeaders() {
+        return headers;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public static class Builder {
+        private String method;
+        private String path;
+        private String httpVersion;
+        private HashMap<String, String> headers;
+        private String body;
+
+        public Builder(String method) {
+            this.method = method;
+        }
+
+        public HttpRequest.Builder withPath(String path) {
+            this.path = path;
+
+            return this;
+        }
+
+        public HttpRequest.Builder withHttpVersion(String httpVersion) {
+            this.httpVersion = httpVersion;
+
+            return this;
+        }
+
+        public HttpRequest.Builder withHeaders(HashMap<String, String> headers) {
+            this.headers = headers;
+
+            return this;
+        }
+
+        public HttpRequest.Builder withBody(String body) {
+            this.body = body;
+
+            return this;
+        }
+
+        public HttpRequest build() {
+            HttpRequest httpRequest = new HttpRequest();
+            httpRequest.method = this.method;
+            httpRequest.path = this.path;
+            httpRequest.httpVersion = this.httpVersion;
+            httpRequest.headers = this.headers;
+            httpRequest.body = this.body;
+
+            return httpRequest;
+        }
     }
 }

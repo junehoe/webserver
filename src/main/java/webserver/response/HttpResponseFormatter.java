@@ -6,12 +6,16 @@ public class HttpResponseFormatter {
         String response = "";
         response += "HTTP/1.1 " + res.getStatusCode() + " " + res.getStatusString();
         response += CRLF;
-        response += "Content-Length: " + res.getContentLength();
-        response += CRLF;
-        response += "Content-Type: " + res.getContentType() + "; " + "charset=utf-8";
-        response += CRLF + CRLF;
-        if (res.getMethod().equals("GET")) {
-            response += res.getContent();
+        if (res.getMethod().equals("POST")) {
+            response += "Location: " + res.getLocation() + CRLF;
+        } else {
+            response += "Content-Length: " + res.getContentLength();
+            response += CRLF;
+            response += "Content-Type: " + res.getContentType() + "; " + "charset=utf-8";
+            response += CRLF + CRLF;
+            if (res.getMethod().equals("GET")) {
+                response += res.getContent();
+            }
         }
 
         return response;

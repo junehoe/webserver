@@ -23,4 +23,24 @@ public class HttpStatusCodeTest {
     public void returnsNotFoundStatusString() {
         assertEquals(HttpStatusCode.NOT_FOUND.getStatusString(), "Not Found");
     }
+
+    @Test
+    public void returns201StatusCode() {
+        assertEquals(HttpStatusCode.CREATED.getStatusCode(), 201);
+    }
+
+    @Test
+    public void returnsCreatedStatusString() {
+        assertEquals(HttpStatusCode.CREATED.getStatusString(), "Created");
+    }
+
+    @Test
+    public void returns303StatusCode() {
+        assertEquals(HttpStatusCode.SEE_OTHER.getStatusCode(), 303);
+    }
+
+    @Test
+    public void returnsSeeOtherStatusString() {
+        assertEquals(HttpStatusCode.SEE_OTHER.getStatusString(), "See Other");
+    }
 }

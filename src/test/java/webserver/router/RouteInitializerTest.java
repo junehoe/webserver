@@ -2,89 +2,61 @@ package webserver.router;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import webserver.HtmlBuilder;
-import webserver.todo.TodoListBuilder;
+import webserver.todo.TodoList;
 
-import static org.mockito.Mockito.*;
-import static webserver.pages.ServerPages.*;
-import static webserver.todo.TodoItems.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RouteInitializerTest {
-    @Mock
-    Router router;
+    private Router router;
+    private TodoList todoList;
 
-    @Mock
-    File file;
+    @Before
+    public void initialize() {
+        router = new Router();
+        todoList = new TodoList();
+    }
 
     @Test
     public void createsServerRoutes() throws IOException {
-        HashMap<String, String> indexDescriptors = HtmlBuilder.createPageDescriptors(INDEX_TITLE, INDEX_BODY);
-        String indexHtmlString = HtmlBuilder.createHtmlString(indexDescriptors);
-        HashMap<String, String> healthDescriptors = HtmlBuilder.createPageDescriptors(HEALTH_TITLE, HEALTH_BODY);
-        String healthHtmlString = HtmlBuilder.createHtmlString(healthDescriptors);
-
         RouteInitializer.createServerRoutes(router);
 
-        verify(router, times(1)).addRoute(INDEX_PATH, indexHtmlString);
-        verify(router, times(1)).addRoute(HEALTH_PATH, healthHtmlString);
+        assertEquals(7, router.getRoutes().size());
     }
 
     @Test
     public void createsTodoListRoute() throws IOException {
-        HashMap<String, String> todoListDesc = HtmlBuilder.createPageDescriptors(
-                TODO_TITLE, TodoListBuilder.buildList()
-        );
-        String htmlString = HtmlBuilder.createHtmlString(todoListDesc);
+        todoList.initializeHardCodedList("./public/test");
+        RouteInitializer.createTodoListRoutes(router, todoList.getTodoList());
 
-        RouteInitializer.createTodoListRoutes(router);
-
-        verify(router, times(1)).addRoute(TODO_PATH, htmlString);
+        assertEquals(12, router.getRoutes().size());
     }
 
     @Test
-    public void createsTodoItemsRoute() throws IOException {
-        HashMap<String, String> todo1Desc = HtmlBuilder.createPageDescriptors(
-                TODO_1_TITLE, TodoListBuilder.buildItem(TODO_1_TITLE)
-        );
-        HashMap<String, String> todo2Desc = HtmlBuilder.createPageDescriptors(
-                TODO_2_TITLE, TodoListBuilder.buildItem(TODO_2_TITLE)
-        );
-        HashMap<String, String> todo3Desc = HtmlBuilder.createPageDescriptors(
-                TODO_3_TITLE, TodoListBuilder.buildItem(TODO_3_TITLE)
-        );
-        HashMap<String, String> todo4Desc = HtmlBuilder.createPageDescriptors(
-                TODO_4_TITLE, TodoListBuilder.buildItem(TODO_4_TITLE)
-        );
-        HashMap<String, String> todo5Desc = HtmlBuilder.createPageDescriptors(
-                TODO_5_TITLE, TodoListBuilder.buildItem(TODO_5_TITLE)
-        );
-        String todo1String = HtmlBuilder.createHtmlString(todo1Desc);
-        String todo2String = HtmlBuilder.createHtmlString(todo2Desc);
-        String todo3String = HtmlBuilder.createHtmlString(todo3Desc);
-        String todo4String = HtmlBuilder.createHtmlString(todo4Desc);
-        String todo5String = HtmlBuilder.createHtmlString(todo5Desc);
+    public void createsCustomTodoItemsRoute() throws IOException {
+        String directory = "public/test/fake-files";
+        File folder = new File(directory);
+        File[] customFiles = folder.listFiles();
+        todoList.initializeCustomList(customFiles);
 
-        RouteInitializer.createTodoListRoutes(router);
+        RouteInitializer.createTodoListRoutes(router, todoList.getTodoList());
 
-        verify(router, times(1)).addRoute(TODO_1_PATH, todo1String);
-        verify(router, times(1)).addRoute(TODO_2_PATH, todo2String);
-        verify(router, times(1)).addRoute(TODO_3_PATH, todo3String);
-        verify(router, times(1)).addRoute(TODO_4_PATH, todo4String);
-        verify(router, times(1)).addRoute(TODO_5_PATH, todo5String);
+        assertEquals(8, router.getRoutes().size());
     }
 
     @Test
     public void throwsNullPointerExceptionIfDirectoryIsInvalid() {
         try {
             String directory = "obviously/fake/path";
+            File folder = new File(directory);
+            File[] customFiles = folder.listFiles();
+            todoList.initializeCustomList(customFiles);
 
-            RouteInitializer.createTodoListRoutes(router, directory);
+            RouteInitializer.createTodoListRoutes(router, todoList.getTodoList());
         } catch (IOException | NullPointerException e) {
             System.out.println("NullPointerException was thrown");
         }

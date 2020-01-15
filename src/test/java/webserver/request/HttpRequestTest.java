@@ -1,38 +1,56 @@
 package webserver.request;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class HttpRequestTest {
-    private HttpRequest httpRequest;
+    @Test
+    public void getsTheRequestMethod() {
+        HttpRequest httpRequest = new HttpRequest.Builder("GET")
+                .build();
 
-    @Mock
-    private BufferedReader input;
-
-    @Before
-    public void initialize() throws IOException {
-        when(input.readLine()).thenReturn("GET /helloworld HTTP/1.1\r\n");
-        httpRequest = new HttpRequest(input);
+        assertEquals("GET", httpRequest.getMethod());
     }
 
     @Test
-    public void getParsedMethod() throws IOException {
-        assertEquals(httpRequest.getMethod(), "GET");
+    public void getsTheRequestPath() {
+        HttpRequest httpRequest = new HttpRequest.Builder("GET")
+                .withPath("/")
+                .build();
+
+        assertEquals("/", httpRequest.getPath());
     }
 
     @Test
-    public void getParsedPath() throws IOException {
-        assertEquals(httpRequest.getPath(), "/helloworld");
+    public void getsTheRequestHttpVersion() {
+        HttpRequest httpRequest = new HttpRequest.Builder("GET")
+                .withHttpVersion("HTTP/1.1")
+                .build();
+
+        assertEquals("HTTP/1.1", httpRequest.getHttpVersion());
+    }
+
+    @Test
+    public void getsTheRequestHeaders() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("Hello", "World");
+        hashMap.put("Olleh", "Dlrow");
+        HttpRequest httpRequest = new HttpRequest.Builder("GET")
+                .withHeaders(hashMap)
+                .build();
+
+        assertEquals(hashMap, httpRequest.getHeaders());
+    }
+
+    @Test
+    public void getsTheBody() {
+        HttpRequest httpRequest = new HttpRequest.Builder("GET")
+                .withBody("Hello")
+                .build();
+
+        assertEquals("Hello", httpRequest.getBody());
     }
 }

@@ -3,6 +3,7 @@ package webserver.response;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import static webserver.response.HttpStatusCode.CREATED;
 import static webserver.response.HttpStatusCode.NOT_FOUND;
 import static webserver.response.HttpStatusCode.OK;
 
@@ -64,5 +65,16 @@ public class HttpResponseTest {
                 .build();
 
         assertEquals(httpResponse.getContent(), "This is exclusive content");
+    }
+
+    @Test
+    public void returnsLocation() {
+        String location = "www.google.com";
+        HttpResponse httpResponse = new HttpResponse.Builder("POST")
+                .withStatusCode(CREATED)
+                .withLocation(location)
+                .build();
+
+        assertEquals(httpResponse.getLocation(), location);
     }
 }

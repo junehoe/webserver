@@ -6,6 +6,7 @@ public class HttpResponse {
     private int contentLength;
     private String contentType;
     private String content;
+    private String location;
 
     private HttpResponse() {}
 
@@ -33,12 +34,17 @@ public class HttpResponse {
         return this.content;
     }
 
+    public String getLocation() {
+        return this.location;
+    }
+
     public static class Builder {
         private String method;
         private HttpStatusCode httpStatusCode;
         private int contentLength;
         private String contentType;
         private String content = "";
+        private String location;
 
         public Builder(String method) {
             this.method = method;
@@ -68,6 +74,12 @@ public class HttpResponse {
             return this;
         }
 
+        public Builder withLocation(String location) {
+            this.location = location;
+
+            return this;
+        }
+
         public HttpResponse build() {
             HttpResponse httpResponse = new HttpResponse();
             httpResponse.method = this.method;
@@ -75,6 +87,7 @@ public class HttpResponse {
             httpResponse.contentLength = this.contentLength;
             httpResponse.contentType = this.contentType;
             httpResponse.content = this.content;
+            httpResponse.location = this.location;
 
             return httpResponse;
         }

@@ -3,11 +3,15 @@ package webserver;
 import webserver.router.RouteInitializer;
 import webserver.router.Router;
 import webserver.socket.SocketCreator;
+import webserver.todo.TodoList;
 import static webserver.parser.CliParser.EMPTY_DIRECTORY;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Server implements Runnable {
     private ServerSocket serverSocket;
@@ -25,10 +29,11 @@ public class Server implements Runnable {
     public void run() {
         try {
             Router router = new Router();
-            createRoutes(router);
+            TodoList todoList = new TodoList();
+            createRoutes(router, todoList);
             while (running) {
                 Socket clientSocket = SocketCreator.createClientSocket(serverSocket);
-                HttpHandler httpHandler = new HttpHandler(clientSocket, router);
+                HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
                 new Thread(httpHandler).start();
             }
         } catch (IOException e) {
@@ -50,14 +55,20 @@ public class Server implements Runnable {
         return this.running;
     }
 
-    private void createRoutes(Router router) throws IOException {
+    private void createRoutes(Router router, TodoList todoList) throws IOException {
         RouteInitializer.createServerRoutes(router);
         if (this.directory.equals(EMPTY_DIRECTORY)) {
             Logger.printDefaultDirectoryMessage();
-            RouteInitializer.createTodoListRoutes(router);
+            Path todoListPath = Paths.get("").toAbsolutePath();
+            router.setPath(todoListPath.toString() + "/todo");
+            todoList.initializeHardCodedList(todoListPath.toString());
         } else {
             Logger.printCustomDirectoryMessage(this.directory);
-            RouteInitializer.createTodoListRoutes(router, this.directory);
+            File folder = new File(this.directory);
+            File[] customFiles = folder.listFiles();
+            todoList.initializeCustomList(customFiles);
+            router.setPath(this.directory);
         }
+        RouteInitializer.createTodoListRoutes(router, todoList.getTodoList());
     }
 }

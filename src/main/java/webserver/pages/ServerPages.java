@@ -1,5 +1,7 @@
 package webserver.pages;
 
+import webserver.HtmlBuilder;
+
 public class ServerPages {
     public static final String INDEX_PATH = "/";
     public static final String INDEX_TITLE = "Todo List";
@@ -11,4 +13,17 @@ public class ServerPages {
 
     public static final String TODO_PATH = "/todo";
     public static final String TODO_TITLE = "Todo List";
+
+    public static final String CREATE_TODO_ITEM_PATH = "/todo/new";
+    public static final String CREATE_TODO_ITEM_TITLE = "Create Todo Item";
+    public static final String CREATE_TODO_ITEM_BODY = todoFormBody();
+
+    private static String todoFormBody() {
+        StringBuilder todoFormBodyBuilder = new StringBuilder();
+        todoFormBodyBuilder.append("Todo Item: " + HtmlBuilder.createInput("text", "todo-name"));
+        todoFormBodyBuilder.append(HtmlBuilder.createBreak());
+        todoFormBodyBuilder.append(HtmlBuilder.createInput("submit"));
+
+        return HtmlBuilder.createForm("/todo/new", "POST", todoFormBodyBuilder.toString());
+    }
 }

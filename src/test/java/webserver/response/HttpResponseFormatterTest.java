@@ -3,6 +3,7 @@ package webserver.response;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+import static webserver.response.HttpStatusCode.CREATED;
 import static webserver.response.HttpStatusCode.NOT_FOUND;
 import static webserver.response.HttpStatusCode.OK;
 
@@ -34,6 +35,17 @@ public class HttpResponseFormatterTest {
                 .build();
         String expected = "HTTP/1.1 404 Not Found\r\nContent-Length: 8\r\n";
         expected += "Content-Type: text/html; charset=utf-8\r\n\r\n";
+
+        assertEquals(HttpResponseFormatter.format(httpResponse), expected);
+    }
+
+    @Test
+    public void returnsThePostResponseString() {
+        HttpResponse httpResponse = new HttpResponse.Builder("POST")
+                .withStatusCode(CREATED)
+                .withLocation("/")
+                .build();
+        String expected = "HTTP/1.1 201 Created\r\nLocation: /\r\n";
 
         assertEquals(HttpResponseFormatter.format(httpResponse), expected);
     }
