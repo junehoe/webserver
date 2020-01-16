@@ -9,4 +9,5 @@ public class RoutePath {
     public static final String FILTERED_TODO_PATH = "/todo\\?filter=(.*?)";
     public static final String TOGGLE_PATH = "/todo/[0-9]+/toggle";
     public static final String EDIT_TODO_ITEM_PATH = "/todo/[0-9]+/edit";
+    public static final String CUSTOM_PATH = "/custom";
 }

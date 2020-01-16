@@ -7,6 +7,7 @@ import webserver.socket.SocketCreator;
 import webserver.todo.TodoList;
 import static webserver.parser.CliParser.EMPTY_DIRECTORY;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -57,11 +58,17 @@ public class Server implements Runnable {
     }
 
     private void createRoutes(Router router, TodoList todoList) throws SQLException {
-        RouteInitializer routeInitializer = new RouteInitializer(todoList, databaseHandler);
-        routeInitializer.createServerRoutes(router);
+        RouteInitializer routeInitializer;
         if (this.directory.equals(EMPTY_DIRECTORY)) {
             Logger.printDefaultDirectoryMessage();
+            routeInitializer = new RouteInitializer(todoList, databaseHandler);
+        } else {
+            Logger.printCustomDirectoryMessage(this.directory);
+            File[] customFiles = new File(this.directory).listFiles();
+            routeInitializer = new RouteInitializer(todoList, databaseHandler, customFiles);
+            routeInitializer.createCustomRoutes(router, customFiles);
         }
+        routeInitializer.createServerRoutes(router);
         databaseHandler.populate(todoList);
     }
 }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Custom Directory</title>
+  </head>
+  <body>
+    <header>
+      <h1>Custom Directory</h1>
+    </header>
+    <main>
+      <section>
+        {{#customFiles}}
+        <a rel="item" href="/custom/{{name}}">{{name}}</a><br>
+        {{/customFiles}}
+      </section>
+    </main>
+    <br>
+    <footer>
+      <a rel="collection" href="/">Go Back</a>
+    </footer>
+  </body>
+</html>
