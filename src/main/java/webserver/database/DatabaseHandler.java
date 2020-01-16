@@ -62,4 +62,15 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
+
+    public void updateTodoItem(int id, String title) {
+        try {
+            String query = String.format("UPDATE TODO set TITLE = '%s' where ID = %d", title, id);
+            PreparedStatement statement = connection.prepareStatement(query,
+                    Statement.RETURN_GENERATED_KEYS);
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

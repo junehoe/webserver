@@ -3,6 +3,7 @@ package webserver.response;
 import static webserver.router.HttpVerb.GET;
 import static webserver.router.HttpVerb.HEAD;
 import static webserver.router.HttpVerb.POST;
+import static webserver.router.HttpVerb.PUT;
 
 public class HttpResponseFormatter {
     private static final String CRLF = "\r\n";
@@ -11,6 +12,7 @@ public class HttpResponseFormatter {
     public static String format(HttpResponse res) {
         switch (res.getMethod()) {
             case GET:
+            case PUT:
                 return formatGet(res);
             case HEAD:
                 return formatHead(res);

@@ -49,4 +49,20 @@ public class HttpResponseFormatterTest {
 
         assertEquals(HttpResponseFormatter.format(httpResponse), expected);
     }
+
+    @Test
+    public void returnsThePutResponseString() {
+        String content = "Test content";
+        HttpResponse httpResponse = new HttpResponse.Builder("PUT")
+                .withStatusCode(OK)
+                .withContentLength(content.length())
+                .withContentType("text/html")
+                .withContent(content)
+                .build();
+        String expected = "HTTP/1.1 200 OK\r\nContent-Length: 12\r\n";
+        expected += "Content-Type: text/html; charset=utf-8\r\n\r\n";
+        expected += content;
+
+        assertEquals(HttpResponseFormatter.format(httpResponse), expected);
+    }
 }

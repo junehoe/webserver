@@ -8,4 +8,5 @@ public class Page {
     public static final String INDEX_PAGE = "./src/main/resources/index.mustache";
     public static final String MAIN_LISTING_PAGE = "./src/main/resources/main-listing.mustache";
     public static final String TODO_ITEM_PAGE = "./src/main/resources/todo-item-template.mustache";
+    public static final String EDIT_TODO_ITEM_PAGE = "./src/main/resources/edit-form.mustache";
 }

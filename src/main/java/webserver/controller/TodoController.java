@@ -17,6 +17,7 @@ import java.util.function.Function;
 
 import static webserver.router.HttpVerb.GET;
 import static webserver.router.HttpVerb.POST;
+import static webserver.router.HttpVerb.PUT;
 import static webserver.pages.Page.*;
 import static webserver.response.HttpStatusCode.*;
 import static webserver.response.HttpStatusCode.UNSUPPORTED_MEDIA_TYPE;
@@ -57,8 +58,7 @@ public class TodoController {
     };
 
     public Function<HttpRequest, HttpResponse> toggleTodoItem = (request) -> {
-        String idToggle = request.getPath().replace("/todo/", "");
-        int id = Integer.parseInt(idToggle.replace("/toggle", ""));
+        int id = HttpRequestParser.getIdFromPath(request.getPath());
         for (TodoItem item : todoList.getTodoList()) {
             if (item.getId() == id) {
                 databaseHandler.toggleTodoItemStatus(item);
@@ -75,6 +75,48 @@ public class TodoController {
         context.put("filteredTodos", todoList.getFilteredTodoList());
         return createResponse(MustacheAPI.createHtml(context, FILTERED_TODO_LISTING_PAGE), request, OK);
     };
+
+    public Function<HttpRequest, HttpResponse> editTodoItem = (request) -> {
+        if (request.getMethod().equals(PUT)) {
+            return putTodoItem(request);
+        }
+        int id = HttpRequestParser.getIdFromPath(request.getPath());
+        for (TodoItem item : todoList.getTodoList()) {
+            if (item.getId() == id) {
+                return createResponse(MustacheAPI.createHtml(item, EDIT_TODO_ITEM_PAGE), request, OK);
+            }
+        }
+        return createResponse(NOT_FOUND);
+    };
+
+    private HttpResponse putTodoItem(HttpRequest httpRequest) {
+        String contentType = HttpRequestParser.getContentTypeFrom(httpRequest.getHeaders());
+        if (HttpRequestValidator.isUnsupportedMediaType(contentType)) {
+            return createResponse(UNSUPPORTED_MEDIA_TYPE);
+        }
+
+        if (HttpRequestValidator.isInvalidValue(httpRequest.getBody())) {
+            return createResponse(BAD_REQUEST);
+        }
+
+        String title = HttpRequestParser.getTitle(httpRequest.getBody()).replace("%20", " ");
+        int id = HttpRequestParser.getIdFromPath(httpRequest.getPath());
+        TodoItem updatedItem = updateTodoItem(id, title);
+        return createResponse(MustacheAPI.createHtml(updatedItem, TODO_ITEM_PAGE),
+                httpRequest,
+                OK);
+    }
+
+    private TodoItem updateTodoItem(int id, String title) {
+        databaseHandler.updateTodoItem(id, title);
+        for (TodoItem item : todoList.getTodoList()) {
+            if (item.getId() == id) {
+                item.setTitle(title);
+                return item;
+            }
+        }
+        return null;
+    }
 
     private HttpResponse createResponse(HttpStatusCode httpStatusCode) {
         String content = MustacheAPI.createHtml(httpStatusCode, ERROR_PAGE);

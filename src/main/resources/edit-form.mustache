@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Edit {{title}}</title>
+  </head>
+  <body>
+    <header>
+      <h1>Edit {{title}}</h1>
+    </header>
+    <main>
+      <section>
+        <form id="edit-form" action="/todo/{{id}}" method="POST">
+          <label>Edit Todo Item: </label>
+          <input type="text" name="todo-name" size="50" value="{{title}}">
+          <input type="submit">
+        </form>
+      </section>
+    </main>
+    <footer>
+      <a rel="collection" href="/todo">Go Back</a>
+    </footer>
+  </body>
+  <script>
+    document.getElementById("edit-form").onsubmit = () => {
+      var formAction = document.getElementById("edit-form").action;
+      var fields = formAction.split('/');
+      var id = fields[4];
+
+      let formData = "";
+      const formEl = event.target;
+      let name = encodeWhiteSpaces(formEl[0].name);
+      let value = encodeWhiteSpaces(formEl[0].value);
+      formData = (name + "=" + value);
+
+      const url = '/todo/' + id;
+
+      const headers = new Headers();
+      headers.set("Content-Type", "application/x-www-form-urlencoded")
+      headers.set("Content-length", formData.length)
+
+      const fetchOptions = {
+        method: 'PUT',
+        headers,
+        body: formData
+      };
+      fetch(url, fetchOptions)
+      .then((res) => {
+        return res.json();
+      })
+      const host = window.location.host;
+      window.location.replace("http://" + host + "/todo/" + id);
+      return false;
+    };
+      function encodeWhiteSpaces(data) {
+        return data.replace(/ /g, "%20");
+      }
+  </script>
+</html>

@@ -24,9 +24,24 @@ public class HttpRequestParserTest {
     }
 
     @Test
+    public void getsTheCaseInsensitiveContentTypeHeaderFromHashMapOfHeaders() {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("cOnTeNt-TypE", "It works");
+
+        assertEquals(HttpRequestParser.getContentTypeFrom(headers), "It works");
+    }
+
+    @Test
     public void returnsUnsupportedMediaTypeIfContentTypeDoesNotExist() {
         HashMap<String, String> headers = new HashMap<>();
 
         assertEquals(HttpRequestParser.getContentTypeFrom(headers), "Unsupported Media Type");
+    }
+
+    @Test
+    public void returnsTheIdFromARequestPath() {
+        String path = "/todo/1/toggle";
+
+        assertEquals(1, HttpRequestParser.getIdFromPath(path));
     }
 }

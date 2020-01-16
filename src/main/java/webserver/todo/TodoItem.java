@@ -30,4 +30,8 @@ public class TodoItem {
     public void setStatus(boolean status) {
         this.isComplete = status;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
