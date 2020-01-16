@@ -2,6 +2,7 @@ package webserver.parser;
 
 import org.junit.Test;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -39,9 +40,19 @@ public class HttpRequestParserTest {
     }
 
     @Test
-    public void returnsTheIdFromARequestPath() {
+    public void returnsTheIdFromARequestPath() throws NumberFormatException {
         String path = "/todo/1/toggle";
 
         assertEquals(1, HttpRequestParser.getIdFromPath(path));
+    }
+
+    @Test
+    public void returnsErrorIfPathIdIsNotParsable() {
+        try {
+            String path = "/todo/not-gonna-work/edit";
+            int id = HttpRequestParser.getIdFromPath(path);
+        } catch (NumberFormatException e) {
+            System.out.println("This will be printed");
+        }
     }
 }

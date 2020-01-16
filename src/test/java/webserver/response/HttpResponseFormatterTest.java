@@ -4,6 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import static webserver.response.HttpStatusCode.CREATED;
+import static webserver.response.HttpStatusCode.NO_CONTENT;
 import static webserver.response.HttpStatusCode.NOT_FOUND;
 import static webserver.response.HttpStatusCode.OK;
 
@@ -62,6 +63,16 @@ public class HttpResponseFormatterTest {
         String expected = "HTTP/1.1 200 OK\r\nContent-Length: 12\r\n";
         expected += "Content-Type: text/html; charset=utf-8\r\n\r\n";
         expected += content;
+
+        assertEquals(HttpResponseFormatter.format(httpResponse), expected);
+    }
+
+    @Test
+    public void returnsTheDeleteResponseString() {
+        HttpResponse httpResponse = new HttpResponse.Builder("DELETE")
+                .withStatusCode(NO_CONTENT)
+                .build();
+        String expected = "HTTP/1.1 204 No Content\r\n";
 
         assertEquals(HttpResponseFormatter.format(httpResponse), expected);
     }

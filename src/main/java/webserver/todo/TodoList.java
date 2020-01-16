@@ -33,4 +33,8 @@ public class TodoList {
     public ArrayList<TodoItem> getFilteredTodoList() {
         return filteredTodoList;
     }
+
+    public void removeTodoItem(TodoItem todoItem) {
+        this.todoList.remove(todoItem);
+    }
 }

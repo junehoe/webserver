@@ -256,4 +256,16 @@ public class TodoControllerTest {
         TodoItem item = todoList.getTodoList().get(0);
         assertEquals(item.getTitle(), "This is cool");
     }
+
+    @Test
+    public void returnsNoContentResponseAfterDeletingTodoItem() {
+        todoList.add(new TodoItem(2, "This will get deleted"));
+        assertEquals(todoList.getTodoList().size(), 2);
+        when(httpRequest.getPath()).thenReturn("/todo/2");
+
+        HttpResponse httpResponse = todoController.deleteTodoItem.apply(httpRequest);
+
+        assertEquals(httpResponse.getStatusCode(), 204);
+        assertEquals(todoList.getTodoList().size(), 1);
+    }
 }

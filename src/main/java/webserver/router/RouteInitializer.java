@@ -45,5 +45,7 @@ public class RouteInitializer {
         router.post(TOGGLE_PATH, todoController.toggleTodoItem);
 
         router.put(TODO_ITEM_PATH, todoController.editTodoItem);
+
+        router.delete(TODO_ITEM_PATH, todoController.deleteTodoItem);
     }
 }

@@ -63,4 +63,14 @@ public class HttpStatusCodeTest {
     public void returnsUnsupportedMediaTypeStatusString() {
         assertEquals(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE.getStatusString(), "Unsupported Media Type");
     }
+
+    @Test
+    public void returns204StatusCode() {
+        assertEquals(HttpStatusCode.NO_CONTENT.getStatusCode(), 204);
+    }
+
+    @Test
+    public void returnsNoContentStatusString() {
+        assertEquals(HttpStatusCode.NO_CONTENT.getStatusString(), "No Content");
+    }
 }

@@ -89,6 +89,22 @@ public class TodoController {
         return createResponse(NOT_FOUND);
     };
 
+    public Function<HttpRequest, HttpResponse> deleteTodoItem = (request) -> {
+        try {
+            int id = HttpRequestParser.getIdFromPath(request.getPath());
+            for (TodoItem item : todoList.getTodoList()) {
+                if (item.getId() == id) {
+                    databaseHandler.deleteTodoItem(id);
+                    todoList.removeTodoItem(item);
+                    break;
+                }
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return createResponse(NO_CONTENT);
+    };
+
     private HttpResponse putTodoItem(HttpRequest httpRequest) {
         String contentType = HttpRequestParser.getContentTypeFrom(httpRequest.getHeaders());
         if (HttpRequestValidator.isUnsupportedMediaType(contentType)) {

@@ -27,7 +27,7 @@ public class HttpRequestParser {
         return UNSUPPORTED_MEDIA_TYPE.getStatusString();
     }
 
-    public static int getIdFromPath(String path) {
+    public static int getIdFromPath(String path) throws NumberFormatException {
         String[] splitPath = path.split("/");
         return Integer.parseInt(splitPath[ID_INDEX]);
     }
