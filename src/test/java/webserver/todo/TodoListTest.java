@@ -42,4 +42,17 @@ public class TodoListTest {
 
         assertEquals(todoList.getFilteredTodoList(), expectedList);
     }
+
+    @Test
+    public void removesItemFromTodoList() {
+        TodoItem goodItem = new TodoItem(1, "Good Item");
+        TodoItem badItem = new TodoItem(2, "Bad Item");
+
+        todoList.add(goodItem);
+        todoList.add(badItem);
+
+        todoList.removeTodoItem(badItem);
+
+        assertEquals(todoList.getTodoList().size(), 1);
+    }
 }

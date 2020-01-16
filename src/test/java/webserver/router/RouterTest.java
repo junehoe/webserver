@@ -66,6 +66,22 @@ public class RouterTest {
     }
 
     @Test
+    public void addsPutRoute() {
+        ArrayList<Route> routes = router.getRoutes();
+        router.put("/todo/1", todoController.editTodoItem);
+
+        assertEquals(routes.get(0).getMethod(), "PUT");
+    }
+
+    @Test
+    public void addsDeleteRoute() {
+        ArrayList<Route> routes = router.getRoutes();
+        router.delete("/todo/1", todoController.deleteTodoItem);
+
+        assertEquals(routes.get(0).getMethod(), "DELETE");
+    }
+
+    @Test
     public void return200ResponseObjectIfRouteExists() {
         String path = "/";
 

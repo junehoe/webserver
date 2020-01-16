@@ -97,6 +97,7 @@ public class TodoControllerTest {
 
         assertEquals(httpResponse.getMethod(), "POST");
         assertEquals(httpResponse.getStatusCode(), 303);
+        assertEquals(todoList.getTodoList().size(), 2);
     }
 
     @Test
@@ -211,5 +212,60 @@ public class TodoControllerTest {
 
         assertEquals(httpResponse.getMethod(), "HEAD");
         assertEquals(httpResponse.getStatusCode(), 200);
+    }
+
+    @Test
+    public void returnsGetResponseForEditTodoItemPath() {
+        HttpRequest httpRequest = new HttpRequest.Builder("GET")
+                .withPath("/todo/1/edit")
+                .withHttpVersion("HTTP/1.1")
+                .build();
+        HttpResponse httpResponse = todoController.editTodoItem.apply(httpRequest);
+
+        assertEquals(httpResponse.getMethod(), "GET");
+        assertEquals(httpResponse.getStatusCode(), 200);
+    }
+
+
+    @Test
+    public void returnsHeadResponseForEditTodoItemPath() {
+        HttpRequest httpRequest = new HttpRequest.Builder("HEAD")
+                .withPath("/todo/1/edit")
+                .withHttpVersion("HTTP/1.1")
+                .build();
+        HttpResponse httpResponse = todoController.editTodoItem.apply(httpRequest);
+
+        assertEquals(httpResponse.getMethod(), "HEAD");
+        assertEquals(httpResponse.getStatusCode(), 200);
+    }
+
+    @Test
+    public void returnsRedirectResponseAfterEditingTodoItem() {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
+
+        when(httpRequest.getMethod()).thenReturn("PUT");
+        when(httpRequest.getPath()).thenReturn("/todo/1");
+        when(httpRequest.getHeaders()).thenReturn(headers);
+        when(httpRequest.getBody()).thenReturn("title=This+is+cool");
+
+        HttpResponse httpResponse = todoController.editTodoItem.apply(httpRequest);
+
+        assertEquals(httpResponse.getStatusCode(), 200);
+
+        TodoItem item = todoList.getTodoList().get(0);
+        assertEquals(item.getTitle(), "This is cool");
+    }
+
+    @Test
+    public void returnsNoContentResponseAfterDeletingTodoItem() {
+        todoList.add(new TodoItem(2, "This will get deleted"));
+        assertEquals(todoList.getTodoList().size(), 2);
+        when(httpRequest.getPath()).thenReturn("/todo/2");
+
+        HttpResponse httpResponse = todoController.deleteTodoItem.apply(httpRequest);
+
+        assertEquals(httpResponse.getStatusCode(), 204);
+        assertEquals(todoList.getTodoList().size(), 1);
     }
 }

@@ -23,7 +23,35 @@
       </section>
     </main>
     <footer>
+      <a rel="collection" href="/todo/{{id}}/edit">Edit</a>
+      <br>
+      <form id="delete-form" action="/todo/{{id}}" method="POST">
+        <a id="delete-link" rel="collection" href="/todo/{{id}}">Delete</a>
+      </form>
+      <br>
       <a rel="collection" href="/todo">Go Back</a>
     </footer>
   </body>
+  <script>
+    document.getElementById("delete-link").addEventListener("click", (event) => {
+      document.getElementById("delete-form").reset();
+      event.preventDefault();
+
+      var formAction = document.getElementById("delete-form").action;
+      var fields = formAction.split('/');
+      var id = fields[4];
+
+      const url = '/todo/' + id;
+
+      const fetchOptions = {
+        method: 'DELETE'
+      };
+      fetch(url, fetchOptions)
+        .then((res) => {
+          const host = window.location.host;
+          window.location.replace("http://" + host + "/todo");
+          return res.json();
+        })
+      });
+  </script>
 </html>

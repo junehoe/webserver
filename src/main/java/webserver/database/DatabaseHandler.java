@@ -62,4 +62,24 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
+
+    public void updateTodoItem(int id, String title) {
+        try {
+            String query = String.format("UPDATE TODO set TITLE = '%s' where ID = %d", title, id);
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteTodoItem(int id) {
+        try {
+            String query = String.format("DELETE FROM TODO where ID = %d", id);
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

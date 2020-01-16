@@ -4,9 +4,11 @@ import webserver.controller.AppController;
 import webserver.response.HttpResponse;
 import webserver.request.HttpRequest;
 
+import static webserver.router.HttpVerb.DELETE;
 import static webserver.router.HttpVerb.GET;
 import static webserver.router.HttpVerb.HEAD;
 import static webserver.router.HttpVerb.POST;
+import static webserver.router.HttpVerb.PUT;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -35,6 +37,14 @@ public class Router {
 
     public void post(String path, Function<HttpRequest, HttpResponse> callback) {
         addRoute(new Route(POST, path, callback));
+    }
+
+    public void put(String path, Function<HttpRequest, HttpResponse> callback) {
+        addRoute(new Route(PUT, path, callback));
+    }
+
+    public void delete(String path, Function<HttpRequest, HttpResponse> callback) {
+        addRoute(new Route(DELETE, path, callback));
     }
 
     public HttpResponse route(HttpRequest httpRequest) {

@@ -6,7 +6,7 @@ public class HttpRequestValidator {
     }
 
     public static boolean isInvalidValue(String body) {
-        return body.contains(" ");
+        return (body.contains(" ") || body.equals(""));
     }
 
     public static boolean isValidFilterRequestPath(String path) {
@@ -15,5 +15,9 @@ public class HttpRequestValidator {
 
     public static boolean isValidRequestBody(String body) {
         return body.contains("todo-name=");
+    }
+
+    public static boolean isContentTypeHeader(String key) {
+        return key.toLowerCase().equals("content-type");
     }
 }

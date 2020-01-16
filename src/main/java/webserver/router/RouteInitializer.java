@@ -30,16 +30,22 @@ public class RouteInitializer {
 
     private void createTodoRoutes(Router router) {
         router.get(CREATE_TODO_ITEM_PATH, todoController.createTodoItem);
+        router.get(EDIT_TODO_ITEM_PATH, todoController.editTodoItem);
         router.get(FILTERED_TODO_PATH, todoController.showFilteredTodoList);
         router.get(TODO_ITEM_PATH, todoController.showTodoItem);
         router.get(TODO_PATH, todoController.showTodoList);
 
         router.head(CREATE_TODO_ITEM_PATH, todoController.createTodoItem);
+        router.head(EDIT_TODO_ITEM_PATH, todoController.editTodoItem);
         router.head(FILTERED_TODO_PATH, todoController.showFilteredTodoList);
         router.head(TODO_ITEM_PATH, todoController.showTodoItem);
         router.head(TODO_PATH, todoController.showTodoList);
 
         router.post(TODO_PATH, todoController.createTodoItem);
         router.post(TOGGLE_PATH, todoController.toggleTodoItem);
+
+        router.put(TODO_ITEM_PATH, todoController.editTodoItem);
+
+        router.delete(TODO_ITEM_PATH, todoController.deleteTodoItem);
     }
 }

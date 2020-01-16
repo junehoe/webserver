@@ -61,4 +61,23 @@ public class HttpRequestValidatorTest {
 
         assertFalse(HttpRequestValidator.isValidRequestBody(requestBody));
     }
+
+    @Test
+    public void returnsFalseForEmptyInvalidRequestBody() {
+        assertFalse(HttpRequestValidator.isValidRequestBody(""));
+    }
+
+    @Test
+    public void returnsTrueForCaseInsensitiveContentTypeKey() {
+        String key = "ContEnt-Type";
+
+        assertTrue(HttpRequestValidator.isContentTypeHeader(key));
+    }
+
+    @Test
+    public void returnsFalseForIncorrectContentTypeKey() {
+        String incorrectKey = "Not-Content-Type";
+
+        assertFalse(HttpRequestValidator.isContentTypeHeader(incorrectKey));
+    }
 }

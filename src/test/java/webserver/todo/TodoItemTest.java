@@ -45,4 +45,11 @@ public class TodoItemTest {
         assertEquals(anotherTodoItem.getTitle(), "Hello World");
         assertTrue(anotherTodoItem.isComplete());
     }
+
+    @Test
+    public void setsTheTitle() {
+        todoItem.setTitle("This is a new title");
+
+        assertEquals(todoItem.getTitle(), "This is a new title");
+    }
 }

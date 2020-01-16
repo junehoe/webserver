@@ -1,8 +1,10 @@
 package webserver.response;
 
+import static webserver.router.HttpVerb.DELETE;
 import static webserver.router.HttpVerb.GET;
 import static webserver.router.HttpVerb.HEAD;
 import static webserver.router.HttpVerb.POST;
+import static webserver.router.HttpVerb.PUT;
 
 public class HttpResponseFormatter {
     private static final String CRLF = "\r\n";
@@ -11,7 +13,10 @@ public class HttpResponseFormatter {
     public static String format(HttpResponse res) {
         switch (res.getMethod()) {
             case GET:
+            case PUT:
                 return formatGet(res);
+            case DELETE:
+                return formatDelete(res);
             case HEAD:
                 return formatHead(res);
             case POST:
@@ -56,6 +61,10 @@ public class HttpResponseFormatter {
         postBuilder.append(locationHeader(res.getLocation()));
         postBuilder.append(CRLF);
         return postBuilder.toString();
+    }
+
+    private static String formatDelete(HttpResponse res) {
+        return initialHeaderLine(res.getStatusCode(), res.getStatusString()) + CRLF;
     }
 
     private static String initialHeaderLine(int statusCode, String statusString) {

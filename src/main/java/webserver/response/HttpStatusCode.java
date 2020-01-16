@@ -3,6 +3,7 @@ package webserver.response;
 public enum HttpStatusCode {
     OK (200, "OK"),
     CREATED (201, "Created"),
+    NO_CONTENT (204, "No Content"),
     SEE_OTHER (303, "See Other"),
     BAD_REQUEST (400, "Bad Request"),
     NOT_FOUND (404, "Not Found"),
