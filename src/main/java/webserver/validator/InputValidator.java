@@ -1,4 +1,4 @@
-package webserver;
+package webserver.validator;
 
 public class InputValidator {
     private static final int LOWER_PORT_BOUND = 1024;

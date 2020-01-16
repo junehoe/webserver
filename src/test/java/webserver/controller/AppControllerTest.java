@@ -6,7 +6,8 @@ import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 
 import static org.junit.Assert.assertEquals;
-import static webserver.pages.ServerPages.*;
+import static webserver.router.RoutePath.HEALTH_PATH;
+import static webserver.router.RoutePath.INDEX_PATH;
 
 public class AppControllerTest {
     private AppController appController;
@@ -17,13 +18,26 @@ public class AppControllerTest {
     }
 
     @Test
-    public void returnsErrorResponse() {
+    public void returnsErrorGetResponse() {
         HttpRequest httpRequest = new HttpRequest.Builder("GET")
                 .withPath("/asdf")
                 .withHttpVersion("HTTP/1.1")
                 .build();
         HttpResponse httpResponse = appController.error.apply(httpRequest);
 
+        assertEquals(httpResponse.getMethod(), "GET");
+        assertEquals(httpResponse.getStatusCode(), 404);
+    }
+
+    @Test
+    public void returnsErrorHeadResponse() {
+        HttpRequest httpRequest = new HttpRequest.Builder("HEAD")
+                .withPath("/asdf")
+                .withHttpVersion("HTTP/1.1")
+                .build();
+        HttpResponse httpResponse = appController.error.apply(httpRequest);
+
+        assertEquals(httpResponse.getMethod(), "HEAD");
         assertEquals(httpResponse.getStatusCode(), 404);
     }
 
@@ -36,6 +50,7 @@ public class AppControllerTest {
         HttpResponse httpResponse = appController.index.apply(httpRequest);
 
         assertEquals(httpResponse.getMethod(), "GET");
+        assertEquals(httpResponse.getStatusCode(), 200);
     }
 
     @Test
@@ -47,6 +62,7 @@ public class AppControllerTest {
         HttpResponse httpResponse = appController.index.apply(httpRequest);
 
         assertEquals(httpResponse.getMethod(), "GET");
+        assertEquals(httpResponse.getStatusCode(), 200);
     }
 
     @Test
@@ -58,6 +74,7 @@ public class AppControllerTest {
         HttpResponse httpResponse = appController.index.apply(httpRequest);
 
         assertEquals(httpResponse.getMethod(), "HEAD");
+        assertEquals(httpResponse.getStatusCode(), 200);
     }
 
     @Test
@@ -69,5 +86,6 @@ public class AppControllerTest {
         HttpResponse httpResponse = appController.healthCheck.apply(httpRequest);
 
         assertEquals(httpResponse.getMethod(), "HEAD");
+        assertEquals(httpResponse.getStatusCode(), 200);
     }
 }

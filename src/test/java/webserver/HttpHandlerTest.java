@@ -1,11 +1,8 @@
 package webserver;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 import java.net.Socket;
-import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,16 +14,16 @@ import webserver.controller.AppController;
 import webserver.controller.TodoController;
 import webserver.database.DatabaseHandler;
 import webserver.router.Router;
+import webserver.todo.TodoItem;
 import webserver.todo.TodoList;
-import webserver.todo.TodoListBuilder;
 
-import static webserver.pages.ServerPages.*;
+import static webserver.pages.Page.*;
+import static webserver.response.HttpStatusCode.NOT_FOUND;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HttpHandlerTest {
-    private final String CRLF = "\r\n";
     private ByteArrayOutputStream outContent;
     private AppController appController;
     private TodoController todoController;
@@ -64,80 +61,109 @@ public class HttpHandlerTest {
     @Test
     public void testServerOutputsIndexPage() throws IOException {
         String inputString = "GET / HTTP/1.1\r\n";
-        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(INDEX_TITLE, INDEX_BODY);
-        String htmlContent = HtmlBuilder.createHtmlString(descriptors);
-        String expected = createExpectedResponse(htmlContent);
+        String content = MustacheAPI.createHtml(null, INDEX_PAGE);
+        String header = "HTTP/1.1 200 OK\r\n";
+        String contentLengthHeader = "Content-Length: " + content.length() + "\r\n";
+        String contentTypeHeader = "Content-Type: text/html; charset=utf-8\r\n\r\n";
+
+        StringBuilder expectedBuilder = new StringBuilder();
+        expectedBuilder.append(header);
+        expectedBuilder.append(contentLengthHeader);
+        expectedBuilder.append(contentTypeHeader);
+        expectedBuilder.append(content);
+        expectedBuilder.append("\n");
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
         HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
-        assertEquals(expected, outContent.toString());
+        assertEquals(expectedBuilder.toString(), outContent.toString());
     }
 
     @Test
     public void testServerOutputs404Page() throws IOException {
         String inputString = "GET /asdf HTTP/1.1\r\n";
-        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(ERROR_TITLE, ERROR_BODY);
-        String htmlContent = HtmlBuilder.createHtmlString(descriptors);
-        String expected = "";
-        expected += "HTTP/1.1 404 Not Found";
-        expected += CRLF;
-        expected += "Content-Length: " + htmlContent.length();
-        expected += CRLF;
-        expected += "Content-Type: text/html; charset=utf-8";
-        expected += CRLF + CRLF;
-        expected += htmlContent + "\n";
+        String content = MustacheAPI.createHtml(NOT_FOUND, ERROR_PAGE);
+        String header = "HTTP/1.1 404 Not Found\r\n";
+        String contentLengthHeader = "Content-Length: " + content.length() + "\r\n";
+        String contentTypeHeader = "Content-Type: text/html; charset=utf-8\r\n\r\n";
+
+        StringBuilder expectedBuilder = new StringBuilder();
+        expectedBuilder.append(header);
+        expectedBuilder.append(contentLengthHeader);
+        expectedBuilder.append(contentTypeHeader);
+        expectedBuilder.append(content);
+        expectedBuilder.append("\n");
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
         HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
-        assertEquals(expected, outContent.toString());
+        assertEquals(expectedBuilder.toString(), outContent.toString());
     }
 
     @Test
     public void testServerOutputsHealthCheckPage() throws IOException {
         String inputString = "GET /health-check HTTP/1.1\r\n";
-        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(HEALTH_TITLE, HEALTH_BODY);
-        String htmlContent = HtmlBuilder.createHtmlString(descriptors);
-        String expected = createExpectedResponse(htmlContent);
+        String content = MustacheAPI.createHtml(null, HEALTH_PAGE);
+        String header = "HTTP/1.1 200 OK\r\n";
+        String contentLengthHeader = "Content-Length: " + content.length() + "\r\n";
+        String contentTypeHeader = "Content-Type: text/html; charset=utf-8\r\n\r\n";
+
+        StringBuilder expectedBuilder = new StringBuilder();
+        expectedBuilder.append(header);
+        expectedBuilder.append(contentLengthHeader);
+        expectedBuilder.append(contentTypeHeader);
+        expectedBuilder.append(content);
+        expectedBuilder.append("\n");
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
         HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
-        assertEquals(expected, outContent.toString());
+        assertEquals(expectedBuilder.toString(), outContent.toString());
     }
 
     @Test
     public void testServerOutputsTodoListPage() throws IOException {
         String inputString = "GET /todo HTTP/1.1\r\n";
-        String todoBody = TodoListBuilder.buildList(todoList.getTodoList());
-        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(TODO_TITLE, todoBody);
-        String htmlContent = HtmlBuilder.createHtmlString(descriptors);
-        String expected = createExpectedResponse(htmlContent);
+        todoList.add(new TodoItem(1, "Hello World"));
+
+        String content = readHtml("./public/test/http-handler-test/todo-list-page.html");
+        String header = "HTTP/1.1 200 OK\r\n";
+        String contentLengthHeader = "Content-Length: " + content.length() + "\r\n";
+        String contentTypeHeader = "Content-Type: text/html; charset=utf-8\r\n\r\n";
+
+        StringBuilder expectedBuilder = new StringBuilder();
+        expectedBuilder.append(header);
+        expectedBuilder.append(contentLengthHeader);
+        expectedBuilder.append(contentTypeHeader);
+        expectedBuilder.append(content);
+        expectedBuilder.append("\n");
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
         HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
 
         httpHandler.run();
 
-        assertEquals(expected, outContent.toString());
+        assertEquals(expectedBuilder.toString(), outContent.toString());
     }
 
-    public String createExpectedResponse(String content) {
-        String response = "";
-        response += "HTTP/1.1 200 OK";
-        response += CRLF;
-        response += "Content-Length: " + content.length();
-        response += CRLF;
-        response += "Content-Type: text/html; charset=utf-8";
-        response += CRLF + CRLF;
-        response += content + "\n";
-        return response;
+    private String readHtml(String path) {
+        StringBuilder contentBuilder = new StringBuilder();
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(path));
+            String str;
+            while ((str = in.readLine()) != null) {
+                contentBuilder.append(str + "\n");
+            }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return contentBuilder.toString();
     }
 }

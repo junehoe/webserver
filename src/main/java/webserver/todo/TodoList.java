@@ -1,6 +1,6 @@
 package webserver.todo;
 
-import webserver.InputValidator;
+import webserver.validator.InputValidator;
 
 import java.util.ArrayList;
 

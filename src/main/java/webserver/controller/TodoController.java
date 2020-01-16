@@ -1,7 +1,6 @@
 package webserver.controller;
 
-import webserver.HtmlBuilder;
-import webserver.HttpRequestValidator;
+import webserver.MustacheAPI;
 import webserver.database.DatabaseHandler;
 import webserver.parser.HttpRequestParser;
 import webserver.parser.QueryParser;
@@ -10,13 +9,15 @@ import webserver.response.HttpResponse;
 import webserver.response.HttpStatusCode;
 import webserver.todo.TodoItem;
 import webserver.todo.TodoList;
-import webserver.todo.TodoListBuilder;
+import webserver.validator.HttpRequestValidator;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
-import static webserver.pages.Page.TEXT_HTML;
-import static webserver.pages.ServerPages.*;
+import static webserver.router.HttpVerb.GET;
+import static webserver.router.HttpVerb.POST;
+import static webserver.pages.Page.*;
 import static webserver.response.HttpStatusCode.*;
 import static webserver.response.HttpStatusCode.UNSUPPORTED_MEDIA_TYPE;
 
@@ -29,28 +30,30 @@ public class TodoController {
         this.databaseHandler = databaseHandler;
     }
 
-    public Function<HttpRequest, HttpResponse> showTodoList = (request) ->
-            createResponse(htmlString(TODO_TITLE, TodoListBuilder.buildList(todoList.getTodoList())), request, OK);
+    public Function<HttpRequest, HttpResponse> showTodoList = (request) -> {
+        Map<String, Object> context = new HashMap<>();
+        context.put("todos", todoList.getTodoList());
+        return createResponse(MustacheAPI.createHtml(context, MAIN_LISTING_PAGE), request, OK);
+    };
 
     public Function<HttpRequest, HttpResponse> createTodoItem = (request) -> {
-        if (request.getMethod().equals("POST")) {
+        if (request.getMethod().equals(POST)) {
             return postTodoItem(request);
         }
-        return createResponse(htmlString(CREATE_TODO_ITEM_TITLE, CREATE_TODO_ITEM_BODY), request, OK);
+        Map<String, Object> context = new HashMap<>();
+        context.put("pageName", "Create New Todo Item");
+        context.put("pagePath", "/todo");
+        return createResponse(MustacheAPI.createHtml(context, FORM_PAGE), request, OK);
     };
 
     public Function<HttpRequest, HttpResponse> showTodoItem = (request) -> {
         int id = Integer.parseInt(request.getPath().replace("/todo/", ""));
         for (TodoItem item : todoList.getTodoList()) {
             if (item.getId() == id) {
-                HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(
-                        item.getTitle(),
-                        HtmlBuilder.createTodoDetailHtml(item.getTitle(), item.getId(), item.isComplete())
-                );
-                return createResponse(HtmlBuilder.createHtmlString(descriptors), request, OK);
+                return createResponse(MustacheAPI.createHtml(item, TODO_ITEM_PAGE), request, OK);
             }
         }
-        return createResponse(htmlString(ERROR_TITLE, ERROR_BODY), request, NOT_FOUND);
+        return createResponse(NOT_FOUND);
     };
 
     public Function<HttpRequest, HttpResponse> toggleTodoItem = (request) -> {
@@ -68,33 +71,23 @@ public class TodoController {
     public Function<HttpRequest, HttpResponse> showFilteredTodoList = (request) -> {
         String keyword = QueryParser.getFilterKeyword(request.getPath());
         todoList.setFilteredTodoList(keyword);
-        return createResponse(htmlString(TODO_TITLE,
-                TodoListBuilder.buildFilteredList(todoList.getFilteredTodoList())),
-                request,
-                OK);
+        Map<String, Object> context = new HashMap<>();
+        context.put("filteredTodos", todoList.getFilteredTodoList());
+        return createResponse(MustacheAPI.createHtml(context, FILTERED_TODO_LISTING_PAGE), request, OK);
     };
 
-    private String htmlString(String title, String body) {
-        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(title, body);
-        return HtmlBuilder.createHtmlString(descriptors);
-    }
-
     private HttpResponse createResponse(HttpStatusCode httpStatusCode) {
-        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(
-                httpStatusCode.getStatusString(),
-                httpStatusCode.getStatusCode() + " " + httpStatusCode.getStatusString()
-        );
-        String content = HtmlBuilder.createHtmlString(descriptors);
-        return new HttpResponse.Builder("GET")
+        String content = MustacheAPI.createHtml(httpStatusCode, ERROR_PAGE);
+        return new HttpResponse.Builder(GET)
                 .withStatusCode(httpStatusCode)
                 .withContentLength(content.length())
-                .withContentType(TEXT_HTML)
+                .withContentType("text/html")
                 .withContent(content)
                 .build();
     }
 
     private HttpResponse createResponse(String location, HttpStatusCode httpStatusCode) {
-        return new HttpResponse.Builder("POST")
+        return new HttpResponse.Builder(POST)
                 .withStatusCode(httpStatusCode)
                 .withLocation(location)
                 .build();
@@ -104,7 +97,7 @@ public class TodoController {
         return new HttpResponse.Builder(httpRequest.getMethod())
                 .withStatusCode(httpStatusCode)
                 .withContentLength(content.length())
-                .withContentType(TEXT_HTML)
+                .withContentType("text/html")
                 .withContent(content)
                 .build();
     }
@@ -112,21 +105,11 @@ public class TodoController {
     private HttpResponse postTodoItem(HttpRequest httpRequest) {
         String contentType = HttpRequestParser.getContentTypeFrom(httpRequest.getHeaders());
         if (HttpRequestValidator.isUnsupportedMediaType(contentType)) {
-            return new HttpResponse.Builder("GET")
-                    .withStatusCode(UNSUPPORTED_MEDIA_TYPE)
-                    .withContentLength(UNSUPPORTED_MEDIA_TYPE.getStatusString().length())
-                    .withContentType(TEXT_HTML)
-                    .withContent(UNSUPPORTED_MEDIA_TYPE.getStatusString())
-                    .build();
+            return createResponse(UNSUPPORTED_MEDIA_TYPE);
         }
 
         if (HttpRequestValidator.isInvalidValue(httpRequest.getBody())) {
-            return new HttpResponse.Builder("GET")
-                    .withStatusCode(BAD_REQUEST)
-                    .withContentLength(BAD_REQUEST.getStatusString().length())
-                    .withContentType(TEXT_HTML)
-                    .withContent(BAD_REQUEST.getStatusString())
-                    .build();
+            return createResponse(BAD_REQUEST);
         }
 
         String title = HttpRequestParser.getTitle(httpRequest.getBody());

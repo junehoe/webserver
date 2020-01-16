@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <header>
+      <h1>{{title}}</h1>
+    </header>
+    <main>
+      <section>
+        <form action="/todo/{{id}}/toggle" method="POST">
+          {{^isComplete}}
+          <label class="incomplete">Complete: NO</label>
+          <input type="submit" value="Mark Complete">
+          {{/isComplete}}
+          {{#isComplete}}
+          <label class="complete">Complete: YES</label>
+          <input type="submit" value="Mark Incomplete">
+          {{/isComplete}}
+        </form>
+      </section>
+    </main>
+    <footer>
+      <a rel="collection" href="/todo">Go Back</a>
+    </footer>
+  </body>
+</html>

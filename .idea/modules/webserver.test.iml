@@ -19,6 +19,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Gradle: com.github.spullara.mustache.java:compiler:0.9.6" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:28.0-jre" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Gradle: org.mockito:mockito-core:2.28.2" level="project" />

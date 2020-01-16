@@ -1,6 +1,6 @@
 package webserver.parser;
 
-import webserver.InputValidator;
+import webserver.validator.InputValidator;
 
 import java.io.File;
 

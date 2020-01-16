@@ -1,4 +1,4 @@
-package webserver;
+package webserver.validator;
 
 public class HttpRequestValidator {
     public static boolean isUnsupportedMediaType(String contentType) {
