@@ -1,16 +1,20 @@
 package webserver.response;
 
+import static webserver.router.HttpVerb.GET;
+import static webserver.router.HttpVerb.HEAD;
+import static webserver.router.HttpVerb.POST;
+
 public class HttpResponseFormatter {
     private static final String CRLF = "\r\n";
     private static final String SEMICOLON_SEPARATOR = "; ";
 
     public static String format(HttpResponse res) {
         switch (res.getMethod()) {
-            case "GET":
+            case GET:
                 return formatGet(res);
-            case "HEAD":
+            case HEAD:
                 return formatHead(res);
-            case "POST":
+            case POST:
                 return formatPost(res);
         }
         return "Something went wrong";
