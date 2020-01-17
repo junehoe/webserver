@@ -13,6 +13,13 @@ public class QueryParserTest {
     }
 
     @Test
+    public void returnsEmptyKeywordIfNoFilterKeyword() {
+        String requestPath = "/todo?filter=";
+
+        assertEquals(QueryParser.getFilterKeyword(requestPath), "");
+    }
+
+    @Test
     public void returnsTheTitleFromRequestBody() {
         String requestBody = "todo-name=Hello+there+this+is+a+title";
 

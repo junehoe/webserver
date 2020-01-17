@@ -31,4 +31,9 @@ public class HttpRequestParser {
         String[] splitPath = path.split("/");
         return Integer.parseInt(splitPath[ID_INDEX]);
     }
+
+    public static String getFileNameFromPath(String path) {
+        String[] splitPath = path.split("/");
+        return splitPath[2];
+    }
 }

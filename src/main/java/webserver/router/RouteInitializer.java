@@ -4,10 +4,13 @@ import webserver.controller.*;
 import webserver.database.DatabaseHandler;
 import webserver.todo.TodoList;
 
+import java.io.File;
+
 import static webserver.router.RoutePath.*;
 
 public class RouteInitializer {
     private AppController appController;
+    private CustomController customController;
     private TodoController todoController;
 
     public RouteInitializer(TodoList todoList, DatabaseHandler databaseHandler) {
@@ -15,9 +18,24 @@ public class RouteInitializer {
         this.todoController = new TodoController(todoList, databaseHandler);
     }
 
+    public RouteInitializer(TodoList todoList, DatabaseHandler databaseHandler, File[] customFiles) {
+        this.appController = new AppController();
+        this.customController = new CustomController(customFiles);
+        this.todoController = new TodoController(todoList, databaseHandler);
+    }
+
     public void createServerRoutes(Router router) {
         createAppRoutes(router);
         createTodoRoutes(router);
+    }
+
+    public void createCustomRoutes(Router router, File[] customFiles) {
+        router.get(CUSTOM_PATH, customController.index);
+        router.head(CUSTOM_PATH, customController.index);
+        for (File customFile : customFiles) {
+            router.get(createCustomPath(customFile.getName()), customController.showFile);
+            router.head(createCustomPath(customFile.getName()), customController.showFile);
+        }
     }
 
     private void createAppRoutes(Router router) {
@@ -47,5 +65,9 @@ public class RouteInitializer {
         router.put(TODO_ITEM_PATH, todoController.editTodoItem);
 
         router.delete(TODO_ITEM_PATH, todoController.deleteTodoItem);
+    }
+
+    private String createCustomPath(String fileName) {
+        return "/custom/" + fileName;
     }
 }

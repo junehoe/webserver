@@ -4,8 +4,14 @@ public class QueryParser {
     private static final int VALUE_INDEX = 1;
 
     public static String getFilterKeyword(String requestPath) {
-        String[] keyValue = requestPath.split("=");
-        return keyValue[VALUE_INDEX].replace("+", " ");
+        String keyword = "";
+        try {
+            String[] keyValue = requestPath.split("=");
+            keyword = keyValue[VALUE_INDEX].replace("+", " ");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        return keyword;
     }
 
     public static String getTitle(String body) {
