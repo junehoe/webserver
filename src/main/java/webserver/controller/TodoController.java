@@ -69,10 +69,14 @@ public class TodoController {
     };
 
     public Function<HttpRequest, HttpResponse> showFilteredTodoList = (request) -> {
-        String keyword = QueryParser.getFilterKeyword(request.getPath());
-        todoList.setFilteredTodoList(keyword);
         Map<String, Object> context = new HashMap<>();
-        context.put("filteredTodos", todoList.getFilteredTodoList());
+        String keyword = QueryParser.getFilterKeyword(request.getPath());
+        if (keyword.equals("")) {
+            context.put("filteredTodos", todoList.getTodoList());
+        } else {
+            todoList.setFilteredTodoList(keyword);
+            context.put("filteredTodos", todoList.getFilteredTodoList());
+        }
         return createResponse(MustacheAPI.createHtml(context, FILTERED_TODO_LISTING_PAGE), request, OK);
     };
 
