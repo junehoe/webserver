@@ -34,5 +34,7 @@ public class RouteInitializer {
         router.head(CREATE_TODO_ITEM_PATH, todoController.createTodoItem);
         router.get(TODO_ITEM_PATH, todoController.showTodoItem);
         router.head(TODO_ITEM_PATH, todoController.showTodoItem);
+        router.get(FILTERED_TODO_PATH, todoController.showFilteredTodoList);
+        router.head(FILTERED_TODO_PATH, todoController.showFilteredTodoList);
     }
 }

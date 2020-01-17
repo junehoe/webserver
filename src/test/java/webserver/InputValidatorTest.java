@@ -30,4 +30,20 @@ public class InputValidatorTest {
 
         assertFalse(InputValidator.isValidPort(inputPort));
     }
+
+    @Test
+    public void returnsTrueIfCaseInsensitiveStringIsContainedInAnotherString() {
+        String str1 = "Hello";
+        String str2 = "Yo HeLLo";
+
+        assertTrue(InputValidator.isCaseInsensitiveStringContained(str1, str2));
+    }
+
+    @Test
+    public void returnsFalseIfCaseInsensitiveStringIsNotContainedInAnotherString() {
+        String str1 = "hi";
+        String str2 = "the above word does not exist in here";
+
+        assertFalse(InputValidator.isCaseInsensitiveStringContained(str1, str2));
+    }
 }

@@ -10,7 +10,18 @@ public class TodoListBuilder {
         for (TodoItem item : todoList) {
             listBuilder.append(HtmlBuilder.createSection(item.getPath(), item.getTitle()));
         }
-        listBuilder.append("<br><br><footer><a href='/todo/new'>Create new todo item</a></footer>");
+        listBuilder.append("<br><br><footer><a href='/todo/new'>Create new todo item</a>");
+        listBuilder.append("<br><br><form action='/todo' method='GET'>Keyword: <input type='text' name='filter'><br><input type='submit'></form></footer>");
+        return listBuilder.toString();
+    }
+
+    public static String buildFilteredList(ArrayList<TodoItem> todoList) {
+        StringBuilder listBuilder = new StringBuilder();
+        listBuilder.append(HtmlBuilder.createHeader("Filtered Todo List"));
+        for (TodoItem item : todoList) {
+            listBuilder.append(HtmlBuilder.createSection(item.getPath(), item.getTitle()));
+        }
+        listBuilder.append("<br><br><footer><a href='/todo'>Go Back</a></footer>");
         return listBuilder.toString();
     }
 

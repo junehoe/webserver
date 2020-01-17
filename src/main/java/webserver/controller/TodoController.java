@@ -4,6 +4,7 @@ import webserver.HtmlBuilder;
 import webserver.HttpRequestValidator;
 import webserver.InputValidator;
 import webserver.parser.HttpRequestParser;
+import webserver.parser.QueryParser;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.HttpStatusCode;
@@ -46,6 +47,15 @@ public class TodoController {
             }
         }
         return createResponse(htmlString(ERROR_TITLE, ERROR_BODY), request, NOT_FOUND);
+    };
+
+    public Function<HttpRequest, HttpResponse> showFilteredTodoList = (request) -> {
+        String keyword = QueryParser.getFilterKeyword(request.getPath());
+        todoList.setFilteredTodoList(keyword);
+        return createResponse(htmlString(TODO_TITLE,
+                TodoListBuilder.buildFilteredList(todoList.getFilteredTodoList())),
+                request,
+                OK);
     };
 
     private String htmlString(String title, String body) {
