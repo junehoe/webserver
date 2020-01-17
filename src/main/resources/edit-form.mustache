@@ -48,8 +48,11 @@
       .then((res) => {
         return res.json();
       })
-      const host = window.location.host;
-      window.location.replace("http://" + host + "/todo/" + id);
+
+      window.setTimeout(() => {
+        const host = window.location.host;
+        window.location.replace("http://" + host + "/todo/" + id);
+      }, 1000);
       return false;
     };
       function encodeWhiteSpaces(data) {
