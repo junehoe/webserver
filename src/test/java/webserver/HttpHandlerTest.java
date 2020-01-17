@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import java.net.Socket;
+import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,11 +13,13 @@ import org.junit.runner.RunWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import webserver.parser.HtmlParser;
-import webserver.router.Route;
+import webserver.controller.AppController;
+import webserver.controller.TodoController;
 import webserver.router.Router;
 import webserver.todo.TodoList;
+import webserver.todo.TodoListBuilder;
 
+import static webserver.pages.ServerPages.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -24,6 +27,8 @@ import static org.mockito.Mockito.*;
 public class HttpHandlerTest {
     private final String CRLF = "\r\n";
     private ByteArrayOutputStream outContent;
+    private AppController appController;
+    private TodoController todoController;
     private Router router;
     private TodoList todoList;
 
@@ -35,14 +40,12 @@ public class HttpHandlerTest {
         when(clientSocket.getOutputStream()).thenReturn(outContent);
         todoList = new TodoList();
         router = new Router();
-        router.addRoute(new Route("GET", "/", HtmlParser.parseHtml("/index.html", true)));
-        router.addRoute(new Route("GET", "/health-check", HtmlParser.parseHtml("/health-check.html", true)));
-        router.addRoute(new Route("GET", "/todo", HtmlParser.parseHtml("/todo-list.html", true)));
-        router.addRoute(new Route("GET", "/todo/1", HtmlParser.parseHtml("/todo-item-1.html", true)));
-        router.addRoute(new Route("GET", "/todo/2", HtmlParser.parseHtml("/todo-item-2.html", true)));
-        router.addRoute(new Route("GET", "/todo/3", HtmlParser.parseHtml("/todo-item-3.html", true)));
-        router.addRoute(new Route("GET", "/todo/4", HtmlParser.parseHtml("/todo-item-4.html", true)));
-        router.addRoute(new Route("GET", "/todo/5", HtmlParser.parseHtml("/todo-item-5.html", true)));
+        appController = new AppController();
+        todoController = new TodoController(todoList);
+
+        router.get("/", appController.index);
+        router.get("/health-check", appController.healthCheck);
+        router.get("/todo", todoController.showTodoList);
     }
 
     @Before
@@ -57,8 +60,8 @@ public class HttpHandlerTest {
     @Test
     public void testServerOutputsIndexPage() throws IOException {
         String inputString = "GET / HTTP/1.1\r\n";
-        String htmlPath = "/index.html";
-        String htmlContent = HtmlParser.parseHtml(htmlPath, true);
+        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(INDEX_TITLE, INDEX_BODY);
+        String htmlContent = HtmlBuilder.createHtmlString(descriptors);
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
@@ -72,8 +75,8 @@ public class HttpHandlerTest {
     @Test
     public void testServerOutputs404Page() throws IOException {
         String inputString = "GET /asdf HTTP/1.1\r\n";
-        String htmlPath = "/error.html";
-        String htmlContent = HtmlParser.parseHtml(htmlPath, true);
+        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(ERROR_TITLE, ERROR_BODY);
+        String htmlContent = HtmlBuilder.createHtmlString(descriptors);
         String expected = "";
         expected += "HTTP/1.1 404 Not Found";
         expected += CRLF;
@@ -94,8 +97,8 @@ public class HttpHandlerTest {
     @Test
     public void testServerOutputsHealthCheckPage() throws IOException {
         String inputString = "GET /health-check HTTP/1.1\r\n";
-        String htmlPath = "/health-check.html";
-        String htmlContent = HtmlParser.parseHtml(htmlPath, true);
+        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(HEALTH_TITLE, HEALTH_BODY);
+        String htmlContent = HtmlBuilder.createHtmlString(descriptors);
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
@@ -109,83 +112,9 @@ public class HttpHandlerTest {
     @Test
     public void testServerOutputsTodoListPage() throws IOException {
         String inputString = "GET /todo HTTP/1.1\r\n";
-        String htmlPath = "/todo-list.html";
-        String htmlContent = HtmlParser.parseHtml(htmlPath, true);
-        String expected = createExpectedResponse(htmlContent);
-
-        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
-
-        httpHandler.run();
-
-        assertEquals(expected, outContent.toString());
-    }
-
-    @Test
-    public void testServerOutputsTodoItem1Page() throws IOException {
-        String inputString = "GET /todo/1 HTTP/1.1\r\n";
-        String htmlPath = "/todo-item-1.html";
-        String htmlContent = HtmlParser.parseHtml(htmlPath, true);
-        String expected = createExpectedResponse(htmlContent);
-
-        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
-
-        httpHandler.run();
-
-        assertEquals(expected, outContent.toString());
-    }
-
-    @Test
-    public void testServerOutputsTodoItem2Page() throws IOException {
-        String inputString = "GET /todo/2 HTTP/1.1\r\n";
-        String htmlPath = "/todo-item-2.html";
-        String htmlContent = HtmlParser.parseHtml(htmlPath, true);
-        String expected = createExpectedResponse(htmlContent);
-
-        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
-
-        httpHandler.run();
-
-        assertEquals(expected, outContent.toString());
-    }
-
-    @Test
-    public void testServerOutputsTodoItem3Page() throws IOException {
-        String inputString = "GET /todo/3 HTTP/1.1\r\n";
-        String htmlPath = "/todo-item-3.html";
-        String htmlContent = HtmlParser.parseHtml(htmlPath, true);
-        String expected = createExpectedResponse(htmlContent);
-
-        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
-
-        httpHandler.run();
-
-        assertEquals(expected, outContent.toString());
-    }
-
-    @Test
-    public void testServerOutputsTodoItem4Page() throws IOException {
-        String inputString = "GET /todo/4 HTTP/1.1\r\n";
-        String htmlPath = "/todo-item-4.html";
-        String htmlContent = HtmlParser.parseHtml(htmlPath, true);
-        String expected = createExpectedResponse(htmlContent);
-
-        when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));
-        HttpHandler httpHandler = new HttpHandler(clientSocket, router, todoList);
-
-        httpHandler.run();
-
-        assertEquals(expected, outContent.toString());
-    }
-
-    @Test
-    public void testServerOutputsTodoItem5Page() throws IOException {
-        String inputString = "GET /todo/5 HTTP/1.1\r\n";
-        String htmlPath = "/todo-item-5.html";
-        String htmlContent = HtmlParser.parseHtml(htmlPath, true);
+        String todoBody = TodoListBuilder.buildList(todoList.getTodoList());
+        HashMap<String, String> descriptors = HtmlBuilder.createPageDescriptors(TODO_TITLE, todoBody);
+        String htmlContent = HtmlBuilder.createHtmlString(descriptors);
         String expected = createExpectedResponse(htmlContent);
 
         when(clientSocket.getInputStream()).thenReturn(new ByteArrayInputStream(inputString.getBytes()));

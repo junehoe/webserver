@@ -74,7 +74,7 @@ public class HtmlParserTest {
         try {
             HtmlParser.parseHtml(htmlPath, true);
             System.out.println("This does not get printed");
-        } catch (IOException | NullPointerException e) {
+        } catch (NullPointerException e) {
             System.out.println("Exception was thrown");
         }
     }

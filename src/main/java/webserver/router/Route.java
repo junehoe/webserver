@@ -1,19 +1,19 @@
 package webserver.router;
 
+import webserver.request.HttpRequest;
+import webserver.response.HttpResponse;
+
+import java.util.function.Function;
+
 public class Route {
     private final String method;
     private final String path;
-    private String body;
+    private Function<HttpRequest, HttpResponse> callback;
 
-    public Route(String method, String path) {
+    public Route(String method, String path, Function<HttpRequest, HttpResponse> callback) {
         this.method = method;
         this.path = path;
-    }
-
-    public Route(String method, String path, String body) {
-        this.method = method;
-        this.path = path;
-        this.body = body;
+        this.callback = callback;
     }
 
     public String getMethod() {
@@ -24,11 +24,7 @@ public class Route {
         return path;
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String newBody) {
-        this.body = newBody;
+    public Function<HttpRequest, HttpResponse> getCallback() {
+        return callback;
     }
 }

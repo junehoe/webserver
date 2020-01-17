@@ -1,29 +1,21 @@
 package webserver.router;
 
-import webserver.HtmlBuilder;
-import webserver.parser.HtmlParser;
+import webserver.controller.AppController;
 import webserver.response.HttpResponse;
 import webserver.request.HttpRequest;
-import webserver.response.HttpStatusCode;
-import webserver.todo.TodoPageCreator;
-import webserver.todo.TodoItem;
-import webserver.todo.TodoList;
-import webserver.todo.TodoListBuilder;
 
-import static webserver.pages.Page.ERROR_HTML;
-import static webserver.pages.Page.TEXT_HTML;
-import static webserver.response.HttpStatusCode.CREATED;
-import static webserver.response.HttpStatusCode.NOT_FOUND;
-import static webserver.response.HttpStatusCode.OK;
-import static webserver.response.HttpStatusCode.SEE_OTHER;
+import static webserver.router.HttpVerb.GET;
+import static webserver.router.HttpVerb.HEAD;
+import static webserver.router.HttpVerb.POST;
 
-import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Router {
     private ArrayList<Route> routes;
-    private String path;
 
     public Router() {
         this.routes = new ArrayList<>();
@@ -33,69 +25,50 @@ public class Router {
         this.routes.add(route);
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void get(String path, Function<HttpRequest, HttpResponse> callback) {
+        addRoute(new Route(GET, path, callback));
     }
 
-    public HttpResponse route(HttpRequest httpRequest, TodoList todoList) throws IOException {
-        ArrayList<TodoItem> todoItemList = todoList.getTodoList();
-        if (httpRequest.getMethod().equals("POST")) {
-            String title = getTitle(httpRequest.getBody());
-            for (TodoItem item : todoItemList) {
-                if (item.getTitle().equals(title)) {
-                    return createPostResponse(httpRequest, SEE_OTHER, "/todo/error");
-                }
-            }
-            String indexedPath = "/todo/" + (todoItemList.size() + 1);
-            TodoPageCreator.createTodoPage(path, title);
-            String body = TodoListBuilder.buildItem(title);
-            HashMap<String, String> pageDescriptors = HtmlBuilder.createPageDescriptors(title, body);
-            addRoute(new Route("GET", indexedPath, HtmlBuilder.createHtmlString(pageDescriptors)));
-            addRoute(new Route("HEAD", indexedPath, HtmlBuilder.createHtmlString(pageDescriptors)));
-            todoList.add(new TodoItem(indexedPath, title));
-            updateRoute("/todo", TodoListBuilder.buildList(todoItemList));
-            return createPostResponse(httpRequest, SEE_OTHER, indexedPath);
-        }
-
-        String htmlContent;
-        for (Route route : routes) {
-            if (route.getPath().equals(httpRequest.getPath())) return createResponse(httpRequest, route.getBody(), OK);
-        }
-        htmlContent = HtmlParser.parseHtml(ERROR_HTML, true);
-        return createResponse(httpRequest, htmlContent, NOT_FOUND);
+    public void head(String path, Function<HttpRequest, HttpResponse> callback) {
+        addRoute(new Route(HEAD, path, callback));
     }
 
-    private String getTitle(String body) {
-        String[] params = body.split("&");
-        String[] title = params[0].split("=");
-        return title[1].replace("+", " ");
+    public void post(String path, Function<HttpRequest, HttpResponse> callback) {
+        addRoute(new Route(POST, path, callback));
+    }
+
+    public HttpResponse route(HttpRequest httpRequest) {
+        Function<HttpRequest, HttpResponse> controller = findController(httpRequest);
+        return controller.apply(httpRequest);
+    }
+
+    public Function<HttpRequest, HttpResponse> findController(HttpRequest httpRequest) {
+        String requestMethod = httpRequest.getMethod();
+        String requestPath = httpRequest.getPath();
+        Optional<Route> route = routes
+                .stream()
+                .filter(entry -> routeMatcher(requestPath, entry.getPath()))
+                .filter(entry -> isSameMethod(requestMethod, entry.getMethod()))
+                .findFirst();
+
+        if (route.isPresent()) {
+            return route.get().getCallback();
+        } else {
+            return AppController.error;
+        }
+    }
+
+    private boolean routeMatcher(String requestPath, String route) {
+        Pattern pattern = Pattern.compile(route);
+        Matcher matcher = pattern.matcher(requestPath);
+        return matcher.matches();
+    }
+
+    private boolean isSameMethod(String requestMethod, String method) {
+        return requestMethod.equals(method);
     }
 
     public ArrayList<Route> getRoutes() {
         return routes;
-    }
-
-    private void updateRoute(String path, String newBody) {
-        for (Route route : routes) {
-            if (route.getPath().equals(path)) {
-                route.setBody(newBody);
-            }
-        }
-    }
-
-    private HttpResponse createResponse(HttpRequest httpRequest, String content, HttpStatusCode httpStatusCode) {
-        return new HttpResponse.Builder(httpRequest.getMethod())
-                .withStatusCode(httpStatusCode)
-                .withContentLength(content.length())
-                .withContentType(TEXT_HTML)
-                .withContent(content)
-                .build();
-    }
-
-    private HttpResponse createPostResponse(HttpRequest httpRequest, HttpStatusCode httpStatusCode, String path) {
-        return new HttpResponse.Builder(httpRequest.getMethod())
-                .withStatusCode(httpStatusCode)
-                .withLocation(path)
-                .build();
     }
 }

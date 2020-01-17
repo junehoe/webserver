@@ -5,11 +5,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import static org.junit.Assert.assertEquals;
 
 public class TodoListTest {
     private TodoList todoList;
+
+    @Mock
+    File file;
 
     @Before
     public void initialize() {
@@ -18,15 +22,16 @@ public class TodoListTest {
 
     @Test
     public void addsTodoItemToTheTodoList() {
-        TodoItem todoItem = new TodoItem("/path", "Title");
+        TodoItem todoItem = new TodoItem("/path", "Title", file);
+        ArrayList<TodoItem> list = todoList.getTodoList();
 
         todoList.add(todoItem);
 
-        assertEquals(todoList.getTodoList().size(), 1);
+        assertEquals(list.get(0).getTitle(), "Title");
     }
 
     @Test
-    public void initializesTheTodoListWithFiveHardCodedTodoItems() throws IOException {
+    public void initializesTheTodoListWithFiveHardCodedTodoItems() {
         todoList.initializeHardCodedList("public/test/hardcoded-test");
 
         ArrayList<TodoItem> list = todoList.getTodoList();
@@ -44,5 +49,12 @@ public class TodoListTest {
         ArrayList<TodoItem> list = todoList.getTodoList();
 
         assertEquals(list.size(), 3);
+    }
+
+    @Test
+    public void setsAndGetsTheDirectoryOfTheTodoList() {
+        todoList.setDirectory("/this-is-a-fake-directory");
+
+        assertEquals(todoList.getDirectory(), "/this-is-a-fake-directory");
     }
 }

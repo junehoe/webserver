@@ -1,6 +1,6 @@
 package webserver;
 
-import webserver.parser.HttpRequestParser;
+import webserver.parser.BufferedReaderParser;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.HttpResponseSender;
@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class HttpHandler implements Runnable {
-    private HttpRequestParser httpRequestParser;
+    private BufferedReaderParser bufferedReaderParser;
     private Socket clientSocket;
     private Router router;
     private TodoList todoList;
@@ -24,15 +24,15 @@ public class HttpHandler implements Runnable {
         this.clientSocket = clientSocket;
         this.router = router;
         this.todoList = todoList;
-        this.httpRequestParser = new HttpRequestParser();
+        this.bufferedReaderParser = new BufferedReaderParser();
     }
 
     public void run() {
         try {
             PrintWriter output = SocketIO.createSocketWriter(clientSocket);
             BufferedReader input = SocketIO.createSocketReader(clientSocket);
-            HttpRequest httpRequest = httpRequestParser.parse(input);
-            HttpResponse httpResponse = router.route(httpRequest, todoList);
+            HttpRequest httpRequest = bufferedReaderParser.parse(input);
+            HttpResponse httpResponse = router.route(httpRequest);
             HttpResponseSender.send(output, httpResponse);
 
             input.close();

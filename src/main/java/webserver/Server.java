@@ -56,19 +56,19 @@ public class Server implements Runnable {
     }
 
     private void createRoutes(Router router, TodoList todoList) throws IOException {
-        RouteInitializer.createServerRoutes(router);
+        RouteInitializer routeInitializer = new RouteInitializer(todoList);
+        routeInitializer.createServerRoutes(router);
         if (this.directory.equals(EMPTY_DIRECTORY)) {
             Logger.printDefaultDirectoryMessage();
             Path todoListPath = Paths.get("").toAbsolutePath();
-            router.setPath(todoListPath.toString() + "/todo");
+            todoList.setDirectory(todoListPath.toString() + "/todo");
             todoList.initializeHardCodedList(todoListPath.toString());
         } else {
             Logger.printCustomDirectoryMessage(this.directory);
             File folder = new File(this.directory);
             File[] customFiles = folder.listFiles();
+            todoList.setDirectory(this.directory);
             todoList.initializeCustomList(customFiles);
-            router.setPath(this.directory);
         }
-        RouteInitializer.createTodoListRoutes(router, todoList.getTodoList());
     }
 }

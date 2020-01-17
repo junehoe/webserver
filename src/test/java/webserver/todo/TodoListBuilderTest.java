@@ -1,18 +1,24 @@
 package webserver.todo;
 
 import org.junit.Test;
+import org.mockito.Mock;
+
+import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 
 public class TodoListBuilderTest {
+    @Mock
+    File file;
+
     @Test
     public void createsTodoList() {
         TodoList todoList = new TodoList();
-        TodoItem todoItem1 = new TodoItem("/todo/1", "Do a barrel roll");
-        TodoItem todoItem2 = new TodoItem("/todo/2", "Buy groceries for the week");
-        TodoItem todoItem3 = new TodoItem("/todo/3", "Pretend to be a tree for a day");
-        TodoItem todoItem4 = new TodoItem("/todo/4", "Adopt a kitten");
-        TodoItem todoItem5 = new TodoItem("/todo/5", "Create a todo list");
+        TodoItem todoItem1 = new TodoItem("/todo/1", "Do a barrel roll", file);
+        TodoItem todoItem2 = new TodoItem("/todo/2", "Buy groceries for the week", file);
+        TodoItem todoItem3 = new TodoItem("/todo/3", "Pretend to be a tree for a day", file);
+        TodoItem todoItem4 = new TodoItem("/todo/4", "Adopt a kitten", file);
+        TodoItem todoItem5 = new TodoItem("/todo/5", "Create a todo list", file);
 
         todoList.add(todoItem1);
         todoList.add(todoItem2);

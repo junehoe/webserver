@@ -4,7 +4,9 @@ public enum HttpStatusCode {
     OK (200, "OK"),
     CREATED (201, "Created"),
     SEE_OTHER (303, "See Other"),
-    NOT_FOUND (404, "Not Found");
+    BAD_REQUEST (400, "Bad Request"),
+    NOT_FOUND (404, "Not Found"),
+    UNSUPPORTED_MEDIA_TYPE (415, "Unsupported Media Type");
 
     private final int statusCode;
     private final String statusString;

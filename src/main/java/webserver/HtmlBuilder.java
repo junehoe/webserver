@@ -11,7 +11,7 @@ import static webserver.pages.Page.TEMPLATE_HTML;
 import static webserver.pages.Page.TITLE;
 
 public class HtmlBuilder {
-    public static String createHtmlString(HashMap<String, String> pageContents) throws IOException {
+    public static String createHtmlString(HashMap<String, String> pageContents) {
         String templateString = HtmlParser.parseHtml(TEMPLATE_HTML, true);
         for (Map.Entry<String, String> entry : pageContents.entrySet()) {
             templateString = replaceSubstring(templateString, entry.getKey(), entry.getValue());
@@ -19,7 +19,7 @@ public class HtmlBuilder {
         return templateString;
     }
 
-    public static String createHtmlString(String path, boolean isResource) throws IOException {
+    public static String createHtmlString(String path, boolean isResource) {
         return HtmlParser.parseHtml(path, isResource);
     }
 
@@ -28,6 +28,14 @@ public class HtmlBuilder {
         hashMap.put(TITLE, title);
         hashMap.put(BODY, body);
         return hashMap;
+    }
+
+    public static String createTodoDetailHtml(String title) {
+        StringBuilder bodyBuilder = new StringBuilder();
+        bodyBuilder.append(HtmlBuilder.createHeader(title));
+        bodyBuilder.append(HtmlBuilder.createBreak());
+        bodyBuilder.append(HtmlBuilder.createGoBackFooter());
+        return bodyBuilder.toString();
     }
 
     public static String createHeader(String headerTitle) {

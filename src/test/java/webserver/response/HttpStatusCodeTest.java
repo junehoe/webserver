@@ -43,4 +43,24 @@ public class HttpStatusCodeTest {
     public void returnsSeeOtherStatusString() {
         assertEquals(HttpStatusCode.SEE_OTHER.getStatusString(), "See Other");
     }
+
+    @Test
+    public void returns400StatusCode() {
+        assertEquals(HttpStatusCode.BAD_REQUEST.getStatusCode(), 400);
+    }
+
+    @Test
+    public void returnsBadRequestStatusString() {
+        assertEquals(HttpStatusCode.BAD_REQUEST.getStatusString(), "Bad Request");
+    }
+
+    @Test
+    public void returns415StatusCode() {
+        assertEquals(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE.getStatusCode(), 415);
+    }
+
+    @Test
+    public void returnsUnsupportedMediaTypeStatusString() {
+        assertEquals(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE.getStatusString(), "Unsupported Media Type");
+    }
 }
